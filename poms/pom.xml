@@ -10,8 +10,9 @@
   <url>http://www.talend.org/</url>
   <modules>
     <module>code/routines</module>
-    <module>jobs/process/fishersetsample_0.1</module>
     <module>jobs/process/querygeospatialsample_0.1</module>
+    <module>jobs/process/simplelinearregressionsample_0.1</module>
+    <module>jobs/process/knnsample_0.1</module>
   </modules>
   <properties>
     <talend.project.name>SAMPLES</talend.project.name>
