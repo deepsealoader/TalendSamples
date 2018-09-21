@@ -134,7 +134,7 @@
     <elementParameter field="TEXT" name="USER_REGION" value="&quot;us&quot;"/>
     <elementParameter field="TEXT" name="CULTURE" value="&quot;en&quot;"/>
     <elementParameter field="CHECK" name="USE_CACHE" value="true"/>
-    <elementParameter field="TEXT" name="CACHE_FILEPATH" value="&quot;google_cache.dat&quot;"/>
+    <elementParameter field="FILE" name="CACHE_FILEPATH" value="&quot;/home/romuald/Projects/Talend/TOS_BD/workspace/SAMPLES/data/google_cache.dat&quot;"/>
     <elementParameter field="CHECK" name="USE_PROXY" value="false"/>
     <elementParameter field="TEXT" name="PROXY_HOSTNAME" value="" show="false"/>
     <elementParameter field="TEXT" name="PROXY_PORT" value="" show="false"/>

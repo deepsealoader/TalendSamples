@@ -178,8 +178,8 @@
 			<outputDirectory>lib</outputDirectory>
 			<includes>
 				<include>org.talend.libraries:dom4j-1.6.1</include>
-				<include>org.talend.libraries:json_simple-1.1</include>
 				<include>org.talend.libraries:log4j-1.2.16</include>
+				<include>org.talend.libraries:mongo-java-driver-3.5.0</include>
 				<include>org.example.samples.code:routines</include>
 			</includes>
 			<!-- without version for talend libraries -->
@@ -190,7 +190,7 @@
 		<dependencySet>
 			<outputDirectory>lib</outputDirectory>
 			<includes>
-				<include>com.github.romualdrousseau:nari</include>
+				<include>null:null</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 		</dependencySet>
@@ -198,7 +198,7 @@
 		<dependencySet>
 			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
-				<include>org.example.samples.job:QueryGeoSpatialSample</include>
+				<include>org.example.samples.job:ExtractFieldsSample</include>
 			</includes>
 			<outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
 			<useProjectArtifact>true</useProjectArtifact>

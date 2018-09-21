@@ -179,7 +179,6 @@
 			<includes>
 				<include>org.talend.libraries:dom4j-1.6.1</include>
 				<include>org.talend.libraries:log4j-1.2.16</include>
-				<include>org.talend.libraries:shuju-1.4-SNAPSHOT</include>
 				<include>org.talend.libraries:talend_file_enhanced_20070724</include>
 				<include>org.talend.libraries:talendcsv</include>
 				<include>org.example.samples.code:routines</include>
@@ -192,7 +191,7 @@
 		<dependencySet>
 			<outputDirectory>lib</outputDirectory>
 			<includes>
-				<include>null:null</include>
+				<include>com.github.romualdrousseau:shuju</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 		</dependencySet>

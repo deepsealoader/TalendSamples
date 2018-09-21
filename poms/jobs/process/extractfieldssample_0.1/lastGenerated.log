@@ -1,0 +1,41 @@
+[WARNING] Disabling enhanced local repository: using legacy is strongly discouraged to ensure build reproducibility.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] Using the builder org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder with a thread count of 1
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building SAMPLES ExtractFieldsSample-0.1.0 (0.1,Job Designs) 0.1.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ ExtractFieldsSample ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ ExtractFieldsSample ---
+[INFO] Not compiling main sources
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ ExtractFieldsSample ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ ExtractFieldsSample ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ ExtractFieldsSample ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ ExtractFieldsSample ---
+[INFO] Building jar: /home/romuald/Projects/Talend/TOS_BD/workspace/SAMPLES/poms/jobs/process/extractfieldssample_0.1/target/extractfieldssample_0_1.jar
+[INFO] 
+[INFO] --- maven-assembly-plugin:3.0.0:single (default) @ ExtractFieldsSample ---
+[INFO] Reading assembly descriptor: /home/romuald/Projects/Talend/TOS_BD/workspace/SAMPLES/poms/jobs/process/extractfieldssample_0.1/src/main/assemblies/assembly.xml
+[WARNING] The following patterns were never triggered in this artifact inclusion filter:
+o  'null:null'
+
+[INFO] Building zip: /home/romuald/Projects/Talend/TOS_BD/workspace/SAMPLES/poms/jobs/process/extractfieldssample_0.1/target/extractfieldssample_0_1.zip
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.311 s
+[INFO] Finished at: 2018-09-21T13:58:15+08:00
+[INFO] Final Memory: 14M/225M
+[INFO] ------------------------------------------------------------------------
