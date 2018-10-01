@@ -490,4 +490,5 @@
     <migrationTask xmi:id="_ULue5rlSEeigsZr8plRwCg" id="org.talend.repository.model.migration.FileInputPositionalByteLengthMigrationTask" breaks="7.0.1" version="7.0.1" status="ok"/>
   </TalendProperties:Project>
   <TalendProperties:User xmi:id="_UFNmorlSEeigsZr8plRwCg" login="romualdrousseau@gmail.com" password="D41D8CD98F00B204E9800998ECF8427E"/>
+  <TalendProperties:User xmi:id="_Cm-aoL7jEeioj-kkbMn_Rg" login="user@talend.com" password="D41D8CD98F00B204E9800998ECF8427E"/>
 </xmi:XMI>

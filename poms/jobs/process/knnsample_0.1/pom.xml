@@ -51,9 +51,9 @@
       <version>6.0.0</version>
     </dependency>
     <dependency>
-      <groupId>org.talend.libraries</groupId>
-      <artifactId>shuju-1.4-SNAPSHOT</artifactId>
-      <version>6.0.0</version>
+      <groupId>com.github.romualdrousseau</groupId>
+      <artifactId>shuju</artifactId>
+      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>org.talend.libraries</groupId>
