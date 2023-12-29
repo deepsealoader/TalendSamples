@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,6 +14,7 @@ package routines.system;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import org.dom4j.Element;
@@ -65,16 +66,16 @@ public class GetJarsToRegister {
     public String replaceJarPaths(String originalClassPathLine, String scheme) throws Exception {
         return replaceJarPaths(originalClassPathLine, scheme, false);
     }
-    
+
     public String replaceJarPaths(String originalClassPathLine, String scheme, boolean encodeSpaces) throws Exception {
         String classPathLine = "";
         String crcMapPath = new java.io.File("../crcMap").getCanonicalPath();
 
         if (isNeedAddLibsPath(crcMapPath)) {
             java.util.Map<String, String> crcMap = null;
-            java.io.ObjectInputStream ois = new ObjectInputStream(new java.io.FileInputStream(crcMapPath));
-            crcMap = (java.util.Map<String, String>) ois.readObject();
-            ois.close();
+            try (java.io.ObjectInputStream ois = new ObjectInputStream(new java.io.FileInputStream(crcMapPath))) {
+                crcMap = (java.util.Map<String, String>) ois.readObject();
+            }
             classPathLine = addLibsPath(originalClassPathLine, crcMap);
         } else if (this.isOozieRuntime) {
             if (this.oozieClasspathLine != null) {
@@ -123,6 +124,8 @@ public class GetJarsToRegister {
             line = line.replace(libStringFinder, "../../../cache/lib/" + crc + "/" + jarName);
         } else if (line.toLowerCase().contains(libStringFinder2)) {
             line = line.toLowerCase().replace(libStringFinder2, "../../../cache/lib/" + crc + "/" + jarName);
+        } else if (line.toLowerCase().equals(jarName)) {
+            line = "../../../cache/lib/" + crc + "/" + jarName;
         } else if (line.contains(":$ROOT_PATH/" + jarName + ":")) {
             line = line.replace(":$ROOT_PATH/" + jarName + ":", ":$ROOT_PATH/../../../cache/lib/" + crc + "/" + jarName + ":");
         } else if (line.contains(";" + jarName + ";")) {

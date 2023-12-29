@@ -42,11 +42,14 @@ import java.io.IOException;
 import java.util.Comparator;
 
 @SuppressWarnings("unused")
+
 /**
- * Job: SimpleLinearRegressionSample Purpose: Demonstrate the usage of SLR algorithm<br>
+ * Job: SimpleLinearRegressionSample Purpose: Demonstrate the usage of SLR
+ * algorithm<br>
  * Description: Demonstrate the usage of SLR algorithm on x62 dataset <br>
+ * 
  * @author romualdrousseau@gmail.com
- * @version 7.0.1.20180411_1414
+ * @version 7.3.1.20200219_1130
  * @status DEV
  */
 public class SimpleLinearRegressionSample implements TalendJob {
@@ -74,8 +77,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	private Object[] multiThreadLockWrite = new Object[0];
 
-	private final static String defaultCharset = java.nio.charset.Charset
-			.defaultCharset().name();
+	private final static String defaultCharset = java.nio.charset.Charset.defaultCharset().name();
 
 	private final static String utf8Charset = "UTF-8";
 
@@ -123,7 +125,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	private ContextProperties context = new ContextProperties();
+	protected ContextProperties context = new ContextProperties(); // will be instanciated by MS.
 
 	public ContextProperties getContext() {
 		return this.context;
@@ -154,29 +156,20 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	private final static String KEY_DB_DATASOURCES_RAW = "KEY_DB_DATASOURCES_RAW";
 
-	public void setDataSources(
-			java.util.Map<String, javax.sql.DataSource> dataSources) {
+	public void setDataSources(java.util.Map<String, javax.sql.DataSource> dataSources) {
 		java.util.Map<String, routines.system.TalendDataSource> talendDataSources = new java.util.HashMap<String, routines.system.TalendDataSource>();
-		for (java.util.Map.Entry<String, javax.sql.DataSource> dataSourceEntry : dataSources
-				.entrySet()) {
-			talendDataSources.put(
-					dataSourceEntry.getKey(),
-					new routines.system.TalendDataSource(dataSourceEntry
-							.getValue()));
+		for (java.util.Map.Entry<String, javax.sql.DataSource> dataSourceEntry : dataSources.entrySet()) {
+			talendDataSources.put(dataSourceEntry.getKey(),
+					new routines.system.TalendDataSource(dataSourceEntry.getValue()));
 		}
 		globalMap.put(KEY_DB_DATASOURCES, talendDataSources);
-		globalMap
-				.put(KEY_DB_DATASOURCES_RAW,
-						new java.util.HashMap<String, javax.sql.DataSource>(
-								dataSources));
+		globalMap.put(KEY_DB_DATASOURCES_RAW, new java.util.HashMap<String, javax.sql.DataSource>(dataSources));
 	}
 
-	MetterCatcherUtils tFlowMeterCatcher_1 = new MetterCatcherUtils(
-			"_rXHRsLoUEeiTnveA9Ky8_A", "0.1");
+	MetterCatcherUtils tFlowMeterCatcher_1 = new MetterCatcherUtils("_rXHRsLoUEeiTnveA9Ky8_A", "0.1");
 
 	private final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-	private final java.io.PrintStream errorMessagePS = new java.io.PrintStream(
-			new java.io.BufferedOutputStream(baos));
+	private final java.io.PrintStream errorMessagePS = new java.io.PrintStream(new java.io.BufferedOutputStream(baos));
 
 	public String getExceptionStackTrace() {
 		if ("failure".equals(this.getStatus())) {
@@ -208,8 +201,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			this.virtualComponentName = virtualComponentName;
 		}
 
-		private TalendException(Exception e, String errorComponent,
-				final java.util.Map<String, Object> globalMap) {
+		private TalendException(Exception e, String errorComponent, final java.util.Map<String, Object> globalMap) {
 			this.currentComponent = errorComponent;
 			this.globalMap = globalMap;
 			this.e = e;
@@ -244,15 +236,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		@Override
 		public void printStackTrace() {
 			if (!(e instanceof TalendException || e instanceof TDieException)) {
-				if (virtualComponentName != null
-						&& currentComponent.indexOf(virtualComponentName + "_") == 0) {
-					globalMap.put(virtualComponentName + "_ERROR_MESSAGE",
-							getExceptionCauseMessage(e));
+				if (virtualComponentName != null && currentComponent.indexOf(virtualComponentName + "_") == 0) {
+					globalMap.put(virtualComponentName + "_ERROR_MESSAGE", getExceptionCauseMessage(e));
 				}
-				globalMap.put(currentComponent + "_ERROR_MESSAGE",
-						getExceptionCauseMessage(e));
-				System.err.println("Exception in component " + currentComponent
-						+ " (" + jobName + ")");
+				globalMap.put(currentComponent + "_ERROR_MESSAGE", getExceptionCauseMessage(e));
+				System.err.println("Exception in component " + currentComponent + " (" + jobName + ")");
 			}
 			if (!(e instanceof TDieException)) {
 				if (e instanceof TalendException) {
@@ -265,12 +253,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			}
 			if (!(e instanceof TalendException)) {
 				try {
-					for (java.lang.reflect.Method m : this.getClass()
-							.getEnclosingClass().getMethods()) {
+					for (java.lang.reflect.Method m : this.getClass().getEnclosingClass().getMethods()) {
 						if (m.getName().compareTo(currentComponent + "_error") == 0) {
 							m.invoke(SimpleLinearRegressionSample.this,
-									new Object[] { e, currentComponent,
-											globalMap });
+									new Object[] { e, currentComponent, globalMap });
 							break;
 						}
 					}
@@ -284,9 +270,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		}
 	}
 
-	public void tChronometerStop_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -295,129 +280,128 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tChronometerStop_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFileInputDelimited_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tMap_2_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
+	public void tMap_2_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap)
 			throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tShujuTrain_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFileInputDelimited_2_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tMap_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
+	public void tMap_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap)
 			throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_19_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tLogRow_3_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
+	}
+
+	public void tFileOutputExcel_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
+
+		end_Hash.put(errorComponent, System.currentTimeMillis());
+
+		((java.util.Map) threadLocal.get()).put("status", "failure");
+
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_21_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tLogRow_2_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFlowMeterCatcher_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileOutputExcel_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
+
+		end_Hash.put(errorComponent, System.currentTimeMillis());
+
+		((java.util.Map) threadLocal.get()).put("status", "failure");
+
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
+	}
+
+	public void tFlowMeterCatcher_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -427,8 +411,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 	}
 
 	public void tLogRow_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -437,9 +420,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tFlowMeterCatcher_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tRowGenerator_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -448,9 +430,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuPredict_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuPredict_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -459,9 +440,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tRowGenerator_2_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -470,9 +450,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuPredict_2_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuPredict_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -481,9 +460,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuTransformDataSet_row3_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransformDataSet_row3_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -492,9 +470,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuTransformDataSet_row7_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransformDataSet_row7_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -503,117 +480,89 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		tRowGenerator_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuTransform_2_TransformOut_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_2_TransformOut_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		tShujuTransform_2_TransformIn_error(exception, errorComponent,
-				globalMap);
+		tShujuTransform_2_TransformIn_error(exception, errorComponent, globalMap);
 
 	}
 
-	public void tShujuTransform_2_TransformIn_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_2_TransformIn_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuTransform_3_TransformOut_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_3_TransformOut_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		tShujuTransform_3_TransformIn_error(exception, errorComponent,
-				globalMap);
+		tShujuTransform_3_TransformIn_error(exception, errorComponent, globalMap);
 
 	}
 
-	public void tShujuTransform_3_TransformIn_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_3_TransformIn_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_2_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_2_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tChronometerStop_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tFileInputDelimited_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tFileInputDelimited_2_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_2_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tFlowMeterCatcher_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFlowMeterCatcher_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tRowGenerator_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tRowGenerator_2_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_2_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tChronometerStop_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tChronometerStop_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -627,8 +576,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -639,20 +587,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tChronometerStop_1", false);
-				start_Hash
-						.put("tChronometerStop_1", System.currentTimeMillis());
+				start_Hash.put("tChronometerStop_1", System.currentTimeMillis());
 
 				currentComponent = "tChronometerStop_1";
 
 				int tos_count_tChronometerStop_1 = 0;
-
-				class BytesLimit65535_tChronometerStop_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tChronometerStop_1().limitLog4jByte();
 
 				long timetChronometerStop_1;
 
@@ -660,20 +599,15 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				System.out.print("[ tChronometerStop_1 ]  ");
 
-				System.out.print("   " + timetChronometerStop_1 / 1000
-						+ "seconds   ");
+				System.out.print("   " + timetChronometerStop_1 / 1000 + "seconds   ");
 
-				System.out.println("" + "  " + timetChronometerStop_1
-						+ " milliseconds");
+				System.out.println("" + "  " + timetChronometerStop_1 + " milliseconds");
 
 				Long currentTimetChronometerStop_1 = System.currentTimeMillis();
-				globalMap.put("tChronometerStop_1",
-						currentTimetChronometerStop_1);
+				globalMap.put("tChronometerStop_1", currentTimetChronometerStop_1);
 
-				globalMap.put("tChronometerStop_1_STOPTIME",
-						currentTimetChronometerStop_1);
-				globalMap.put("tChronometerStop_1_DURATION",
-						timetChronometerStop_1);
+				globalMap.put("tChronometerStop_1_STOPTIME", currentTimetChronometerStop_1);
+				globalMap.put("tChronometerStop_1_DURATION", timetChronometerStop_1);
 
 				/**
 				 * [tChronometerStop_1 begin ] stop
@@ -723,12 +657,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				/**
 				 * [tChronometerStop_1 end ] stop
 				 */
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -760,8 +693,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		globalMap.put("tChronometerStop_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row2Struct implements
-			routines.system.IPersistableRow<row2Struct> {
+	public static class row2Struct implements routines.system.IPersistableRow<row2Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -842,8 +774,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -861,8 +792,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row18Struct implements
-			routines.system.IPersistableRow<row18Struct> {
+	public static class row18Struct implements routines.system.IPersistableRow<row18Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -943,8 +873,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -962,8 +891,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row1Struct implements
-			routines.system.IPersistableRow<row1Struct> {
+	public static class row1Struct implements routines.system.IPersistableRow<row1Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -1057,8 +985,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1076,9 +1003,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public void tFileInputDelimited_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -1092,8 +1017,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -1113,22 +1037,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tShujuTrain_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row2" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row2");
 				}
 
 				int tos_count_tShujuTrain_1 = 0;
 
-				class BytesLimit65535_tShujuTrain_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTrain_1().limitLog4jByte();
 				int nb_line_tShujuTrain_1 = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTrain_1 = new com.github.romualdrousseau.shuju.DataSet();
@@ -1147,23 +1060,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tFlowMeter_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row18" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row18");
 				}
 
 				int tos_count_tFlowMeter_1 = 0;
-
-				class BytesLimit65535_tFlowMeter_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_1().limitLog4jByte();
 
 				int count_tFlowMeter_1 = 0;
 
@@ -1181,38 +1081,26 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tMap_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row1" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row1");
 				}
 
 				int tos_count_tMap_2 = 0;
 
-				class BytesLimit65535_tMap_2 {
-					public void limitLog4jByte() throws Exception {
+// ###############################
+// # Lookup's keys initialization
+// ###############################        
 
-					}
-				}
-
-				new BytesLimit65535_tMap_2().limitLog4jByte();
-
-				// ###############################
-				// # Lookup's keys initialization
-				// ###############################
-
-				// ###############################
-				// # Vars initialization
+// ###############################
+// # Vars initialization
 				class Var__tMap_2__Struct {
 				}
 				Var__tMap_2__Struct Var__tMap_2 = new Var__tMap_2__Struct();
-				// ###############################
+// ###############################
 
-				// ###############################
-				// # Outputs initialization
+// ###############################
+// # Outputs initialization
 				row18Struct row18_tmp = new row18Struct();
-				// ###############################
+// ###############################
 
 				/**
 				 * [tMap_2 begin ] stop
@@ -1223,33 +1111,24 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tFileInputDelimited_1", false);
-				start_Hash.put("tFileInputDelimited_1",
-						System.currentTimeMillis());
+				start_Hash.put("tFileInputDelimited_1", System.currentTimeMillis());
 
 				currentComponent = "tFileInputDelimited_1";
 
 				int tos_count_tFileInputDelimited_1 = 0;
 
-				class BytesLimit65535_tFileInputDelimited_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFileInputDelimited_1().limitLog4jByte();
-
 				final routines.system.RowState rowstate_tFileInputDelimited_1 = new routines.system.RowState();
 
 				int nb_line_tFileInputDelimited_1 = 0;
 				org.talend.fileprocess.FileInputDelimited fid_tFileInputDelimited_1 = null;
+				int limit_tFileInputDelimited_1 = -1;
 				try {
 
-					Object filename_tFileInputDelimited_1 = "C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv";
+					Object filename_tFileInputDelimited_1 = "C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv";
 					if (filename_tFileInputDelimited_1 instanceof java.io.InputStream) {
 
 						int footer_value_tFileInputDelimited_1 = 0, random_value_tFileInputDelimited_1 = -1;
-						if (footer_value_tFileInputDelimited_1 > 0
-								|| random_value_tFileInputDelimited_1 > 0) {
+						if (footer_value_tFileInputDelimited_1 > 0 || random_value_tFileInputDelimited_1 > 0) {
 							throw new java.lang.Exception(
 									"When the input source is a stream,footer and random shouldn't be bigger than 0.");
 						}
@@ -1257,17 +1136,15 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					}
 					try {
 						fid_tFileInputDelimited_1 = new org.talend.fileprocess.FileInputDelimited(
-								"C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv",
-								"ISO-8859-15", ",", "\n", true, 1, 0, -1, -1,
-								false);
+								"C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv", "ISO-8859-15", ",",
+								"\n", true, 1, 0, limit_tFileInputDelimited_1, -1, false);
 					} catch (java.lang.Exception e) {
 
 						System.err.println(e.getMessage());
 
 					}
 
-					while (fid_tFileInputDelimited_1 != null
-							&& fid_tFileInputDelimited_1.nextRecord()) {
+					while (fid_tFileInputDelimited_1 != null && fid_tFileInputDelimited_1.nextRecord()) {
 						rowstate_tFileInputDelimited_1.reset();
 
 						row1 = null;
@@ -1282,8 +1159,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 							columnIndexWithD_tFileInputDelimited_1 = 0;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
@@ -1291,27 +1167,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row1.I = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"I", "row1", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"I", "row1", temp, ex_tFileInputDelimited_1), ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'I' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'I' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 1;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
@@ -1319,27 +1189,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row1.T = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"T", "row1", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"T", "row1", temp, ex_tFileInputDelimited_1), ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'T' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'T' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 2;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
@@ -1347,26 +1211,20 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row1.D = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"D", "row1", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"D", "row1", temp, ex_tFileInputDelimited_1), ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'D' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'D' in 'row1' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							if (rowstate_tFileInputDelimited_1.getException() != null) {
-								throw rowstate_tFileInputDelimited_1
-										.getException();
+								throw rowstate_tFileInputDelimited_1.getException();
 							}
 
 						} catch (java.lang.Exception e) {
@@ -1402,7 +1260,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 						/**
 						 * [tFileInputDelimited_1 process_data_begin ] stop
 						 */
-						// Start of branch "row1"
+// Start of branch "row1"
 						if (row1 != null) {
 
 							/**
@@ -1411,12 +1269,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 							currentComponent = "tMap_2";
 
-							// row1
-							// row1
-
 							if (execStat) {
-								runStat.updateStatOnConnection("row1"
-										+ iterateId, 1, 1);
+								runStat.updateStatOnConnection(iterateId, 1, 1, "row1");
 							}
 
 							boolean hasCasePrimitiveKeyWithNull_tMap_2 = false;
@@ -1438,11 +1292,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								row18 = null;
 
-								// # Output table : 'row18'
+// # Output table : 'row18'
 								row18_tmp.T = row1.T - 1.0;
 								row18_tmp.D = row1.D;
 								row18 = row18_tmp;
-								// ###############################
+// ###############################
 
 							} // end of Var scope
 
@@ -1463,7 +1317,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 							/**
 							 * [tMap_2 process_data_begin ] stop
 							 */
-							// Start of branch "row18"
+// Start of branch "row18"
 							if (row18 != null) {
 
 								/**
@@ -1472,12 +1326,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								currentComponent = "tFlowMeter_1";
 
-								// row18
-								// row18
-
 								if (execStat) {
-									runStat.updateStatOnConnection("row18"
-											+ iterateId, 1, 1);
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row18");
 								}
 
 								count_tFlowMeter_1++;
@@ -1506,23 +1356,17 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								currentComponent = "tShujuTrain_1";
 
-								// row2
-								// row2
-
 								if (execStat) {
-									runStat.updateStatOnConnection("row2"
-											+ iterateId, 1, 1);
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row2");
 								}
 
 								com.github.romualdrousseau.shuju.DataRow row_tShujuTrain_1 = new com.github.romualdrousseau.shuju.DataRow();
 								com.github.romualdrousseau.shuju.features.NumericFeature feature_T_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 										row2.T);
-								row_tShujuTrain_1
-										.addFeature(feature_T_tShujuTrain_1);
+								row_tShujuTrain_1.addFeature(feature_T_tShujuTrain_1);
 								com.github.romualdrousseau.shuju.features.NumericFeature feature_D_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 										row2.D);
-								row_tShujuTrain_1
-										.setLabel(feature_D_tShujuTrain_1);
+								row_tShujuTrain_1.setLabel(feature_D_tShujuTrain_1);
 								dataset_tShujuTrain_1.addRow(row_tShujuTrain_1);
 
 								nb_line_tShujuTrain_1++;
@@ -1595,21 +1439,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					}
 				} finally {
-					if (!((Object) ("C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv") instanceof java.io.InputStream)) {
+					if (!((Object) ("C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv") instanceof java.io.InputStream)) {
 						if (fid_tFileInputDelimited_1 != null) {
 							fid_tFileInputDelimited_1.close();
 						}
 					}
 					if (fid_tFileInputDelimited_1 != null) {
-						globalMap.put("tFileInputDelimited_1_NB_LINE",
-								fid_tFileInputDelimited_1.getRowNumber());
+						globalMap.put("tFileInputDelimited_1_NB_LINE", fid_tFileInputDelimited_1.getRowNumber());
 
 					}
 				}
 
 				ok_Hash.put("tFileInputDelimited_1", true);
-				end_Hash.put("tFileInputDelimited_1",
-						System.currentTimeMillis());
+				end_Hash.put("tFileInputDelimited_1", System.currentTimeMillis());
 
 				/**
 				 * [tFileInputDelimited_1 end ] stop
@@ -1621,15 +1463,12 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tMap_2";
 
-				// ###############################
-				// # Lookup hashes releasing
-				// ###############################
+// ###############################
+// # Lookup hashes releasing
+// ###############################      
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row1" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row1");
 				}
 
 				ok_Hash.put("tMap_2", true);
@@ -1645,15 +1484,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_1";
 
-				tFlowMeterCatcher_1.addMessage("row18", new Integer(
-						count_tFlowMeter_1), "null", "", "tFlowMeter_1");
+				tFlowMeterCatcher_1.addMessage("row18", new Integer(count_tFlowMeter_1), "null", "", "tFlowMeter_1");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row18" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row18");
 				}
 
 				ok_Hash.put("tFlowMeter_1", true);
@@ -1679,15 +1513,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				classifier_tShujuTrain_1.train(dataset_tShujuTrain_1);
 
-				globalMap.put("classifier_tShujuTrain_1",
-						classifier_tShujuTrain_1);
+				globalMap.put("classifier_tShujuTrain_1", classifier_tShujuTrain_1);
 				globalMap.put("tShujuTrain_1_NB_LINE", nb_line_tShujuTrain_1);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row2" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row2");
 				}
 
 				ok_Hash.put("tShujuTrain_1", true);
@@ -1697,16 +1527,13 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 * [tShujuTrain_1 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 			tFlowMeterCatcher_1Process(globalMap);
 
 			if (resumeEntryMethodName == null || globalResumeTicket) {
-				resumeUtil
-						.addLog("CHECKPOINT",
-								"CONNECTION:SUBJOB_OK:tFileInputDelimited_1:OnSubjobOk",
-								"", Thread.currentThread().getId() + "", "",
-								"", "", "", "");
+				resumeUtil.addLog("CHECKPOINT", "CONNECTION:SUBJOB_OK:tFileInputDelimited_1:OnSubjobOk", "",
+						Thread.currentThread().getId() + "", "", "", "", "", "");
 			}
 
 			if (execStat) {
@@ -1717,8 +1544,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -1781,8 +1607,106 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row10Struct implements
-			routines.system.IPersistableRow<row10Struct> {
+	public static class row12Struct implements routines.system.IPersistableRow<row12Struct> {
+		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
+		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
+
+		public double T;
+
+		public double getT() {
+			return this.T;
+		}
+
+		public double D;
+
+		public double getD() {
+			return this.D;
+		}
+
+		public void readData(ObjectInputStream dis) {
+
+			synchronized (commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample) {
+
+				try {
+
+					int length = 0;
+
+					this.T = dis.readDouble();
+
+					this.D = dis.readDouble();
+
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+
+				}
+
+			}
+
+		}
+
+		public void writeData(ObjectOutputStream dos) {
+			try {
+
+				// double
+
+				dos.writeDouble(this.T);
+
+				// double
+
+				dos.writeDouble(this.D);
+
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+
+		public String toString() {
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(super.toString());
+			sb.append("[");
+			sb.append("T=" + String.valueOf(T));
+			sb.append(",D=" + String.valueOf(D));
+			sb.append("]");
+
+			return sb.toString();
+		}
+
+		/**
+		 * Compare keys
+		 */
+		public int compareTo(row12Struct other) {
+
+			int returnValue = -1;
+
+			return returnValue;
+		}
+
+		private int checkNullsAndCompare(Object object1, Object object2) {
+			int returnValue = 0;
+			if (object1 instanceof Comparable && object2 instanceof Comparable) {
+				returnValue = ((Comparable) object1).compareTo(object2);
+			} else if (object1 != null && object2 != null) {
+				returnValue = compareStrings(object1.toString(), object2.toString());
+			} else if (object1 == null && object2 != null) {
+				returnValue = 1;
+			} else if (object1 != null && object2 == null) {
+				returnValue = -1;
+			} else {
+				returnValue = 0;
+			}
+
+			return returnValue;
+		}
+
+		private int compareStrings(String string1, String string2) {
+			return string1.compareTo(string2);
+		}
+
+	}
+
+	public static class row10Struct implements routines.system.IPersistableRow<row10Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -1863,8 +1787,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1882,8 +1805,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row11Struct implements
-			routines.system.IPersistableRow<row11Struct> {
+	public static class row11Struct implements routines.system.IPersistableRow<row11Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -1964,8 +1886,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1983,8 +1904,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class OnRowsEndStructtShujuTransform_3 implements
-			routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_3> {
+	public static class OnRowsEndStructtShujuTransform_3
+			implements routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_3> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2065,8 +1986,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2084,8 +2004,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row9Struct implements
-			routines.system.IPersistableRow<row9Struct> {
+	public static class row9Struct implements routines.system.IPersistableRow<row9Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2166,8 +2085,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2185,8 +2103,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class OnRowsEndStructtShujuTransform_2 implements
-			routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_2> {
+	public static class OnRowsEndStructtShujuTransform_2
+			implements routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_2> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2267,8 +2185,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2286,8 +2203,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row16Struct implements
-			routines.system.IPersistableRow<row16Struct> {
+	public static class row15Struct implements routines.system.IPersistableRow<row15Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2356,7 +2272,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		/**
 		 * Compare keys
 		 */
-		public int compareTo(row16Struct other) {
+		public int compareTo(row15Struct other) {
 
 			int returnValue = -1;
 
@@ -2368,8 +2284,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2387,8 +2302,106 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row8Struct implements
-			routines.system.IPersistableRow<row8Struct> {
+	public static class row14Struct implements routines.system.IPersistableRow<row14Struct> {
+		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
+		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
+
+		public double T;
+
+		public double getT() {
+			return this.T;
+		}
+
+		public double D;
+
+		public double getD() {
+			return this.D;
+		}
+
+		public void readData(ObjectInputStream dis) {
+
+			synchronized (commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample) {
+
+				try {
+
+					int length = 0;
+
+					this.T = dis.readDouble();
+
+					this.D = dis.readDouble();
+
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+
+				}
+
+			}
+
+		}
+
+		public void writeData(ObjectOutputStream dos) {
+			try {
+
+				// double
+
+				dos.writeDouble(this.T);
+
+				// double
+
+				dos.writeDouble(this.D);
+
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+
+		public String toString() {
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(super.toString());
+			sb.append("[");
+			sb.append("T=" + String.valueOf(T));
+			sb.append(",D=" + String.valueOf(D));
+			sb.append("]");
+
+			return sb.toString();
+		}
+
+		/**
+		 * Compare keys
+		 */
+		public int compareTo(row14Struct other) {
+
+			int returnValue = -1;
+
+			return returnValue;
+		}
+
+		private int checkNullsAndCompare(Object object1, Object object2) {
+			int returnValue = 0;
+			if (object1 instanceof Comparable && object2 instanceof Comparable) {
+				returnValue = ((Comparable) object1).compareTo(object2);
+			} else if (object1 != null && object2 != null) {
+				returnValue = compareStrings(object1.toString(), object2.toString());
+			} else if (object1 == null && object2 != null) {
+				returnValue = 1;
+			} else if (object1 != null && object2 == null) {
+				returnValue = -1;
+			} else {
+				returnValue = 0;
+			}
+
+			return returnValue;
+		}
+
+		private int compareStrings(String string1, String string2) {
+			return string1.compareTo(string2);
+		}
+
+	}
+
+	public static class row8Struct implements routines.system.IPersistableRow<row8Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2469,8 +2482,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2488,8 +2500,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row17Struct implements
-			routines.system.IPersistableRow<row17Struct> {
+	public static class row17Struct implements routines.system.IPersistableRow<row17Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2570,8 +2581,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2589,8 +2599,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row6Struct implements
-			routines.system.IPersistableRow<row6Struct> {
+	public static class row6Struct implements routines.system.IPersistableRow<row6Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2684,8 +2693,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2703,8 +2711,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class after_tFileInputDelimited_2Struct implements
-			routines.system.IPersistableRow<after_tFileInputDelimited_2Struct> {
+	public static class after_tFileInputDelimited_2Struct
+			implements routines.system.IPersistableRow<after_tFileInputDelimited_2Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -2798,8 +2806,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2817,9 +2824,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public void tFileInputDelimited_2Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_2Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tFileInputDelimited_2_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -2834,8 +2839,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -2847,42 +2851,30 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				row6Struct row6 = new row6Struct();
 				row17Struct row17 = new row17Struct();
 				row17Struct row8 = row17;
-				row17Struct row16 = row17;
+				row17Struct row14 = row17;
+				row17Struct row15 = row17;
 				row9Struct row9 = new row9Struct();
 				row11Struct row11 = new row11Struct();
 				row11Struct row10 = row11;
+				row11Struct row12 = row11;
 
 				/**
 				 * [tShujuTransform_2_TransformOut begin ] start
 				 */
 
 				ok_Hash.put("tShujuTransform_2_TransformOut", false);
-				start_Hash.put("tShujuTransform_2_TransformOut",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_2_TransformOut", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_2";
 
 				currentComponent = "tShujuTransform_2_TransformOut";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row16" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row15");
 				}
 
 				int tos_count_tShujuTransform_2_TransformOut = 0;
 
-				class BytesLimit65535_tShujuTransform_2_TransformOut {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_2_TransformOut()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_2_TransformOut = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.DataSet();
@@ -2891,6 +2883,60 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				/**
 				 * [tShujuTransform_2_TransformOut begin ] stop
+				 */
+
+				/**
+				 * [tFileOutputExcel_2 begin ] start
+				 */
+
+				ok_Hash.put("tFileOutputExcel_2", false);
+				start_Hash.put("tFileOutputExcel_2", System.currentTimeMillis());
+
+				currentComponent = "tFileOutputExcel_2";
+
+				if (execStat) {
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row14");
+				}
+
+				int tos_count_tFileOutputExcel_2 = 0;
+
+				int columnIndex_tFileOutputExcel_2 = 0;
+
+				String fileName_tFileOutputExcel_2 = "C:/Users/RRU_SG1/Documents/out.xls";
+				int nb_line_tFileOutputExcel_2 = 0;
+				org.talend.ExcelTool xlsxTool_tFileOutputExcel_2 = new org.talend.ExcelTool();
+
+				xlsxTool_tFileOutputExcel_2.setSheet("Sheet1");
+				xlsxTool_tFileOutputExcel_2.setAppend(false, false);
+				xlsxTool_tFileOutputExcel_2.setRecalculateFormula(false);
+				xlsxTool_tFileOutputExcel_2.setXY(false, 0, 0, false);
+
+				java.util.concurrent.ConcurrentHashMap<java.lang.Object, java.lang.Object> chm_tFileOutputExcel_2 = (java.util.concurrent.ConcurrentHashMap<java.lang.Object, java.lang.Object>) globalMap
+						.get("concurrentHashMap");
+				java.lang.Object lockObj_tFileOutputExcel_2 = chm_tFileOutputExcel_2
+						.computeIfAbsent("EXCEL_OUTPUT_LOCK_OBJ_tFileOutputExcel_2", k -> new Object());
+				synchronized (lockObj_tFileOutputExcel_2) {
+
+					xlsxTool_tFileOutputExcel_2.prepareXlsxFile(fileName_tFileOutputExcel_2);
+
+				}
+
+				xlsxTool_tFileOutputExcel_2.setFont("");
+
+				if (xlsxTool_tFileOutputExcel_2.getStartRow() == 0) {
+
+					xlsxTool_tFileOutputExcel_2.addRow();
+
+					xlsxTool_tFileOutputExcel_2.addCellValue("T");
+
+					xlsxTool_tFileOutputExcel_2.addCellValue("D");
+
+					nb_line_tFileOutputExcel_2++;
+
+				}
+
+				/**
+				 * [tFileOutputExcel_2 begin ] stop
 				 */
 
 				/**
@@ -2903,31 +2949,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tLogRow_3";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row8" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row8");
 				}
 
 				int tos_count_tLogRow_3 = 0;
 
-				class BytesLimit65535_tLogRow_3 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tLogRow_3().limitLog4jByte();
-
-				// /////////////////////
+				///////////////////////
 
 				final String OUTPUT_FIELD_SEPARATOR_tLogRow_3 = "|";
 				java.io.PrintStream consoleOut_tLogRow_3 = null;
 
 				StringBuilder strBuffer_tLogRow_3 = null;
 				int nb_line_tLogRow_3 = 0;
-				// /////////////////////
+///////////////////////    			
 
 				/**
 				 * [tLogRow_3 begin ] stop
@@ -2943,23 +2977,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tFlowMeter_19";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row17" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row17");
 				}
 
 				int tos_count_tFlowMeter_19 = 0;
-
-				class BytesLimit65535_tFlowMeter_19 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_19().limitLog4jByte();
 
 				int count_tFlowMeter_19 = 0;
 
@@ -2977,38 +2998,26 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tMap_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row6" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row6");
 				}
 
 				int tos_count_tMap_1 = 0;
 
-				class BytesLimit65535_tMap_1 {
-					public void limitLog4jByte() throws Exception {
+// ###############################
+// # Lookup's keys initialization
+// ###############################        
 
-					}
-				}
-
-				new BytesLimit65535_tMap_1().limitLog4jByte();
-
-				// ###############################
-				// # Lookup's keys initialization
-				// ###############################
-
-				// ###############################
-				// # Vars initialization
+// ###############################
+// # Vars initialization
 				class Var__tMap_1__Struct {
 				}
 				Var__tMap_1__Struct Var__tMap_1 = new Var__tMap_1__Struct();
-				// ###############################
+// ###############################
 
-				// ###############################
-				// # Outputs initialization
+// ###############################
+// # Outputs initialization
 				row17Struct row17_tmp = new row17Struct();
-				// ###############################
+// ###############################
 
 				/**
 				 * [tMap_1 begin ] stop
@@ -3019,33 +3028,24 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tFileInputDelimited_2", false);
-				start_Hash.put("tFileInputDelimited_2",
-						System.currentTimeMillis());
+				start_Hash.put("tFileInputDelimited_2", System.currentTimeMillis());
 
 				currentComponent = "tFileInputDelimited_2";
 
 				int tos_count_tFileInputDelimited_2 = 0;
 
-				class BytesLimit65535_tFileInputDelimited_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFileInputDelimited_2().limitLog4jByte();
-
 				final routines.system.RowState rowstate_tFileInputDelimited_2 = new routines.system.RowState();
 
 				int nb_line_tFileInputDelimited_2 = 0;
 				org.talend.fileprocess.FileInputDelimited fid_tFileInputDelimited_2 = null;
+				int limit_tFileInputDelimited_2 = -1;
 				try {
 
-					Object filename_tFileInputDelimited_2 = "C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv";
+					Object filename_tFileInputDelimited_2 = "C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv";
 					if (filename_tFileInputDelimited_2 instanceof java.io.InputStream) {
 
 						int footer_value_tFileInputDelimited_2 = 0, random_value_tFileInputDelimited_2 = -1;
-						if (footer_value_tFileInputDelimited_2 > 0
-								|| random_value_tFileInputDelimited_2 > 0) {
+						if (footer_value_tFileInputDelimited_2 > 0 || random_value_tFileInputDelimited_2 > 0) {
 							throw new java.lang.Exception(
 									"When the input source is a stream,footer and random shouldn't be bigger than 0.");
 						}
@@ -3053,17 +3053,15 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					}
 					try {
 						fid_tFileInputDelimited_2 = new org.talend.fileprocess.FileInputDelimited(
-								"C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv",
-								"ISO-8859-15", ",", "\n", true, 1, 0, -1, -1,
-								false);
+								"C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv", "ISO-8859-15", ",",
+								"\n", true, 1, 0, limit_tFileInputDelimited_2, -1, false);
 					} catch (java.lang.Exception e) {
 
 						System.err.println(e.getMessage());
 
 					}
 
-					while (fid_tFileInputDelimited_2 != null
-							&& fid_tFileInputDelimited_2.nextRecord()) {
+					while (fid_tFileInputDelimited_2 != null && fid_tFileInputDelimited_2.nextRecord()) {
 						rowstate_tFileInputDelimited_2.reset();
 
 						row6 = null;
@@ -3078,8 +3076,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 							columnIndexWithD_tFileInputDelimited_2 = 0;
 
-							temp = fid_tFileInputDelimited_2
-									.get(columnIndexWithD_tFileInputDelimited_2);
+							temp = fid_tFileInputDelimited_2.get(columnIndexWithD_tFileInputDelimited_2);
 							if (temp.length() > 0) {
 
 								try {
@@ -3087,27 +3084,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row6.I = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_2) {
-									rowstate_tFileInputDelimited_2
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"I", "row6", temp,
-															ex_tFileInputDelimited_2),
-													ex_tFileInputDelimited_2));
+									rowstate_tFileInputDelimited_2.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"I", "row6", temp, ex_tFileInputDelimited_2), ex_tFileInputDelimited_2));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_2
-										.setException(new RuntimeException(
-												"Value is empty for column : 'I' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_2.setException(new RuntimeException(
+										"Value is empty for column : 'I' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_2 = 1;
 
-							temp = fid_tFileInputDelimited_2
-									.get(columnIndexWithD_tFileInputDelimited_2);
+							temp = fid_tFileInputDelimited_2.get(columnIndexWithD_tFileInputDelimited_2);
 							if (temp.length() > 0) {
 
 								try {
@@ -3115,27 +3106,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row6.T = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_2) {
-									rowstate_tFileInputDelimited_2
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"T", "row6", temp,
-															ex_tFileInputDelimited_2),
-													ex_tFileInputDelimited_2));
+									rowstate_tFileInputDelimited_2.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"T", "row6", temp, ex_tFileInputDelimited_2), ex_tFileInputDelimited_2));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_2
-										.setException(new RuntimeException(
-												"Value is empty for column : 'T' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_2.setException(new RuntimeException(
+										"Value is empty for column : 'T' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_2 = 2;
 
-							temp = fid_tFileInputDelimited_2
-									.get(columnIndexWithD_tFileInputDelimited_2);
+							temp = fid_tFileInputDelimited_2.get(columnIndexWithD_tFileInputDelimited_2);
 							if (temp.length() > 0) {
 
 								try {
@@ -3143,26 +3128,20 @@ public class SimpleLinearRegressionSample implements TalendJob {
 									row6.D = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_2) {
-									rowstate_tFileInputDelimited_2
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"D", "row6", temp,
-															ex_tFileInputDelimited_2),
-													ex_tFileInputDelimited_2));
+									rowstate_tFileInputDelimited_2.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"D", "row6", temp, ex_tFileInputDelimited_2), ex_tFileInputDelimited_2));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_2
-										.setException(new RuntimeException(
-												"Value is empty for column : 'D' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_2.setException(new RuntimeException(
+										"Value is empty for column : 'D' in 'row6' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							if (rowstate_tFileInputDelimited_2.getException() != null) {
-								throw rowstate_tFileInputDelimited_2
-										.getException();
+								throw rowstate_tFileInputDelimited_2.getException();
 							}
 
 						} catch (java.lang.Exception e) {
@@ -3198,7 +3177,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 						/**
 						 * [tFileInputDelimited_2 process_data_begin ] stop
 						 */
-						// Start of branch "row6"
+// Start of branch "row6"
 						if (row6 != null) {
 
 							/**
@@ -3207,12 +3186,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 							currentComponent = "tMap_1";
 
-							// row6
-							// row6
-
 							if (execStat) {
-								runStat.updateStatOnConnection("row6"
-										+ iterateId, 1, 1);
+								runStat.updateStatOnConnection(iterateId, 1, 1, "row6");
 							}
 
 							boolean hasCasePrimitiveKeyWithNull_tMap_1 = false;
@@ -3234,11 +3209,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								row17 = null;
 
-								// # Output table : 'row17'
+// # Output table : 'row17'
 								row17_tmp.T = row6.T - 1.0;
 								row17_tmp.D = row6.D;
 								row17 = row17_tmp;
-								// ###############################
+// ###############################
 
 							} // end of Var scope
 
@@ -3259,7 +3234,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 							/**
 							 * [tMap_1 process_data_begin ] stop
 							 */
-							// Start of branch "row17"
+// Start of branch "row17"
 							if (row17 != null) {
 
 								/**
@@ -3268,12 +3243,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								currentComponent = "tFlowMeter_19";
 
-								// row17
-								// row17
-
 								if (execStat) {
-									runStat.updateStatOnConnection("row17"
-											+ iterateId, 1, 1);
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row17");
 								}
 
 								count_tFlowMeter_19++;
@@ -3302,47 +3273,37 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								currentComponent = "tLogRow_3";
 
-								// row8
-								// row8
-
 								if (execStat) {
-									runStat.updateStatOnConnection("row8"
-											+ iterateId, 1, 1);
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row8");
 								}
 
-								// /////////////////////
+///////////////////////		
 
 								strBuffer_tLogRow_3 = new StringBuilder();
 
-								strBuffer_tLogRow_3.append(FormatterUtils
-										.formatUnwithE(row8.T));
+								strBuffer_tLogRow_3.append(FormatterUtils.formatUnwithE(row8.T));
 
 								strBuffer_tLogRow_3.append("|");
 
-								strBuffer_tLogRow_3.append(FormatterUtils
-										.formatUnwithE(row8.D));
+								strBuffer_tLogRow_3.append(FormatterUtils.formatUnwithE(row8.D));
 
 								if (globalMap.get("tLogRow_CONSOLE") != null) {
-									consoleOut_tLogRow_3 = (java.io.PrintStream) globalMap
-											.get("tLogRow_CONSOLE");
+									consoleOut_tLogRow_3 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
 								} else {
 									consoleOut_tLogRow_3 = new java.io.PrintStream(
-											new java.io.BufferedOutputStream(
-													System.out));
-									globalMap.put("tLogRow_CONSOLE",
-											consoleOut_tLogRow_3);
+											new java.io.BufferedOutputStream(System.out));
+									globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_3);
 								}
-								consoleOut_tLogRow_3
-										.println(strBuffer_tLogRow_3.toString());
+								consoleOut_tLogRow_3.println(strBuffer_tLogRow_3.toString());
 								consoleOut_tLogRow_3.flush();
 								nb_line_tLogRow_3++;
-								// ////
+//////
 
-								// ////
+//////                    
 
-								// /////////////////////
+///////////////////////    			
 
-								row16 = row8;
+								row14 = row8;
 
 								tos_count_tLogRow_3++;
 
@@ -3361,6 +3322,41 @@ public class SimpleLinearRegressionSample implements TalendJob {
 								 */
 
 								/**
+								 * [tFileOutputExcel_2 main ] start
+								 */
+
+								currentComponent = "tFileOutputExcel_2";
+
+								if (execStat) {
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row14");
+								}
+
+								xlsxTool_tFileOutputExcel_2.addRow();
+
+								xlsxTool_tFileOutputExcel_2.addCellValue(row14.T);
+
+								xlsxTool_tFileOutputExcel_2.addCellValue(row14.D);
+								nb_line_tFileOutputExcel_2++;
+
+								row15 = row14;
+
+								tos_count_tFileOutputExcel_2++;
+
+								/**
+								 * [tFileOutputExcel_2 main ] stop
+								 */
+
+								/**
+								 * [tFileOutputExcel_2 process_data_begin ] start
+								 */
+
+								currentComponent = "tFileOutputExcel_2";
+
+								/**
+								 * [tFileOutputExcel_2 process_data_begin ] stop
+								 */
+
+								/**
 								 * [tShujuTransform_2_TransformOut main ] start
 								 */
 
@@ -3368,25 +3364,18 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 								currentComponent = "tShujuTransform_2_TransformOut";
 
-								// row16
-								// row16
-
 								if (execStat) {
-									runStat.updateStatOnConnection("row16"
-											+ iterateId, 1, 1);
+									runStat.updateStatOnConnection(iterateId, 1, 1, "row15");
 								}
 
 								com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.DataRow();
 								com.github.romualdrousseau.shuju.features.NumericFeature feature_T_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.features.NumericFeature(
 										row17.T);
-								row_tShujuTransform_2_TransformOut
-										.addFeature(feature_T_tShujuTransform_2_TransformOut);
+								row_tShujuTransform_2_TransformOut.addFeature(feature_T_tShujuTransform_2_TransformOut);
 								com.github.romualdrousseau.shuju.features.NumericFeature feature_D_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.features.NumericFeature(
 										row17.D);
-								row_tShujuTransform_2_TransformOut
-										.setLabel(feature_D_tShujuTransform_2_TransformOut);
-								dataset_tShujuTransform_2_TransformOut
-										.addRow(row_tShujuTransform_2_TransformOut);
+								row_tShujuTransform_2_TransformOut.setLabel(feature_D_tShujuTransform_2_TransformOut);
+								dataset_tShujuTransform_2_TransformOut.addRow(row_tShujuTransform_2_TransformOut);
 
 								nb_line_tShujuTransform_2_TransformOut++;
 
@@ -3397,8 +3386,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 								 */
 
 								/**
-								 * [tShujuTransform_2_TransformOut
-								 * process_data_begin ] start
+								 * [tShujuTransform_2_TransformOut process_data_begin ] start
 								 */
 
 								currentVirtualComponent = "tShujuTransform_2";
@@ -3406,13 +3394,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 								currentComponent = "tShujuTransform_2_TransformOut";
 
 								/**
-								 * [tShujuTransform_2_TransformOut
-								 * process_data_begin ] stop
+								 * [tShujuTransform_2_TransformOut process_data_begin ] stop
 								 */
 
 								/**
-								 * [tShujuTransform_2_TransformOut
-								 * process_data_end ] start
+								 * [tShujuTransform_2_TransformOut process_data_end ] start
 								 */
 
 								currentVirtualComponent = "tShujuTransform_2";
@@ -3420,8 +3406,17 @@ public class SimpleLinearRegressionSample implements TalendJob {
 								currentComponent = "tShujuTransform_2_TransformOut";
 
 								/**
-								 * [tShujuTransform_2_TransformOut
-								 * process_data_end ] stop
+								 * [tShujuTransform_2_TransformOut process_data_end ] stop
+								 */
+
+								/**
+								 * [tFileOutputExcel_2 process_data_end ] start
+								 */
+
+								currentComponent = "tFileOutputExcel_2";
+
+								/**
+								 * [tFileOutputExcel_2 process_data_end ] stop
 								 */
 
 								/**
@@ -3476,21 +3471,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					}
 				} finally {
-					if (!((Object) ("C:/Users/admin/Projects/workspace/SAMPLES/data/x62.csv") instanceof java.io.InputStream)) {
+					if (!((Object) ("C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/x62.csv") instanceof java.io.InputStream)) {
 						if (fid_tFileInputDelimited_2 != null) {
 							fid_tFileInputDelimited_2.close();
 						}
 					}
 					if (fid_tFileInputDelimited_2 != null) {
-						globalMap.put("tFileInputDelimited_2_NB_LINE",
-								fid_tFileInputDelimited_2.getRowNumber());
+						globalMap.put("tFileInputDelimited_2_NB_LINE", fid_tFileInputDelimited_2.getRowNumber());
 
 					}
 				}
 
 				ok_Hash.put("tFileInputDelimited_2", true);
-				end_Hash.put("tFileInputDelimited_2",
-						System.currentTimeMillis());
+				end_Hash.put("tFileInputDelimited_2", System.currentTimeMillis());
 
 				/**
 				 * [tFileInputDelimited_2 end ] stop
@@ -3502,15 +3495,12 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tMap_1";
 
-				// ###############################
-				// # Lookup hashes releasing
-				// ###############################
+// ###############################
+// # Lookup hashes releasing
+// ###############################      
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row6" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row6");
 				}
 
 				ok_Hash.put("tMap_1", true);
@@ -3526,15 +3516,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_19";
 
-				tFlowMeterCatcher_1.addMessage("row17", new Integer(
-						count_tFlowMeter_19), "null", "", "tFlowMeter_19");
+				tFlowMeterCatcher_1.addMessage("row17", new Integer(count_tFlowMeter_19), "null", "", "tFlowMeter_19");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row17" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row17");
 				}
 
 				ok_Hash.put("tFlowMeter_19", true);
@@ -3550,17 +3535,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tLogRow_3";
 
-				// ////
-				// ////
+//////
+//////
 				globalMap.put("tLogRow_3_NB_LINE", nb_line_tLogRow_3);
 
-				// /////////////////////
+///////////////////////    			
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row8" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row8");
 				}
 
 				ok_Hash.put("tLogRow_3", true);
@@ -3568,6 +3550,29 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				/**
 				 * [tLogRow_3 end ] stop
+				 */
+
+				/**
+				 * [tFileOutputExcel_2 end ] start
+				 */
+
+				currentComponent = "tFileOutputExcel_2";
+
+				xlsxTool_tFileOutputExcel_2.writeExcel(fileName_tFileOutputExcel_2, true);
+
+				nb_line_tFileOutputExcel_2 = nb_line_tFileOutputExcel_2 - 1;
+
+				globalMap.put("tFileOutputExcel_2_NB_LINE", nb_line_tFileOutputExcel_2);
+
+				if (execStat) {
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row14");
+				}
+
+				ok_Hash.put("tFileOutputExcel_2", true);
+				end_Hash.put("tFileOutputExcel_2", System.currentTimeMillis());
+
+				/**
+				 * [tFileOutputExcel_2 end ] stop
 				 */
 
 				/**
@@ -3580,33 +3585,22 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				another_dataset_tShujuTransform_2_TransformOut = (com.github.romualdrousseau.shuju.DataSet) globalMap
 						.get("dataset_row3");
+				dataset_tShujuTransform_2_TransformOut.transform(
+						new com.github.romualdrousseau.shuju.transforms.VectorAdd(
+								another_dataset_tShujuTransform_2_TransformOut, -1.0),
+						com.github.romualdrousseau.shuju.IFeature.LABEL);
 				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.VectorAdd(
-										another_dataset_tShujuTransform_2_TransformOut,
-										-1.0),
-								com.github.romualdrousseau.shuju.IFeature.LABEL);
-				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.VectorShift(
-										12.0), 0);
+						.transform(new com.github.romualdrousseau.shuju.transforms.VectorShift(12.0), 0);
 
-				globalMap.put("tShujuTransform_2",
-						dataset_tShujuTransform_2_TransformOut);
-				globalMap.put("tShujuTransform_2_TransformOut_NB_LINE",
-						nb_line_tShujuTransform_2_TransformOut);
+				globalMap.put("tShujuTransform_2", dataset_tShujuTransform_2_TransformOut);
+				globalMap.put("tShujuTransform_2_TransformOut_NB_LINE", nb_line_tShujuTransform_2_TransformOut);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row16" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row15");
 				}
 
 				ok_Hash.put("tShujuTransform_2_TransformOut", true);
-				end_Hash.put("tShujuTransform_2_TransformOut",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_2_TransformOut", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_2_TransformOut end ] stop
@@ -3617,31 +3611,18 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransform_3_TransformOut", false);
-				start_Hash.put("tShujuTransform_3_TransformOut",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_3_TransformOut", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_3";
 
 				currentComponent = "tShujuTransform_3_TransformOut";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row9" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row9");
 				}
 
 				int tos_count_tShujuTransform_3_TransformOut = 0;
 
-				class BytesLimit65535_tShujuTransform_3_TransformOut {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_3_TransformOut()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_3_TransformOut = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_3_TransformOut = new com.github.romualdrousseau.shuju.DataSet();
@@ -3657,8 +3638,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransform_2_TransformIn", false);
-				start_Hash.put("tShujuTransform_2_TransformIn",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_2_TransformIn", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_2";
 
@@ -3666,24 +3646,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				int tos_count_tShujuTransform_2_TransformIn = 0;
 
-				class BytesLimit65535_tShujuTransform_2_TransformIn {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_2_TransformIn()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_2_TransformIn = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_2_TransformIn = (com.github.romualdrousseau.shuju.DataSet) globalMap
 						.get("tShujuTransform_2");
 				for (com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_2_TransformIn : dataset_tShujuTransform_2_TransformIn
 						.rows()) {
-					row9.T = (Double) row_tShujuTransform_2_TransformIn
-							.features().get(0).getValue();
-					row9.D = (Double) row_tShujuTransform_2_TransformIn
-							.getLabel().getValue();
+					row9.T = (Double) row_tShujuTransform_2_TransformIn.features().get(0).getValue();
+					row9.D = (Double) row_tShujuTransform_2_TransformIn.getLabel().getValue();
 					nb_line_tShujuTransform_2_TransformIn++;
 
 					/**
@@ -3724,24 +3694,18 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tShujuTransform_3_TransformOut";
 
-					// row9
-					// row9
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row9" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row9");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_3_TransformOut = new com.github.romualdrousseau.shuju.DataRow();
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_T_tShujuTransform_3_TransformOut = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row9.T);
-					row_tShujuTransform_3_TransformOut
-							.addFeature(feature_T_tShujuTransform_3_TransformOut);
+					row_tShujuTransform_3_TransformOut.addFeature(feature_T_tShujuTransform_3_TransformOut);
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_D_tShujuTransform_3_TransformOut = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row9.D);
-					row_tShujuTransform_3_TransformOut
-							.setLabel(feature_D_tShujuTransform_3_TransformOut);
-					dataset_tShujuTransform_3_TransformOut
-							.addRow(row_tShujuTransform_3_TransformOut);
+					row_tShujuTransform_3_TransformOut.setLabel(feature_D_tShujuTransform_3_TransformOut);
+					dataset_tShujuTransform_3_TransformOut.addRow(row_tShujuTransform_3_TransformOut);
 
 					nb_line_tShujuTransform_3_TransformOut++;
 
@@ -3752,8 +3716,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					 */
 
 					/**
-					 * [tShujuTransform_3_TransformOut process_data_begin ]
-					 * start
+					 * [tShujuTransform_3_TransformOut process_data_begin ] start
 					 */
 
 					currentVirtualComponent = "tShujuTransform_3";
@@ -3798,12 +3761,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				}
 
-				globalMap.put("tShujuTransform_2_TransformIn_NB_LINE",
-						nb_line_tShujuTransform_2_TransformIn);
+				globalMap.put("tShujuTransform_2_TransformIn_NB_LINE", nb_line_tShujuTransform_2_TransformIn);
 
 				ok_Hash.put("tShujuTransform_2_TransformIn", true);
-				end_Hash.put("tShujuTransform_2_TransformIn",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_2_TransformIn", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_2_TransformIn end ] stop
@@ -3819,36 +3780,80 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				another_dataset_tShujuTransform_3_TransformOut = (com.github.romualdrousseau.shuju.DataSet) globalMap
 						.get("dataset_row7");
-				dataset_tShujuTransform_3_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.SmoothScaler(
-										0.8),
-								com.github.romualdrousseau.shuju.IFeature.LABEL);
-				dataset_tShujuTransform_3_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.VectorAdd(
-										another_dataset_tShujuTransform_3_TransformOut,
-										1.0),
-								com.github.romualdrousseau.shuju.IFeature.LABEL);
+				dataset_tShujuTransform_3_TransformOut.transform(
+						new com.github.romualdrousseau.shuju.transforms.SmoothScaler(0.8),
+						com.github.romualdrousseau.shuju.IFeature.LABEL);
+				dataset_tShujuTransform_3_TransformOut.transform(
+						new com.github.romualdrousseau.shuju.transforms.VectorAdd(
+								another_dataset_tShujuTransform_3_TransformOut, 1.0),
+						com.github.romualdrousseau.shuju.IFeature.LABEL);
 
-				globalMap.put("tShujuTransform_3",
-						dataset_tShujuTransform_3_TransformOut);
-				globalMap.put("tShujuTransform_3_TransformOut_NB_LINE",
-						nb_line_tShujuTransform_3_TransformOut);
+				globalMap.put("tShujuTransform_3", dataset_tShujuTransform_3_TransformOut);
+				globalMap.put("tShujuTransform_3_TransformOut_NB_LINE", nb_line_tShujuTransform_3_TransformOut);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row9" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row9");
 				}
 
 				ok_Hash.put("tShujuTransform_3_TransformOut", true);
-				end_Hash.put("tShujuTransform_3_TransformOut",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_3_TransformOut", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_3_TransformOut end ] stop
+				 */
+
+				/**
+				 * [tFileOutputExcel_1 begin ] start
+				 */
+
+				ok_Hash.put("tFileOutputExcel_1", false);
+				start_Hash.put("tFileOutputExcel_1", System.currentTimeMillis());
+
+				currentComponent = "tFileOutputExcel_1";
+
+				if (execStat) {
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row12");
+				}
+
+				int tos_count_tFileOutputExcel_1 = 0;
+
+				int columnIndex_tFileOutputExcel_1 = 0;
+
+				String fileName_tFileOutputExcel_1 = "C:/Users/RRU_SG1/Documents/out.xls";
+				int nb_line_tFileOutputExcel_1 = 0;
+				org.talend.ExcelTool xlsxTool_tFileOutputExcel_1 = new org.talend.ExcelTool();
+
+				xlsxTool_tFileOutputExcel_1.setSheet("Sheet1");
+				xlsxTool_tFileOutputExcel_1.setAppend(true, true);
+				xlsxTool_tFileOutputExcel_1.setRecalculateFormula(false);
+				xlsxTool_tFileOutputExcel_1.setXY(false, 0, 0, false);
+
+				java.util.concurrent.ConcurrentHashMap<java.lang.Object, java.lang.Object> chm_tFileOutputExcel_1 = (java.util.concurrent.ConcurrentHashMap<java.lang.Object, java.lang.Object>) globalMap
+						.get("concurrentHashMap");
+				java.lang.Object lockObj_tFileOutputExcel_1 = chm_tFileOutputExcel_1
+						.computeIfAbsent("EXCEL_OUTPUT_LOCK_OBJ_tFileOutputExcel_1", k -> new Object());
+				synchronized (lockObj_tFileOutputExcel_1) {
+
+					xlsxTool_tFileOutputExcel_1.prepareXlsxFile(fileName_tFileOutputExcel_1);
+
+				}
+
+				xlsxTool_tFileOutputExcel_1.setFont("");
+
+				if (xlsxTool_tFileOutputExcel_1.getStartRow() == 0) {
+
+					xlsxTool_tFileOutputExcel_1.addRow();
+
+					xlsxTool_tFileOutputExcel_1.addCellValue("T");
+
+					xlsxTool_tFileOutputExcel_1.addCellValue("D");
+
+					nb_line_tFileOutputExcel_1++;
+
+				}
+
+				/**
+				 * [tFileOutputExcel_1 begin ] stop
 				 */
 
 				/**
@@ -3861,32 +3866,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tLogRow_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row10" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row10");
 				}
 
 				int tos_count_tLogRow_2 = 0;
 
-				class BytesLimit65535_tLogRow_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tLogRow_2().limitLog4jByte();
-
-				// /////////////////////
+				///////////////////////
 
 				final String OUTPUT_FIELD_SEPARATOR_tLogRow_2 = "|";
 				java.io.PrintStream consoleOut_tLogRow_2 = null;
 
 				StringBuilder strBuffer_tLogRow_2 = null;
 				int nb_line_tLogRow_2 = 0;
-				// /////////////////////
+///////////////////////    			
 
 				/**
 				 * [tLogRow_2 begin ] stop
@@ -3902,23 +3894,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tFlowMeter_21";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row11" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row11");
 				}
 
 				int tos_count_tFlowMeter_21 = 0;
-
-				class BytesLimit65535_tFlowMeter_21 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_21().limitLog4jByte();
 
 				int count_tFlowMeter_21 = 0;
 
@@ -3931,8 +3910,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransform_3_TransformIn", false);
-				start_Hash.put("tShujuTransform_3_TransformIn",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_3_TransformIn", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_3";
 
@@ -3940,24 +3918,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				int tos_count_tShujuTransform_3_TransformIn = 0;
 
-				class BytesLimit65535_tShujuTransform_3_TransformIn {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_3_TransformIn()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_3_TransformIn = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_3_TransformIn = (com.github.romualdrousseau.shuju.DataSet) globalMap
 						.get("tShujuTransform_3");
 				for (com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_3_TransformIn : dataset_tShujuTransform_3_TransformIn
 						.rows()) {
-					row11.T = (Double) row_tShujuTransform_3_TransformIn
-							.features().get(0).getValue();
-					row11.D = (Double) row_tShujuTransform_3_TransformIn
-							.getLabel().getValue();
+					row11.T = (Double) row_tShujuTransform_3_TransformIn.features().get(0).getValue();
+					row11.D = (Double) row_tShujuTransform_3_TransformIn.getLabel().getValue();
 					nb_line_tShujuTransform_3_TransformIn++;
 
 					/**
@@ -3996,12 +3964,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tFlowMeter_21";
 
-					// row11
-					// row11
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row11" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row11");
 					}
 
 					count_tFlowMeter_21++;
@@ -4030,43 +3994,36 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tLogRow_2";
 
-					// row10
-					// row10
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row10" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row10");
 					}
 
-					// /////////////////////
+///////////////////////		
 
 					strBuffer_tLogRow_2 = new StringBuilder();
 
-					strBuffer_tLogRow_2.append(FormatterUtils
-							.formatUnwithE(row10.T));
+					strBuffer_tLogRow_2.append(FormatterUtils.formatUnwithE(row10.T));
 
 					strBuffer_tLogRow_2.append("|");
 
-					strBuffer_tLogRow_2.append(FormatterUtils
-							.formatUnwithE(row10.D));
+					strBuffer_tLogRow_2.append(FormatterUtils.formatUnwithE(row10.D));
 
 					if (globalMap.get("tLogRow_CONSOLE") != null) {
-						consoleOut_tLogRow_2 = (java.io.PrintStream) globalMap
-								.get("tLogRow_CONSOLE");
+						consoleOut_tLogRow_2 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
 					} else {
-						consoleOut_tLogRow_2 = new java.io.PrintStream(
-								new java.io.BufferedOutputStream(System.out));
+						consoleOut_tLogRow_2 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
 						globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_2);
 					}
-					consoleOut_tLogRow_2
-							.println(strBuffer_tLogRow_2.toString());
+					consoleOut_tLogRow_2.println(strBuffer_tLogRow_2.toString());
 					consoleOut_tLogRow_2.flush();
 					nb_line_tLogRow_2++;
-					// ////
+//////
 
-					// ////
+//////                    
 
-					// /////////////////////
+///////////////////////    			
+
+					row12 = row10;
 
 					tos_count_tLogRow_2++;
 
@@ -4082,6 +4039,49 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					/**
 					 * [tLogRow_2 process_data_begin ] stop
+					 */
+
+					/**
+					 * [tFileOutputExcel_1 main ] start
+					 */
+
+					currentComponent = "tFileOutputExcel_1";
+
+					if (execStat) {
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row12");
+					}
+
+					xlsxTool_tFileOutputExcel_1.addRow();
+
+					xlsxTool_tFileOutputExcel_1.addCellValue(row12.T);
+
+					xlsxTool_tFileOutputExcel_1.addCellValue(row12.D);
+					nb_line_tFileOutputExcel_1++;
+
+					tos_count_tFileOutputExcel_1++;
+
+					/**
+					 * [tFileOutputExcel_1 main ] stop
+					 */
+
+					/**
+					 * [tFileOutputExcel_1 process_data_begin ] start
+					 */
+
+					currentComponent = "tFileOutputExcel_1";
+
+					/**
+					 * [tFileOutputExcel_1 process_data_begin ] stop
+					 */
+
+					/**
+					 * [tFileOutputExcel_1 process_data_end ] start
+					 */
+
+					currentComponent = "tFileOutputExcel_1";
+
+					/**
+					 * [tFileOutputExcel_1 process_data_end ] stop
 					 */
 
 					/**
@@ -4126,12 +4126,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				}
 
-				globalMap.put("tShujuTransform_3_TransformIn_NB_LINE",
-						nb_line_tShujuTransform_3_TransformIn);
+				globalMap.put("tShujuTransform_3_TransformIn_NB_LINE", nb_line_tShujuTransform_3_TransformIn);
 
 				ok_Hash.put("tShujuTransform_3_TransformIn", true);
-				end_Hash.put("tShujuTransform_3_TransformIn",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_3_TransformIn", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_3_TransformIn end ] stop
@@ -4143,15 +4141,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_21";
 
-				tFlowMeterCatcher_1.addMessage("row11", new Integer(
-						count_tFlowMeter_21), "null", "", "tFlowMeter_21");
+				tFlowMeterCatcher_1.addMessage("row11", new Integer(count_tFlowMeter_21), "null", "", "tFlowMeter_21");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row11" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row11");
 				}
 
 				ok_Hash.put("tFlowMeter_21", true);
@@ -4167,18 +4160,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tLogRow_2";
 
-				// ////
-				// ////
+//////
+//////
 				globalMap.put("tLogRow_2_NB_LINE", nb_line_tLogRow_2);
 
-				// /////////////////////
+///////////////////////    			
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row10" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row10");
 				}
 
 				ok_Hash.put("tLogRow_2", true);
@@ -4188,16 +4177,44 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 * [tLogRow_2 end ] stop
 				 */
 
-			}// end the resume
+				/**
+				 * [tFileOutputExcel_1 end ] start
+				 */
+
+				currentComponent = "tFileOutputExcel_1";
+
+				columnIndex_tFileOutputExcel_1 = 0;
+
+				xlsxTool_tFileOutputExcel_1.setColAutoSize(columnIndex_tFileOutputExcel_1);
+
+				columnIndex_tFileOutputExcel_1 = 1;
+
+				xlsxTool_tFileOutputExcel_1.setColAutoSize(columnIndex_tFileOutputExcel_1);
+
+				xlsxTool_tFileOutputExcel_1.writeExcel(fileName_tFileOutputExcel_1, true);
+
+				nb_line_tFileOutputExcel_1 = nb_line_tFileOutputExcel_1 - 1;
+
+				globalMap.put("tFileOutputExcel_1_NB_LINE", nb_line_tFileOutputExcel_1);
+
+				if (execStat) {
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row12");
+				}
+
+				ok_Hash.put("tFileOutputExcel_1", true);
+				end_Hash.put("tFileOutputExcel_1", System.currentTimeMillis());
+
+				/**
+				 * [tFileOutputExcel_1 end ] stop
+				 */
+
+			} // end the resume
 
 			tFlowMeterCatcher_1Process(globalMap);
 
 			if (resumeEntryMethodName == null || globalResumeTicket) {
-				resumeUtil
-						.addLog("CHECKPOINT",
-								"CONNECTION:SUBJOB_OK:tFileInputDelimited_2:OnSubjobOk",
-								"", Thread.currentThread().getId() + "", "",
-								"", "", "", "");
+				resumeUtil.addLog("CHECKPOINT", "CONNECTION:SUBJOB_OK:tFileInputDelimited_2:OnSubjobOk", "",
+						Thread.currentThread().getId() + "", "", "", "", "", "");
 			}
 
 			if (execStat) {
@@ -4208,8 +4225,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			te.setVirtualComponentName(currentVirtualComponent);
 
@@ -4267,6 +4283,16 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				/**
 				 * [tLogRow_3 finally ] stop
+				 */
+
+				/**
+				 * [tFileOutputExcel_2 finally ] start
+				 */
+
+				currentComponent = "tFileOutputExcel_2";
+
+				/**
+				 * [tFileOutputExcel_2 finally ] stop
 				 */
 
 				/**
@@ -4337,6 +4363,16 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 * [tLogRow_2 finally ] stop
 				 */
 
+				/**
+				 * [tFileOutputExcel_1 finally ] start
+				 */
+
+				currentComponent = "tFileOutputExcel_1";
+
+				/**
+				 * [tFileOutputExcel_1 finally ] stop
+				 */
+
 			} catch (java.lang.Exception e) {
 				// ignore
 			} catch (java.lang.Error error) {
@@ -4348,8 +4384,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		globalMap.put("tFileInputDelimited_2_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row13Struct implements
-			routines.system.IPersistableRow<row13Struct> {
+	public static class row13Struct implements routines.system.IPersistableRow<row13Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -4443,8 +4478,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			return this.thresholds;
 		}
 
-		private java.util.Date readDate(ObjectInputStream dis)
-				throws IOException {
+		private java.util.Date readDate(ObjectInputStream dis) throws IOException {
 			java.util.Date dateReturn = null;
 			int length = 0;
 			length = dis.readByte();
@@ -4456,8 +4490,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			return dateReturn;
 		}
 
-		private void writeDate(java.util.Date date1, ObjectOutputStream dos)
-				throws IOException {
+		private void writeDate(java.util.Date date1, ObjectOutputStream dos) throws IOException {
 			if (date1 == null) {
 				dos.writeByte(-1);
 			} else {
@@ -4474,25 +4507,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_SimpleLinearRegressionSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_SimpleLinearRegressionSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_SimpleLinearRegressionSample.length == 0) {
 						commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[2 * length];
 					}
 				}
-				dis.readFully(
-						commonByteArray_SAMPLES_SimpleLinearRegressionSample,
-						0, length);
-				strReturn = new String(
-						commonByteArray_SAMPLES_SimpleLinearRegressionSample,
-						0, length, utf8Charset);
+				dis.readFully(commonByteArray_SAMPLES_SimpleLinearRegressionSample, 0, length);
+				strReturn = new String(commonByteArray_SAMPLES_SimpleLinearRegressionSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -4514,8 +4541,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			return intReturn;
 		}
 
-		private void writeInteger(Integer intNum, ObjectOutputStream dos)
-				throws IOException {
+		private void writeInteger(Integer intNum, ObjectOutputStream dos) throws IOException {
 			if (intNum == null) {
 				dos.writeByte(-1);
 			} else {
@@ -4690,8 +4716,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -4709,9 +4734,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public void tFlowMeterCatcher_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFlowMeterCatcher_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tFlowMeterCatcher_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -4725,8 +4748,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -4744,32 +4766,19 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tLogRow_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row13" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row13");
 				}
 
 				int tos_count_tLogRow_1 = 0;
 
-				class BytesLimit65535_tLogRow_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tLogRow_1().limitLog4jByte();
-
-				// /////////////////////
+				///////////////////////
 
 				final String OUTPUT_FIELD_SEPARATOR_tLogRow_1 = "|";
 				java.io.PrintStream consoleOut_tLogRow_1 = null;
 
 				StringBuilder strBuffer_tLogRow_1 = null;
 				int nb_line_tLogRow_1 = 0;
-				// /////////////////////
+///////////////////////    			
 
 				/**
 				 * [tLogRow_1 begin ] stop
@@ -4780,40 +4789,27 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tFlowMeterCatcher_1", false);
-				start_Hash.put("tFlowMeterCatcher_1",
-						System.currentTimeMillis());
+				start_Hash.put("tFlowMeterCatcher_1", System.currentTimeMillis());
 
 				currentComponent = "tFlowMeterCatcher_1";
 
 				int tos_count_tFlowMeterCatcher_1 = 0;
 
-				class BytesLimit65535_tFlowMeterCatcher_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeterCatcher_1().limitLog4jByte();
-
-				for (MetterCatcherUtils.MetterCatcherMessage mcm : tFlowMeterCatcher_1
-						.getMessages()) {
+				for (MetterCatcherUtils.MetterCatcherMessage mcm : tFlowMeterCatcher_1.getMessages()) {
 					row13.pid = pid;
 					row13.root_pid = rootPid;
 					row13.father_pid = fatherPid;
 					row13.project = projectName;
 					row13.job = jobName;
 					row13.context = contextStr;
-					row13.origin = (mcm.getOrigin() == null
-							|| mcm.getOrigin().length() < 1 ? null : mcm
-							.getOrigin());
+					row13.origin = (mcm.getOrigin() == null || mcm.getOrigin().length() < 1 ? null : mcm.getOrigin());
 					row13.moment = mcm.getMoment();
 					row13.job_version = mcm.getJobVersion();
 					row13.job_repository_id = mcm.getJobId();
 					row13.system_pid = mcm.getSystemPid();
 					row13.label = mcm.getLabel();
 					row13.count = mcm.getCount();
-					row13.reference = tFlowMeterCatcher_1.getConnLinesCount(mcm
-							.getReferense() + "_count");
+					row13.reference = tFlowMeterCatcher_1.getConnLinesCount(mcm.getReferense() + "_count");
 					row13.thresholds = mcm.getThresholds();
 
 					/**
@@ -4848,22 +4844,17 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tLogRow_1";
 
-					// row13
-					// row13
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row13" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row13");
 					}
 
-					// /////////////////////
+///////////////////////		
 
 					strBuffer_tLogRow_1 = new StringBuilder();
 
 					if (row13.moment != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils.format_Date(
-								row13.moment, "yyyy-MM-dd HH:mm:ss"));
+						strBuffer_tLogRow_1.append(FormatterUtils.format_Date(row13.moment, "yyyy-MM-dd HH:mm:ss"));
 
 					} //
 
@@ -4879,8 +4870,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.father_pid != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.father_pid));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.father_pid));
 
 					} //
 
@@ -4888,8 +4878,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.root_pid != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.root_pid));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.root_pid));
 
 					} //
 
@@ -4897,8 +4886,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.system_pid != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.system_pid));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.system_pid));
 
 					} //
 
@@ -4906,8 +4894,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.project != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.project));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.project));
 
 					} //
 
@@ -4923,8 +4910,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.job_repository_id != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.job_repository_id));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.job_repository_id));
 
 					} //
 
@@ -4932,8 +4918,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.job_version != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.job_version));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.job_version));
 
 					} //
 
@@ -4941,8 +4926,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.context != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.context));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.context));
 
 					} //
 
@@ -4950,8 +4934,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.origin != null) { //
 
-						strBuffer_tLogRow_1
-								.append(String.valueOf(row13.origin));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.origin));
 
 					} //
 
@@ -4975,8 +4958,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.reference != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.reference));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.reference));
 
 					} //
 
@@ -4984,28 +4966,24 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					if (row13.thresholds != null) { //
 
-						strBuffer_tLogRow_1.append(String
-								.valueOf(row13.thresholds));
+						strBuffer_tLogRow_1.append(String.valueOf(row13.thresholds));
 
 					} //
 
 					if (globalMap.get("tLogRow_CONSOLE") != null) {
-						consoleOut_tLogRow_1 = (java.io.PrintStream) globalMap
-								.get("tLogRow_CONSOLE");
+						consoleOut_tLogRow_1 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
 					} else {
-						consoleOut_tLogRow_1 = new java.io.PrintStream(
-								new java.io.BufferedOutputStream(System.out));
+						consoleOut_tLogRow_1 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
 						globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_1);
 					}
-					consoleOut_tLogRow_1
-							.println(strBuffer_tLogRow_1.toString());
+					consoleOut_tLogRow_1.println(strBuffer_tLogRow_1.toString());
 					consoleOut_tLogRow_1.flush();
 					nb_line_tLogRow_1++;
-					// ////
+//////
 
-					// ////
+//////                    
 
-					// /////////////////////
+///////////////////////    			
 
 					tos_count_tLogRow_1++;
 
@@ -5064,18 +5042,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tLogRow_1";
 
-				// ////
-				// ////
+//////
+//////
 				globalMap.put("tLogRow_1_NB_LINE", nb_line_tLogRow_1);
 
-				// /////////////////////
+///////////////////////    			
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row13" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row13");
 				}
 
 				ok_Hash.put("tLogRow_1", true);
@@ -5085,12 +5059,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 * [tLogRow_1 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -5133,8 +5106,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		globalMap.put("tFlowMeterCatcher_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row3Struct implements
-			routines.system.IPersistableRow<row3Struct> {
+	public static class row3Struct implements routines.system.IPersistableRow<row3Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -5258,8 +5230,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5277,8 +5248,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row5Struct implements
-			routines.system.IPersistableRow<row5Struct> {
+	public static class row5Struct implements routines.system.IPersistableRow<row5Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -5356,8 +5326,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5375,9 +5344,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public void tRowGenerator_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tRowGenerator_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -5391,8 +5358,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -5406,29 +5372,16 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransformDataSet_row3", false);
-				start_Hash.put("tShujuTransformDataSet_row3",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransformDataSet_row3", System.currentTimeMillis());
 
 				currentComponent = "tShujuTransformDataSet_row3";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row3" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row3");
 				}
 
 				int tos_count_tShujuTransformDataSet_row3 = 0;
 
-				class BytesLimit65535_tShujuTransformDataSet_row3 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransformDataSet_row3()
-						.limitLog4jByte();
 				int nb_line_tShujuTransformDataSet_row3 = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransformDataSet_row3 = new com.github.romualdrousseau.shuju.DataSet();
@@ -5447,22 +5400,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tShujuPredict_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row5" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row5");
 				}
 
 				int tos_count_tShujuPredict_1 = 0;
 
-				class BytesLimit65535_tShujuPredict_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuPredict_1().limitLog4jByte();
 				int nb_line_tShujuPredict_1 = 0;
 
 				com.github.romualdrousseau.shuju.IClassifier classifier_tShujuPredict_1 = (com.github.romualdrousseau.shuju.IClassifier) globalMap
@@ -5482,14 +5424,6 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tRowGenerator_1";
 
 				int tos_count_tRowGenerator_1 = 0;
-
-				class BytesLimit65535_tRowGenerator_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tRowGenerator_1().limitLog4jByte();
 
 				int nb_line_tRowGenerator_1 = 0;
 				int nb_max_row_tRowGenerator_1 = 12;
@@ -5539,11 +5473,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tShujuPredict_1";
 
-					// row5
-					// row5
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row5" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row5");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuPredict_1 = new com.github.romualdrousseau.shuju.DataRow();
@@ -5580,28 +5511,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tShujuTransformDataSet_row3";
 
-					// row3
-					// row3
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row3" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row3");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuTransformDataSet_row3 = new com.github.romualdrousseau.shuju.DataRow();
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_T_tShujuTransformDataSet_row3 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row3.T);
-					row_tShujuTransformDataSet_row3
-							.addFeature(feature_T_tShujuTransformDataSet_row3);
+					row_tShujuTransformDataSet_row3.addFeature(feature_T_tShujuTransformDataSet_row3);
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_RESULT_LABEL_tShujuTransformDataSet_row3 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row3.RESULT_LABEL);
-					row_tShujuTransformDataSet_row3
-							.setLabel(feature_RESULT_LABEL_tShujuTransformDataSet_row3);
+					row_tShujuTransformDataSet_row3.setLabel(feature_RESULT_LABEL_tShujuTransformDataSet_row3);
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_RESULT_ERROR_tShujuTransformDataSet_row3 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row3.RESULT_ERROR);
-					row_tShujuTransformDataSet_row3
-							.addFeature(feature_RESULT_ERROR_tShujuTransformDataSet_row3);
-					dataset_tShujuTransformDataSet_row3
-							.addRow(row_tShujuTransformDataSet_row3);
+					row_tShujuTransformDataSet_row3.addFeature(feature_RESULT_ERROR_tShujuTransformDataSet_row3);
+					dataset_tShujuTransformDataSet_row3.addRow(row_tShujuTransformDataSet_row3);
 
 					nb_line_tShujuTransformDataSet_row3++;
 
@@ -5658,8 +5582,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					currentComponent = "tRowGenerator_1";
 
 				}
-				globalMap.put("tRowGenerator_1_NB_LINE",
-						nb_line_tRowGenerator_1);
+				globalMap.put("tRowGenerator_1_NB_LINE", nb_line_tRowGenerator_1);
 
 				ok_Hash.put("tRowGenerator_1", true);
 				end_Hash.put("tRowGenerator_1", System.currentTimeMillis());
@@ -5674,14 +5597,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tShujuPredict_1";
 
-				globalMap.put("tShujuPredict_1_NB_LINE",
-						nb_line_tShujuPredict_1);
+				globalMap.put("tShujuPredict_1_NB_LINE", nb_line_tShujuPredict_1);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row5" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row5");
 				}
 
 				ok_Hash.put("tShujuPredict_1", true);
@@ -5697,32 +5616,25 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tShujuTransformDataSet_row3";
 
-				globalMap.put("dataset_row3",
-						dataset_tShujuTransformDataSet_row3);
-				globalMap.put("tShujuTransformDataSet_row3_NB_LINE",
-						nb_line_tShujuTransformDataSet_row3);
+				globalMap.put("dataset_row3", dataset_tShujuTransformDataSet_row3);
+				globalMap.put("tShujuTransformDataSet_row3_NB_LINE", nb_line_tShujuTransformDataSet_row3);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row3" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row3");
 				}
 
 				ok_Hash.put("tShujuTransformDataSet_row3", true);
-				end_Hash.put("tShujuTransformDataSet_row3",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransformDataSet_row3", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransformDataSet_row3 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -5775,8 +5687,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		globalMap.put("tRowGenerator_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row7Struct implements
-			routines.system.IPersistableRow<row7Struct> {
+	public static class row7Struct implements routines.system.IPersistableRow<row7Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -5900,8 +5811,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5919,8 +5829,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public static class row4Struct implements
-			routines.system.IPersistableRow<row4Struct> {
+	public static class row4Struct implements routines.system.IPersistableRow<row4Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_SimpleLinearRegressionSample = new byte[0];
 
@@ -5998,8 +5907,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -6017,9 +5925,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 	}
 
-	public void tRowGenerator_2Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tRowGenerator_2Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tRowGenerator_2_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -6033,8 +5939,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -6048,29 +5953,16 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransformDataSet_row7", false);
-				start_Hash.put("tShujuTransformDataSet_row7",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransformDataSet_row7", System.currentTimeMillis());
 
 				currentComponent = "tShujuTransformDataSet_row7";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row7" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row7");
 				}
 
 				int tos_count_tShujuTransformDataSet_row7 = 0;
 
-				class BytesLimit65535_tShujuTransformDataSet_row7 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransformDataSet_row7()
-						.limitLog4jByte();
 				int nb_line_tShujuTransformDataSet_row7 = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransformDataSet_row7 = new com.github.romualdrousseau.shuju.DataSet();
@@ -6089,22 +5981,11 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tShujuPredict_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row4" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row4");
 				}
 
 				int tos_count_tShujuPredict_2 = 0;
 
-				class BytesLimit65535_tShujuPredict_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuPredict_2().limitLog4jByte();
 				int nb_line_tShujuPredict_2 = 0;
 
 				com.github.romualdrousseau.shuju.IClassifier classifier_tShujuPredict_2 = (com.github.romualdrousseau.shuju.IClassifier) globalMap
@@ -6124,14 +6005,6 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				currentComponent = "tRowGenerator_2";
 
 				int tos_count_tRowGenerator_2 = 0;
-
-				class BytesLimit65535_tRowGenerator_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tRowGenerator_2().limitLog4jByte();
 
 				int nb_line_tRowGenerator_2 = 0;
 				int nb_max_row_tRowGenerator_2 = 12;
@@ -6181,11 +6054,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tShujuPredict_2";
 
-					// row4
-					// row4
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row4" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row4");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuPredict_2 = new com.github.romualdrousseau.shuju.DataRow();
@@ -6222,28 +6092,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 					currentComponent = "tShujuTransformDataSet_row7";
 
-					// row7
-					// row7
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row7" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row7");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuTransformDataSet_row7 = new com.github.romualdrousseau.shuju.DataRow();
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_T_tShujuTransformDataSet_row7 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row7.T);
-					row_tShujuTransformDataSet_row7
-							.addFeature(feature_T_tShujuTransformDataSet_row7);
+					row_tShujuTransformDataSet_row7.addFeature(feature_T_tShujuTransformDataSet_row7);
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_RESULT_LABEL_tShujuTransformDataSet_row7 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row7.RESULT_LABEL);
-					row_tShujuTransformDataSet_row7
-							.setLabel(feature_RESULT_LABEL_tShujuTransformDataSet_row7);
+					row_tShujuTransformDataSet_row7.setLabel(feature_RESULT_LABEL_tShujuTransformDataSet_row7);
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_RESULT_ERROR_tShujuTransformDataSet_row7 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row7.RESULT_ERROR);
-					row_tShujuTransformDataSet_row7
-							.addFeature(feature_RESULT_ERROR_tShujuTransformDataSet_row7);
-					dataset_tShujuTransformDataSet_row7
-							.addRow(row_tShujuTransformDataSet_row7);
+					row_tShujuTransformDataSet_row7.addFeature(feature_RESULT_ERROR_tShujuTransformDataSet_row7);
+					dataset_tShujuTransformDataSet_row7.addRow(row_tShujuTransformDataSet_row7);
 
 					nb_line_tShujuTransformDataSet_row7++;
 
@@ -6300,8 +6163,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					currentComponent = "tRowGenerator_2";
 
 				}
-				globalMap.put("tRowGenerator_2_NB_LINE",
-						nb_line_tRowGenerator_2);
+				globalMap.put("tRowGenerator_2_NB_LINE", nb_line_tRowGenerator_2);
 
 				ok_Hash.put("tRowGenerator_2", true);
 				end_Hash.put("tRowGenerator_2", System.currentTimeMillis());
@@ -6316,14 +6178,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tShujuPredict_2";
 
-				globalMap.put("tShujuPredict_2_NB_LINE",
-						nb_line_tShujuPredict_2);
+				globalMap.put("tShujuPredict_2_NB_LINE", nb_line_tShujuPredict_2);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row4" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row4");
 				}
 
 				ok_Hash.put("tShujuPredict_2", true);
@@ -6339,32 +6197,25 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				currentComponent = "tShujuTransformDataSet_row7";
 
-				globalMap.put("dataset_row7",
-						dataset_tShujuTransformDataSet_row7);
-				globalMap.put("tShujuTransformDataSet_row7_NB_LINE",
-						nb_line_tShujuTransformDataSet_row7);
+				globalMap.put("dataset_row7", dataset_tShujuTransformDataSet_row7);
+				globalMap.put("tShujuTransformDataSet_row7_NB_LINE", nb_line_tShujuTransformDataSet_row7);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row7" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row7");
 				}
 
 				ok_Hash.put("tShujuTransformDataSet_row7", true);
-				end_Hash.put("tShujuTransformDataSet_row7",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransformDataSet_row7", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransformDataSet_row7 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -6439,6 +6290,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 	public boolean isChildJob = false;
 	public String log4jLevel = "";
 
+	private boolean enableLogStash;
+
 	private boolean execStat = true;
 
 	private ThreadLocal<java.util.Map<String, String>> threadLocal = new ThreadLocal<java.util.Map<String, String>>() {
@@ -6506,6 +6359,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				lastStr = "";
 			}
 		}
+		enableLogStash = "true".equalsIgnoreCase(System.getProperty("monitoring"));
 
 		if (clientHost == null) {
 			clientHost = defaultClientHost;
@@ -6527,10 +6381,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		if (portStats != null) {
 			// portStats = -1; //for testing
 			if (portStats < 0 || portStats > 65535) {
-				// issue:10869, the portStats is invalid, so this client socket
-				// can't open
-				System.err.println("The statistics socket port " + portStats
-						+ " is invalid.");
+				// issue:10869, the portStats is invalid, so this client socket can't open
+				System.err.println("The statistics socket port " + portStats + " is invalid.");
 				execStat = false;
 			}
 		} else {
@@ -6538,27 +6390,24 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		}
 
 		try {
-			// call job/subjob with an existing context, like:
-			// --context=production. if without this parameter, there will use
-			// the default context instead.
-			java.io.InputStream inContext = SimpleLinearRegressionSample.class
-					.getClassLoader().getResourceAsStream(
-							"samples/simplelinearregressionsample_0_1/contexts/"
-									+ contextStr + ".properties");
+			// call job/subjob with an existing context, like: --context=production. if
+			// without this parameter, there will use the default context instead.
+			java.io.InputStream inContext = SimpleLinearRegressionSample.class.getClassLoader().getResourceAsStream(
+					"samples/simplelinearregressionsample_0_1/contexts/" + contextStr + ".properties");
 			if (inContext == null) {
-				inContext = SimpleLinearRegressionSample.class
-						.getClassLoader()
-						.getResourceAsStream(
-								"config/contexts/" + contextStr + ".properties");
+				inContext = SimpleLinearRegressionSample.class.getClassLoader()
+						.getResourceAsStream("config/contexts/" + contextStr + ".properties");
 			}
 			if (inContext != null) {
 				// defaultProps is in order to keep the original context value
-				defaultProps.load(inContext);
+				if (context != null && context.isEmpty()) {
+					defaultProps.load(inContext);
+					context = new ContextProperties(defaultProps);
+				}
+
 				inContext.close();
-				context = new ContextProperties(defaultProps);
 			} else if (!isDefaultContext) {
-				// print info and job continue to run, for case: context_param
-				// is not empty.
+				// print info and job continue to run, for case: context_param is not empty.
 				System.err.println("Could not find the context " + contextStr);
 			}
 
@@ -6567,12 +6416,21 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				// set types for params from parentJobs
 				for (Object key : context_param.keySet()) {
 					String context_key = key.toString();
-					String context_type = context_param
-							.getContextType(context_key);
+					String context_type = context_param.getContextType(context_key);
 					context.setContextType(context_key, context_type);
 
 				}
 			}
+			class ContextProcessing {
+				private void processContext_0() {
+				}
+
+				public void processAllContext() {
+					processContext_0();
+				}
+			}
+
+			new ContextProcessing().processAllContext();
 		} catch (java.io.IOException ie) {
 			System.err.println("Could not load context " + contextStr);
 			ie.printStackTrace();
@@ -6583,18 +6441,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		}
 
 		// Resume: init the resumeUtil
-		resumeEntryMethodName = ResumeUtil
-				.getResumeEntryMethodName(resuming_checkpoint_path);
+		resumeEntryMethodName = ResumeUtil.getResumeEntryMethodName(resuming_checkpoint_path);
 		resumeUtil = new ResumeUtil(resuming_logs_dir_path, isChildJob, rootPid);
-		resumeUtil.initCommonInfo(pid, rootPid, fatherPid, projectName,
-				jobName, contextStr, jobVersion);
+		resumeUtil.initCommonInfo(pid, rootPid, fatherPid, projectName, jobName, contextStr, jobVersion);
 
 		List<String> parametersToEncrypt = new java.util.ArrayList<String>();
 		// Resume: jobStart
-		resumeUtil.addLog("JOB_STARTED", "JOB:" + jobName,
-				parent_part_launcher, Thread.currentThread().getId() + "", "",
-				"", "", "",
-				resumeUtil.convertToJsonText(context, parametersToEncrypt));
+		resumeUtil.addLog("JOB_STARTED", "JOB:" + jobName, parent_part_launcher, Thread.currentThread().getId() + "",
+				"", "", "", "", resumeUtil.convertToJsonText(context, parametersToEncrypt));
 
 		if (execStat) {
 			try {
@@ -6610,8 +6464,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		java.util.concurrent.ConcurrentHashMap<Object, Object> concurrentHashMap = new java.util.concurrent.ConcurrentHashMap<Object, Object>();
 		globalMap.put("concurrentHashMap", concurrentHashMap);
 
-		long startUsedMemory = Runtime.getRuntime().totalMemory()
-				- Runtime.getRuntime().freeMemory();
+		long startUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		long endUsedMemory = 0;
 		long end = 0;
 
@@ -6632,10 +6485,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				try {
 					((java.util.Map) threadLocal.get()).put("errorCode", null);
 					tFileInputDelimited_1Process(globalMap);
-					if (!"failure".equals(((java.util.Map) threadLocal.get())
-							.get("status"))) {
-						((java.util.Map) threadLocal.get())
-								.put("status", "end");
+					if (!"failure".equals(((java.util.Map) threadLocal.get()).get("status"))) {
+						((java.util.Map) threadLocal.get()).put("status", "end");
 					}
 				} catch (TalendException e_tFileInputDelimited_1) {
 					globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", -1);
@@ -6644,18 +6495,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 
 				} catch (java.lang.Error e_tFileInputDelimited_1) {
 					globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", -1);
-					((java.util.Map) threadLocal.get())
-							.put("status", "failure");
+					((java.util.Map) threadLocal.get()).put("status", "failure");
 					throw e_tFileInputDelimited_1;
 
 				} finally {
-					Integer localErrorCode = (Integer) (((java.util.Map) threadLocal
-							.get()).get("errorCode"));
-					String localStatus = (String) (((java.util.Map) threadLocal
-							.get()).get("status"));
+					Integer localErrorCode = (Integer) (((java.util.Map) threadLocal.get()).get("errorCode"));
+					String localStatus = (String) (((java.util.Map) threadLocal.get()).get("status"));
 					if (localErrorCode != null) {
-						if (errorCode == null
-								|| localErrorCode.compareTo(errorCode) > 0) {
+						if (errorCode == null || localErrorCode.compareTo(errorCode) > 0) {
 							errorCode = localErrorCode;
 						}
 					}
@@ -6663,8 +6510,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 						status = localStatus;
 					}
 
-					if ("true".equals(((java.util.Map) threadLocal.get())
-							.get("JobInterrupted"))) {
+					if ("true".equals(((java.util.Map) threadLocal.get()).get("JobInterrupted"))) {
 						launchingThread.interrupt();
 					}
 
@@ -6696,12 +6542,10 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			System.out.println((end - startTime) + " milliseconds");
 		}
 
-		endUsedMemory = Runtime.getRuntime().totalMemory()
-				- Runtime.getRuntime().freeMemory();
+		endUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		if (false) {
-			System.out
-					.println((endUsedMemory - startUsedMemory)
-							+ " bytes memory increase when running : SimpleLinearRegressionSample");
+			System.out.println((endUsedMemory - startUsedMemory)
+					+ " bytes memory increase when running : SimpleLinearRegressionSample");
 		}
 
 		if (execStat) {
@@ -6714,9 +6558,8 @@ public class SimpleLinearRegressionSample implements TalendJob {
 		} else {
 			returnCode = errorCode.intValue();
 		}
-		resumeUtil.addLog("JOB_ENDED", "JOB:" + jobName, parent_part_launcher,
-				Thread.currentThread().getId() + "", "", "" + returnCode, "",
-				"", "");
+		resumeUtil.addLog("JOB_ENDED", "JOB:" + jobName, parent_part_launcher, Thread.currentThread().getId() + "", "",
+				"" + returnCode, "", "", "");
 
 		return returnCode;
 
@@ -6770,8 +6613,7 @@ public class SimpleLinearRegressionSample implements TalendJob {
 					context_param.setContextType(keyValue.substring(0, index),
 							replaceEscapeChars(keyValue.substring(index + 1)));
 				} else { // the subjob won't escape the especial chars
-					context_param.setContextType(keyValue.substring(0, index),
-							keyValue.substring(index + 1));
+					context_param.setContextType(keyValue.substring(0, index), keyValue.substring(index + 1));
 				}
 
 			}
@@ -6781,24 +6623,24 @@ public class SimpleLinearRegressionSample implements TalendJob {
 			int index = -1;
 			if (keyValue != null && (index = keyValue.indexOf('=')) > -1) {
 				if (fatherPid == null) {
-					context_param.put(keyValue.substring(0, index),
-							replaceEscapeChars(keyValue.substring(index + 1)));
+					context_param.put(keyValue.substring(0, index), replaceEscapeChars(keyValue.substring(index + 1)));
 				} else { // the subjob won't escape the especial chars
-					context_param.put(keyValue.substring(0, index),
-							keyValue.substring(index + 1));
+					context_param.put(keyValue.substring(0, index), keyValue.substring(index + 1));
 				}
 			}
 		} else if (arg.startsWith("--log4jLevel=")) {
 			log4jLevel = arg.substring(13);
+		} else if (arg.startsWith("--monitoring") && arg.contains("=")) {// for trunjob call
+			final int equal = arg.indexOf('=');
+			final String key = arg.substring("--".length(), equal);
+			System.setProperty(key, arg.substring(equal + 1));
 		}
-
 	}
 
 	private static final String NULL_VALUE_EXPRESSION_IN_COMMAND_STRING_FOR_CHILD_JOB_ONLY = "<TALEND_NULL>";
 
-	private final String[][] escapeChars = { { "\\\\", "\\" }, { "\\n", "\n" },
-			{ "\\'", "\'" }, { "\\r", "\r" }, { "\\f", "\f" }, { "\\b", "\b" },
-			{ "\\t", "\t" } };
+	private final String[][] escapeChars = { { "\\\\", "\\" }, { "\\n", "\n" }, { "\\'", "\'" }, { "\\r", "\r" },
+			{ "\\f", "\f" }, { "\\b", "\b" }, { "\\t", "\t" } };
 
 	private String replaceEscapeChars(String keyValue) {
 
@@ -6815,15 +6657,14 @@ public class SimpleLinearRegressionSample implements TalendJob {
 				index = keyValue.indexOf(strArray[0], currIndex);
 				if (index >= 0) {
 
-					result.append(keyValue.substring(currIndex,
-							index + strArray[0].length()).replace(strArray[0],
+					result.append(keyValue.substring(currIndex, index + strArray[0].length()).replace(strArray[0],
 							strArray[1]));
 					currIndex = index + strArray[0].length();
 					break;
 				}
 			}
-			// if the left string doesn't include escape chars, append the left
-			// into the result
+			// if the left string doesn't include escape chars, append the left into the
+			// result
 			if (index < 0) {
 				result.append(keyValue.substring(currIndex));
 				currIndex = currIndex + keyValue.length();
@@ -6844,6 +6685,6 @@ public class SimpleLinearRegressionSample implements TalendJob {
 	ResumeUtil resumeUtil = null;
 }
 /************************************************************************************************
- * 179157 characters generated by Talend Open Studio for Big Data on the
- * September 23, 2018 11:21:36 AM SGT
+ * 185479 characters generated by Talend Open Studio for Big Data on the 21
+ * July, 2020 4:58:31 PM SGT
  ************************************************************************************************/

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A buffer to keep all the DB connections, make it reusable between the different jobs.
@@ -28,8 +29,8 @@ public class SharedDBConnectionLog4j {
 
     private static boolean DEBUG = false;
 
-    private static org.apache.log4j.Logger LOGGER = null;
-    
+    private static Logger LOGGER = null;
+
     private static String cid = null;
 
     private static SharedDBConnectionLog4j instance = null;
@@ -58,17 +59,21 @@ public class SharedDBConnectionLog4j {
         if (DEBUG) {
             System.out.println("SharedDBConnection, current shared connections list is:"+keys); //$NON-NLS-1$
         }
-        logMessage(Level.DEBUG,cid +" - SharedDBConnection, current shared connections list is:"+keys);
+        logMessage(true,cid +" - SharedDBConnection, current shared connections list is:"+keys);
     }
     /**
-     * 
+     *
      * DOC jyhu Comment method "logMessage".
-     * @param logLevel :current logInfo level
+     * @param debug : debug if true, info if false
      * @param logInfo :loginfo
      */
-    private synchronized void logMessage(Level logLevel,String logInfo){
+    private synchronized void logMessage(boolean debug,String logInfo){
         if(LOGGER!=null){
-            LOGGER.log(logLevel,logInfo);
+            if(debug) {
+                LOGGER.debug(logInfo);
+            } else {
+                LOGGER.info(logInfo);
+            }
         }
     }
     private synchronized Connection getConnection(String dbDriver, String url, String userName, String password,
@@ -81,30 +86,30 @@ public class SharedDBConnectionLog4j {
                 System.out.println("SharedDBConnection, can't find the key:" + dbConnectionName + " " //$NON-NLS-1$ //$NON-NLS-2$
                         + "so create a new one and share it."); //$NON-NLS-1$
             }
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, can't find the key:" + dbConnectionName + " " + "so create a new one and share it.");
-            logMessage(Level.DEBUG,cid +" - Driver ClassName: "+dbDriver+".");
+            logMessage(true,cid +" - SharedDBConnection, can't find the key:" + dbConnectionName + " " + "so create a new one and share it.");
+            logMessage(true,cid +" - Driver ClassName: "+dbDriver+".");
             Class.forName(dbDriver);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection attempt to '" + url + "' with the username '" + userName + "'.");
+            logMessage(false,cid +" - SharedDBConnection, Connection attempt to '" + url + "' with the username '" + userName + "'.");
             connection = DriverManager.getConnection(url, userName, password);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
+            logMessage(false,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
             sharedConnections.put(dbConnectionName, connection);
-            logMessage(Level.DEBUG,cid +" - Shared Connection with key '" + dbConnectionName + "'");
+            logMessage(true,cid +" - Shared Connection with key '" + dbConnectionName + "'");
         } else if (connection.isClosed()) {
             if (DEBUG) {
                 System.out.println("SharedDBConnection, find the key: " + dbConnectionName + " " //$NON-NLS-1$ //$NON-NLS-2$
                         + "But it is closed. So create a new one and share it."); //$NON-NLS-1$
             }
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " "  + "But it is closed. So create a new one and share it.");
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection attempt to '" + url + "' with the username '" + userName + "'.");
+            logMessage(true,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " "  + "But it is closed. So create a new one and share it.");
+            logMessage(false,cid +" - SharedDBConnection, Connection attempt to '" + url + "' with the username '" + userName + "'.");
             connection = DriverManager.getConnection(url, userName, password);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
+            logMessage(false,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
             sharedConnections.put(dbConnectionName, connection);
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, Shared Connection with key '" + dbConnectionName + "'");
+            logMessage(true,cid +" - SharedDBConnection, Shared Connection with key '" + dbConnectionName + "'");
         } else {
             if (DEBUG) {
                 System.out.println("SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
-            logMessage(Level.INFO,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK.");
+            logMessage(false,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK.");
         }
         return connection;
     }
@@ -120,37 +125,37 @@ public class SharedDBConnectionLog4j {
                 System.out.println("SharedDBConnection, can't find the key:" + dbConnectionName + " " //$NON-NLS-1$ //$NON-NLS-2$
                         + "so create a new one and share it."); //$NON-NLS-1$
             }
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, can't find the key:" + dbConnectionName + " " + "so create a new one and share it.");
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, Driver ClassName: "+dbDriver+".");
+            logMessage(true,cid +" - SharedDBConnection, can't find the key:" + dbConnectionName + " " + "so create a new one and share it.");
+            logMessage(true,cid +" - SharedDBConnection, Driver ClassName: "+dbDriver+".");
             Class.forName(dbDriver);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection attempt to '" + url + ".");
+            logMessage(false,cid +" - SharedDBConnection, Connection attempt to '" + url + ".");
             connection = DriverManager.getConnection(url);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
+            logMessage(false,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
             sharedConnections.put(dbConnectionName, connection);
-            logMessage(Level.DEBUG,cid +" - Shared Connection with key '" + dbConnectionName + "'");
+            logMessage(true,cid +" - Shared Connection with key '" + dbConnectionName + "'");
         } else if (connection.isClosed()) {
             if (DEBUG) {
                 System.out.println("SharedDBConnection, find the key: " + dbConnectionName + " " //$NON-NLS-1$ //$NON-NLS-2$
                         + "But it is closed. So create a new one and share it."); //$NON-NLS-1$
             }
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "But it is closed. So create a new one and share it.");
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection attempt to '" + url + ".");
+            logMessage(true,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "But it is closed. So create a new one and share it.");
+            logMessage(false,cid +" - SharedDBConnection, Connection attempt to '" + url + ".");
             connection = DriverManager.getConnection(url);
-            logMessage(Level.INFO,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
+            logMessage(false,cid +" - SharedDBConnection, Connection to '" + url + "' has succeeded.");
             sharedConnections.put(dbConnectionName, connection);
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, Shared Connection with key '" + dbConnectionName + "'");
+            logMessage(true,cid +" - SharedDBConnection, Shared Connection with key '" + dbConnectionName + "'");
         } else {
             if (DEBUG) {
                 System.out.println("SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
-            logMessage(Level.DEBUG,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK.");
+            logMessage(true,cid +" - SharedDBConnection, find the key: " + dbConnectionName + " " + "it is OK.");
         }
         return connection;
     }
 
     /**
      * If there don't exist the connection or it is closed, create and store it.
-     * 
+     *
      * @param dbDriver
      * @param url
      * @param userName
@@ -169,7 +174,7 @@ public class SharedDBConnectionLog4j {
 
     /**
      * If there don't exist the connection or it is closed, create and store it.
-     * 
+     *
      * @param dbDriver
      * @param url
      * @param dbConnectionName
@@ -194,10 +199,10 @@ public class SharedDBConnectionLog4j {
     public static void setDebugMode(boolean debug) {
         DEBUG = debug;
     }
-    
-    public static void initLogger(org.apache.log4j.Logger logger,String uniqueName) {
+
+    public static void initLogger(String loggerName,String uniqueName) {
         if(LOGGER ==null){
-            LOGGER = logger;
+            LOGGER = LoggerFactory.getLogger(loggerName);
         }
         cid = uniqueName;
     }

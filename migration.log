@@ -1,0 +1,40 @@
+ ---=== Start Migration of project SAMPLES ===---
+ * Task [ResetMavenTemplateMigrationTask] : Applied successfully
+ * Task [RemovePigudfModulesMigrationTask] : Nothing to do
+ * Task [Fix a problem of project resources linked to items] : Applied successfully
+ * Task [GenerateJobPomMigrationTask] : Applied successfully
+ * Task [EscapeQuoterForTNormalize] : Applied successfully
+ * Task [KeepChangeRemoteDirFalseForFTPFileExist] : Applied successfully
+ * Task [AddTypeNameInConnection] : Nothing to do
+ * Task [RenameELTJDBCComponentsMigrationTask] : Applied successfully
+ * Task [AddDbMappingTTeradataFastLoadMigrationTask] : Applied successfully
+ * Task [PostgresqlDefaultDBVersion] : Applied successfully
+ * Task [MySQLDefaultDBVersion] : Applied successfully
+ * Task [UseOracle11VersionInsteadOfRemoved] : Applied successfully
+ * Task [CheckS3AccessibilityMigrationTask] : Applied successfully
+ * Task [DecrementLimitTFileInputDelimitedTDI32185] : Applied successfully
+ * Task [SetTrustAllCertsLdapComponentsTDI41648] : Applied successfully
+ * Task [RedshiftLogFileMigrationTask] : Applied successfully
+ * Task [ResetAdditionalJDBCParamsForCreateTable] : Applied successfully
+ * Task [SafelyCreateTemporaryFileMigrationTask] : Applied successfully
+ * Task [MigrateTDataMaskingGuiTDQ16376] : Applied successfully
+ * Task [RenameSalesforceWaveMigrationTask] : Applied successfully
+ * Task [CleanCustomerMatcherField] : Applied successfully
+ * Task [RenameTCOMPCouchbaseMigrationTask] : Applied successfully
+ * Task [EncryptTckMetadataMigrationTask] : Nothing to do
+ * Task [AddEncodingTypeForDQComponentsTask] : Applied successfully
+ * Task [AddRAWFlowTPatternMasking] : Applied successfully
+ * Task [changeDBVersionForMapROJAIOutputMigrationTask] : Applied successfully
+ * Task [SAPBAPIParameterTypeMigrationTask] : Applied successfully
+ * Task [UseDefaultJSONWrappingStandard] : Applied successfully
+ * Task [AddMissingContextMigrationTask] : Nothing to do
+ * Task [cleanLoginAndPasswordForRedshiftSqlForSSO] : Applied successfully
+ * Task [oracleSPAutomappingDateToTimestampTask] : Applied successfully
+ * Task [UpgradePasswordEncryptionAlg4ItemMigrationTask] : Applied successfully
+ * Task [ChangeCDCTypeForOracle18TDI43319] : Applied successfully
+ * Task [Fix empty process id parameters for tRunjob node] : Applied successfully
+ * Task [ChangeDefaultValueTDI36397] : Applied successfully
+ * Task [ChangeDBVersionValue4BonitaComponentsTDI43395] : Applied successfully
+ * Task [UpdateDatesPatternAccordingToDeletedTimestampOption] : Nothing to do
+ * Task [AutoUpdateRelationsMigrationTask] : Applied successfully
+ ---=== End of migration ===---

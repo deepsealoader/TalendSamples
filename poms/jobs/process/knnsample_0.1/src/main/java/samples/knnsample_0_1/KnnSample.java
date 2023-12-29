@@ -42,11 +42,13 @@ import java.io.IOException;
 import java.util.Comparator;
 
 @SuppressWarnings("unused")
+
 /**
  * Job: KnnSample Purpose: Demonstrate the usage of KNN algorithm<br>
  * Description: Demonstrate the usage of KNN algorithm on Fisher dataset <br>
- * @author 
- * @version 7.0.1.20180411_1414
+ * 
+ * @author user@talend.com
+ * @version 7.3.1.20200219_1130
  * @status DEV
  */
 public class KnnSample implements TalendJob {
@@ -74,8 +76,7 @@ public class KnnSample implements TalendJob {
 
 	private Object[] multiThreadLockWrite = new Object[0];
 
-	private final static String defaultCharset = java.nio.charset.Charset
-			.defaultCharset().name();
+	private final static String defaultCharset = java.nio.charset.Charset.defaultCharset().name();
 
 	private final static String utf8Charset = "UTF-8";
 
@@ -123,7 +124,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	private ContextProperties context = new ContextProperties();
+	protected ContextProperties context = new ContextProperties(); // will be instanciated by MS.
 
 	public ContextProperties getContext() {
 		return this.context;
@@ -154,29 +155,20 @@ public class KnnSample implements TalendJob {
 
 	private final static String KEY_DB_DATASOURCES_RAW = "KEY_DB_DATASOURCES_RAW";
 
-	public void setDataSources(
-			java.util.Map<String, javax.sql.DataSource> dataSources) {
+	public void setDataSources(java.util.Map<String, javax.sql.DataSource> dataSources) {
 		java.util.Map<String, routines.system.TalendDataSource> talendDataSources = new java.util.HashMap<String, routines.system.TalendDataSource>();
-		for (java.util.Map.Entry<String, javax.sql.DataSource> dataSourceEntry : dataSources
-				.entrySet()) {
-			talendDataSources.put(
-					dataSourceEntry.getKey(),
-					new routines.system.TalendDataSource(dataSourceEntry
-							.getValue()));
+		for (java.util.Map.Entry<String, javax.sql.DataSource> dataSourceEntry : dataSources.entrySet()) {
+			talendDataSources.put(dataSourceEntry.getKey(),
+					new routines.system.TalendDataSource(dataSourceEntry.getValue()));
 		}
 		globalMap.put(KEY_DB_DATASOURCES, talendDataSources);
-		globalMap
-				.put(KEY_DB_DATASOURCES_RAW,
-						new java.util.HashMap<String, javax.sql.DataSource>(
-								dataSources));
+		globalMap.put(KEY_DB_DATASOURCES_RAW, new java.util.HashMap<String, javax.sql.DataSource>(dataSources));
 	}
 
-	MetterCatcherUtils tFlowMeterCatcher_1 = new MetterCatcherUtils(
-			"_v2hkMLgPEei30bV-SVSjVA", "0.1");
+	MetterCatcherUtils tFlowMeterCatcher_1 = new MetterCatcherUtils("_v2hkMLgPEei30bV-SVSjVA", "0.1");
 
 	private final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-	private final java.io.PrintStream errorMessagePS = new java.io.PrintStream(
-			new java.io.BufferedOutputStream(baos));
+	private final java.io.PrintStream errorMessagePS = new java.io.PrintStream(new java.io.BufferedOutputStream(baos));
 
 	public String getExceptionStackTrace() {
 		if ("failure".equals(this.getStatus())) {
@@ -208,8 +200,7 @@ public class KnnSample implements TalendJob {
 			this.virtualComponentName = virtualComponentName;
 		}
 
-		private TalendException(Exception e, String errorComponent,
-				final java.util.Map<String, Object> globalMap) {
+		private TalendException(Exception e, String errorComponent, final java.util.Map<String, Object> globalMap) {
 			this.currentComponent = errorComponent;
 			this.globalMap = globalMap;
 			this.e = e;
@@ -244,15 +235,11 @@ public class KnnSample implements TalendJob {
 		@Override
 		public void printStackTrace() {
 			if (!(e instanceof TalendException || e instanceof TDieException)) {
-				if (virtualComponentName != null
-						&& currentComponent.indexOf(virtualComponentName + "_") == 0) {
-					globalMap.put(virtualComponentName + "_ERROR_MESSAGE",
-							getExceptionCauseMessage(e));
+				if (virtualComponentName != null && currentComponent.indexOf(virtualComponentName + "_") == 0) {
+					globalMap.put(virtualComponentName + "_ERROR_MESSAGE", getExceptionCauseMessage(e));
 				}
-				globalMap.put(currentComponent + "_ERROR_MESSAGE",
-						getExceptionCauseMessage(e));
-				System.err.println("Exception in component " + currentComponent
-						+ " (" + jobName + ")");
+				globalMap.put(currentComponent + "_ERROR_MESSAGE", getExceptionCauseMessage(e));
+				System.err.println("Exception in component " + currentComponent + " (" + jobName + ")");
 			}
 			if (!(e instanceof TDieException)) {
 				if (e instanceof TalendException) {
@@ -265,11 +252,9 @@ public class KnnSample implements TalendJob {
 			}
 			if (!(e instanceof TalendException)) {
 				try {
-					for (java.lang.reflect.Method m : this.getClass()
-							.getEnclosingClass().getMethods()) {
+					for (java.lang.reflect.Method m : this.getClass().getEnclosingClass().getMethods()) {
 						if (m.getName().compareTo(currentComponent + "_error") == 0) {
-							m.invoke(KnnSample.this, new Object[] { e,
-									currentComponent, globalMap });
+							m.invoke(KnnSample.this, new Object[] { e, currentComponent, globalMap });
 							break;
 						}
 					}
@@ -283,129 +268,108 @@ public class KnnSample implements TalendJob {
 		}
 	}
 
-	public void tFileInputDelimited_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFilterColumns_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFilterColumns_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_12_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tReplicate_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tSampleRow_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_15_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tShujuTrain_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tSampleRow_2_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
 	public void tFlowMeter_17_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tBufferOutput_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tBufferOutput_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tBufferInput_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tBufferInput_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -414,9 +378,8 @@ public class KnnSample implements TalendJob {
 		tBufferInput_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuPredict_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuPredict_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -426,8 +389,7 @@ public class KnnSample implements TalendJob {
 	}
 
 	public void tFlowMeter_19_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -436,8 +398,7 @@ public class KnnSample implements TalendJob {
 		tBufferInput_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tMap_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
+	public void tMap_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap)
 			throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
@@ -448,8 +409,7 @@ public class KnnSample implements TalendJob {
 	}
 
 	public void tLogRow_1_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -458,9 +418,8 @@ public class KnnSample implements TalendJob {
 		tBufferInput_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tChronometerStop_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -469,9 +428,8 @@ public class KnnSample implements TalendJob {
 		tChronometerStop_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFlowMeterCatcher_1_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFlowMeterCatcher_1_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -481,8 +439,7 @@ public class KnnSample implements TalendJob {
 	}
 
 	public void tLogRow_2_error(Exception exception, String errorComponent,
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -491,38 +448,32 @@ public class KnnSample implements TalendJob {
 		tFlowMeterCatcher_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tShujuTransform_2_TransformOut_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_2_TransformOut_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		tShujuTransform_2_TransformIn_error(exception, errorComponent,
-				globalMap);
+		tShujuTransform_2_TransformIn_error(exception, errorComponent, globalMap);
 
 	}
 
-	public void tShujuTransform_2_TransformIn_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tShujuTransform_2_TransformIn_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
 		((java.util.Map) threadLocal.get()).put("status", "failure");
 
-		tFileInputDelimited_1_onSubJobError(exception, errorComponent,
-				globalMap);
+		tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tAggregateRow_1_AGGOUT_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tAggregateRow_1_AGGOUT_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		tAggregateRow_1_AGGIN_error(exception, errorComponent, globalMap);
 
 	}
 
-	public void tAggregateRow_1_AGGIN_error(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tAggregateRow_1_AGGIN_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		end_Hash.put(errorComponent, System.currentTimeMillis());
 
@@ -531,52 +482,39 @@ public class KnnSample implements TalendJob {
 		tBufferInput_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
-	public void tFileInputDelimited_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tBufferInput_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tBufferInput_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tChronometerStop_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public void tFlowMeterCatcher_1_onSubJobError(Exception exception,
-			String errorComponent, final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFlowMeterCatcher_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
 
-		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread
-				.currentThread().getId() + "", "FATAL", "",
-				exception.getMessage(),
-				ResumeUtil.getExceptionStackTrace(exception), "");
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
 
 	}
 
-	public static class row15Struct implements
-			routines.system.IPersistableRow<row15Struct> {
+	public static class row15Struct implements routines.system.IPersistableRow<row15Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -618,22 +556,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -729,8 +664,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -748,8 +682,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row1Struct implements
-			routines.system.IPersistableRow<row1Struct> {
+	public static class row1Struct implements routines.system.IPersistableRow<row1Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -791,22 +724,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -902,8 +832,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -921,8 +850,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row14Struct implements
-			routines.system.IPersistableRow<row14Struct> {
+	public static class row14Struct implements routines.system.IPersistableRow<row14Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -964,22 +892,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1075,8 +1000,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1094,8 +1018,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row2Struct implements
-			routines.system.IPersistableRow<row2Struct> {
+	public static class row2Struct implements routines.system.IPersistableRow<row2Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -1137,22 +1060,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1248,8 +1168,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1267,8 +1186,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row6Struct implements
-			routines.system.IPersistableRow<row6Struct> {
+	public static class row6Struct implements routines.system.IPersistableRow<row6Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -1310,22 +1228,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1421,8 +1336,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1440,8 +1354,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row7Struct implements
-			routines.system.IPersistableRow<row7Struct> {
+	public static class row7Struct implements routines.system.IPersistableRow<row7Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -1483,22 +1396,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1594,8 +1504,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1613,8 +1522,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row3Struct implements
-			routines.system.IPersistableRow<row3Struct> {
+	public static class row3Struct implements routines.system.IPersistableRow<row3Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -1656,22 +1564,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1767,8 +1672,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1786,8 +1690,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row5Struct implements
-			routines.system.IPersistableRow<row5Struct> {
+	public static class row5Struct implements routines.system.IPersistableRow<row5Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -1829,22 +1732,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -1940,8 +1840,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -1959,8 +1858,8 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class OnRowsEndStructtShujuTransform_2 implements
-			routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_2> {
+	public static class OnRowsEndStructtShujuTransform_2
+			implements routines.system.IPersistableRow<OnRowsEndStructtShujuTransform_2> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -2002,22 +1901,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -2113,8 +2009,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2132,8 +2027,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row12Struct implements
-			routines.system.IPersistableRow<row12Struct> {
+	public static class row12Struct implements routines.system.IPersistableRow<row12Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -2175,22 +2069,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -2286,8 +2177,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2305,8 +2195,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row4Struct implements
-			routines.system.IPersistableRow<row4Struct> {
+	public static class row4Struct implements routines.system.IPersistableRow<row4Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 		protected static final int DEFAULT_HASHCODE = 1;
@@ -2407,22 +2296,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -2530,8 +2416,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -2549,9 +2434,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public void tFileInputDelimited_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFileInputDelimited_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -2566,8 +2449,7 @@ public class KnnSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -2589,32 +2471,18 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransform_2_TransformOut", false);
-				start_Hash.put("tShujuTransform_2_TransformOut",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_2_TransformOut", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_2";
 
 				currentComponent = "tShujuTransform_2_TransformOut";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row12" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row12");
 				}
 
 				int tos_count_tShujuTransform_2_TransformOut = 0;
 
-				class BytesLimit65535_tShujuTransform_2_TransformOut {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_2_TransformOut()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_2_TransformOut = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.DataSet();
@@ -2635,22 +2503,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tFilterColumns_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row4" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row4");
 				}
 
 				int tos_count_tFilterColumns_1 = 0;
-
-				class BytesLimit65535_tFilterColumns_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFilterColumns_1().limitLog4jByte();
 
 				int nb_line_tFilterColumns_1 = 0;
 
@@ -2663,33 +2519,24 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tFileInputDelimited_1", false);
-				start_Hash.put("tFileInputDelimited_1",
-						System.currentTimeMillis());
+				start_Hash.put("tFileInputDelimited_1", System.currentTimeMillis());
 
 				currentComponent = "tFileInputDelimited_1";
 
 				int tos_count_tFileInputDelimited_1 = 0;
 
-				class BytesLimit65535_tFileInputDelimited_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFileInputDelimited_1().limitLog4jByte();
-
 				final routines.system.RowState rowstate_tFileInputDelimited_1 = new routines.system.RowState();
 
 				int nb_line_tFileInputDelimited_1 = 0;
 				org.talend.fileprocess.FileInputDelimited fid_tFileInputDelimited_1 = null;
+				int limit_tFileInputDelimited_1 = -1;
 				try {
 
-					Object filename_tFileInputDelimited_1 = "C:/Users/admin/Projects/workspace/SAMPLES/data/fisher's data.csv";
+					Object filename_tFileInputDelimited_1 = "C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/fisher's data.csv";
 					if (filename_tFileInputDelimited_1 instanceof java.io.InputStream) {
 
 						int footer_value_tFileInputDelimited_1 = 0, random_value_tFileInputDelimited_1 = -1;
-						if (footer_value_tFileInputDelimited_1 > 0
-								|| random_value_tFileInputDelimited_1 > 0) {
+						if (footer_value_tFileInputDelimited_1 > 0 || random_value_tFileInputDelimited_1 > 0) {
 							throw new java.lang.Exception(
 									"When the input source is a stream,footer and random shouldn't be bigger than 0.");
 						}
@@ -2697,17 +2544,15 @@ public class KnnSample implements TalendJob {
 					}
 					try {
 						fid_tFileInputDelimited_1 = new org.talend.fileprocess.FileInputDelimited(
-								"C:/Users/admin/Projects/workspace/SAMPLES/data/fisher's data.csv",
-								"ISO-8859-15", ",", "\n", true, 1, 0, -1, -1,
-								false);
+								"C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/fisher's data.csv",
+								"ISO-8859-15", ",", "\n", true, 1, 0, limit_tFileInputDelimited_1, -1, false);
 					} catch (java.lang.Exception e) {
 
 						System.err.println(e.getMessage());
 
 					}
 
-					while (fid_tFileInputDelimited_1 != null
-							&& fid_tFileInputDelimited_1.nextRecord()) {
+					while (fid_tFileInputDelimited_1 != null && fid_tFileInputDelimited_1.nextRecord()) {
 						rowstate_tFileInputDelimited_1.reset();
 
 						row4 = null;
@@ -2722,162 +2567,125 @@ public class KnnSample implements TalendJob {
 
 							columnIndexWithD_tFileInputDelimited_1 = 0;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
 
-									row4.dataOrder = ParserUtils
-											.parseTo_int(temp);
+									row4.dataOrder = ParserUtils.parseTo_int(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"dataOrder",
-															"row4", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"dataOrder", "row4", temp, ex_tFileInputDelimited_1),
+											ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'dataOrder' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'dataOrder' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 1;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
 
-									row4.sepalLength = ParserUtils
-											.parseTo_double(temp);
+									row4.sepalLength = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"sepalLength",
-															"row4", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"sepalLength", "row4", temp, ex_tFileInputDelimited_1),
+											ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'sepalLength' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'sepalLength' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 2;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
 
-									row4.sepalWidth = ParserUtils
-											.parseTo_double(temp);
+									row4.sepalWidth = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"sepalWidth",
-															"row4", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"sepalWidth", "row4", temp, ex_tFileInputDelimited_1),
+											ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'sepalWidth' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'sepalWidth' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 3;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
 
-									row4.petalLength = ParserUtils
-											.parseTo_double(temp);
+									row4.petalLength = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"petalLength",
-															"row4", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"petalLength", "row4", temp, ex_tFileInputDelimited_1),
+											ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'petalLength' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'petalLength' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 4;
 
-							temp = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							temp = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 							if (temp.length() > 0) {
 
 								try {
 
-									row4.petalWidth = ParserUtils
-											.parseTo_double(temp);
+									row4.petalWidth = ParserUtils.parseTo_double(temp);
 
 								} catch (java.lang.Exception ex_tFileInputDelimited_1) {
-									rowstate_tFileInputDelimited_1
-											.setException(new RuntimeException(
-													String.format(
-															"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
-															"petalWidth",
-															"row4", temp,
-															ex_tFileInputDelimited_1),
-													ex_tFileInputDelimited_1));
+									rowstate_tFileInputDelimited_1.setException(new RuntimeException(String.format(
+											"Couldn't parse value for column '%s' in '%s', value is '%s'. Details: %s",
+											"petalWidth", "row4", temp, ex_tFileInputDelimited_1),
+											ex_tFileInputDelimited_1));
 								}
 
 							} else {
 
-								rowstate_tFileInputDelimited_1
-										.setException(new RuntimeException(
-												"Value is empty for column : 'petalWidth' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
+								rowstate_tFileInputDelimited_1.setException(new RuntimeException(
+										"Value is empty for column : 'petalWidth' in 'row4' connection, value is invalid or this column should be nullable or have a default value."));
 
 							}
 
 							columnIndexWithD_tFileInputDelimited_1 = 5;
 
-							row4.species = fid_tFileInputDelimited_1
-									.get(columnIndexWithD_tFileInputDelimited_1);
+							row4.species = fid_tFileInputDelimited_1.get(columnIndexWithD_tFileInputDelimited_1);
 
 							if (rowstate_tFileInputDelimited_1.getException() != null) {
-								throw rowstate_tFileInputDelimited_1
-										.getException();
+								throw rowstate_tFileInputDelimited_1.getException();
 							}
 
 						} catch (java.lang.Exception e) {
@@ -2913,7 +2721,7 @@ public class KnnSample implements TalendJob {
 						/**
 						 * [tFileInputDelimited_1 process_data_begin ] stop
 						 */
-						// Start of branch "row4"
+// Start of branch "row4"
 						if (row4 != null) {
 
 							/**
@@ -2922,12 +2730,8 @@ public class KnnSample implements TalendJob {
 
 							currentComponent = "tFilterColumns_1";
 
-							// row4
-							// row4
-
 							if (execStat) {
-								runStat.updateStatOnConnection("row4"
-										+ iterateId, 1, 1);
+								runStat.updateStatOnConnection(iterateId, 1, 1, "row4");
 							}
 
 							row12.sepalLength = row4.sepalLength;
@@ -2966,12 +2770,8 @@ public class KnnSample implements TalendJob {
 
 							currentComponent = "tShujuTransform_2_TransformOut";
 
-							// row12
-							// row12
-
 							if (execStat) {
-								runStat.updateStatOnConnection("row12"
-										+ iterateId, 1, 1);
+								runStat.updateStatOnConnection(iterateId, 1, 1, "row12");
 							}
 
 							com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.DataRow();
@@ -2993,10 +2793,8 @@ public class KnnSample implements TalendJob {
 									.addFeature(feature_petalWidth_tShujuTransform_2_TransformOut);
 							com.github.romualdrousseau.shuju.features.StringFeature feature_species_tShujuTransform_2_TransformOut = new com.github.romualdrousseau.shuju.features.StringFeature(
 									row12.species);
-							row_tShujuTransform_2_TransformOut
-									.setLabel(feature_species_tShujuTransform_2_TransformOut);
-							dataset_tShujuTransform_2_TransformOut
-									.addRow(row_tShujuTransform_2_TransformOut);
+							row_tShujuTransform_2_TransformOut.setLabel(feature_species_tShujuTransform_2_TransformOut);
+							dataset_tShujuTransform_2_TransformOut.addRow(row_tShujuTransform_2_TransformOut);
 
 							nb_line_tShujuTransform_2_TransformOut++;
 
@@ -3007,8 +2805,7 @@ public class KnnSample implements TalendJob {
 							 */
 
 							/**
-							 * [tShujuTransform_2_TransformOut
-							 * process_data_begin ] start
+							 * [tShujuTransform_2_TransformOut process_data_begin ] start
 							 */
 
 							currentVirtualComponent = "tShujuTransform_2";
@@ -3016,13 +2813,11 @@ public class KnnSample implements TalendJob {
 							currentComponent = "tShujuTransform_2_TransformOut";
 
 							/**
-							 * [tShujuTransform_2_TransformOut
-							 * process_data_begin ] stop
+							 * [tShujuTransform_2_TransformOut process_data_begin ] stop
 							 */
 
 							/**
-							 * [tShujuTransform_2_TransformOut process_data_end
-							 * ] start
+							 * [tShujuTransform_2_TransformOut process_data_end ] start
 							 */
 
 							currentVirtualComponent = "tShujuTransform_2";
@@ -3030,8 +2825,7 @@ public class KnnSample implements TalendJob {
 							currentComponent = "tShujuTransform_2_TransformOut";
 
 							/**
-							 * [tShujuTransform_2_TransformOut process_data_end
-							 * ] stop
+							 * [tShujuTransform_2_TransformOut process_data_end ] stop
 							 */
 
 							/**
@@ -3064,21 +2858,19 @@ public class KnnSample implements TalendJob {
 
 					}
 				} finally {
-					if (!((Object) ("C:/Users/admin/Projects/workspace/SAMPLES/data/fisher's data.csv") instanceof java.io.InputStream)) {
+					if (!((Object) ("C:/Users/RRU_SG1/Projects/Talend/workspace/SAMPLES/data/fisher's data.csv") instanceof java.io.InputStream)) {
 						if (fid_tFileInputDelimited_1 != null) {
 							fid_tFileInputDelimited_1.close();
 						}
 					}
 					if (fid_tFileInputDelimited_1 != null) {
-						globalMap.put("tFileInputDelimited_1_NB_LINE",
-								fid_tFileInputDelimited_1.getRowNumber());
+						globalMap.put("tFileInputDelimited_1_NB_LINE", fid_tFileInputDelimited_1.getRowNumber());
 
 					}
 				}
 
 				ok_Hash.put("tFileInputDelimited_1", true);
-				end_Hash.put("tFileInputDelimited_1",
-						System.currentTimeMillis());
+				end_Hash.put("tFileInputDelimited_1", System.currentTimeMillis());
 
 				/**
 				 * [tFileInputDelimited_1 end ] stop
@@ -3090,13 +2882,9 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tFilterColumns_1";
 
-				globalMap.put("tFilterColumns_1_NB_LINE",
-						nb_line_tFilterColumns_1);
+				globalMap.put("tFilterColumns_1_NB_LINE", nb_line_tFilterColumns_1);
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row4" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row4");
 				}
 
 				ok_Hash.put("tFilterColumns_1", true);
@@ -3117,49 +2905,34 @@ public class KnnSample implements TalendJob {
 				com.github.romualdrousseau.shuju.DataSummary dataSummary_tShujuTransform_2_TransformOut_sepalLength = new com.github.romualdrousseau.shuju.DataSummary(
 						dataset_tShujuTransform_2_TransformOut, 0);
 				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.NumericScaler(
-										dataSummary_tShujuTransform_2_TransformOut_sepalLength),
-								0);
+						.transform(new com.github.romualdrousseau.shuju.transforms.NumericScaler(
+								dataSummary_tShujuTransform_2_TransformOut_sepalLength), 0);
 				com.github.romualdrousseau.shuju.DataSummary dataSummary_tShujuTransform_2_TransformOut_sepalWidth = new com.github.romualdrousseau.shuju.DataSummary(
 						dataset_tShujuTransform_2_TransformOut, 1);
 				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.NumericScaler(
-										dataSummary_tShujuTransform_2_TransformOut_sepalWidth),
-								1);
+						.transform(new com.github.romualdrousseau.shuju.transforms.NumericScaler(
+								dataSummary_tShujuTransform_2_TransformOut_sepalWidth), 1);
 				com.github.romualdrousseau.shuju.DataSummary dataSummary_tShujuTransform_2_TransformOut_petalLength = new com.github.romualdrousseau.shuju.DataSummary(
 						dataset_tShujuTransform_2_TransformOut, 2);
 				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.NumericScaler(
-										dataSummary_tShujuTransform_2_TransformOut_petalLength),
-								2);
+						.transform(new com.github.romualdrousseau.shuju.transforms.NumericScaler(
+								dataSummary_tShujuTransform_2_TransformOut_petalLength), 2);
 				com.github.romualdrousseau.shuju.DataSummary dataSummary_tShujuTransform_2_TransformOut_petalWidth = new com.github.romualdrousseau.shuju.DataSummary(
 						dataset_tShujuTransform_2_TransformOut, 3);
 				dataset_tShujuTransform_2_TransformOut
-						.transform(
-								new com.github.romualdrousseau.shuju.transforms.NumericScaler(
-										dataSummary_tShujuTransform_2_TransformOut_petalWidth),
-								3);
+						.transform(new com.github.romualdrousseau.shuju.transforms.NumericScaler(
+								dataSummary_tShujuTransform_2_TransformOut_petalWidth), 3);
 				dataset_tShujuTransform_2_TransformOut.shuffle();
 
-				globalMap.put("tShujuTransform_2",
-						dataset_tShujuTransform_2_TransformOut);
-				globalMap.put("tShujuTransform_2_TransformOut_NB_LINE",
-						nb_line_tShujuTransform_2_TransformOut);
+				globalMap.put("tShujuTransform_2", dataset_tShujuTransform_2_TransformOut);
+				globalMap.put("tShujuTransform_2_TransformOut_NB_LINE", nb_line_tShujuTransform_2_TransformOut);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row12" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row12");
 				}
 
 				ok_Hash.put("tShujuTransform_2_TransformOut", true);
-				end_Hash.put("tShujuTransform_2_TransformOut",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_2_TransformOut", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_2_TransformOut end ] stop
@@ -3175,23 +2948,11 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tShujuTrain_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row14" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row14");
 				}
 
 				int tos_count_tShujuTrain_1 = 0;
 
-				class BytesLimit65535_tShujuTrain_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTrain_1().limitLog4jByte();
 				int nb_line_tShujuTrain_1 = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTrain_1 = new com.github.romualdrousseau.shuju.DataSet();
@@ -3210,22 +2971,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tFlowMeter_15";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row2" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row2");
 				}
 
 				int tos_count_tFlowMeter_15 = 0;
-
-				class BytesLimit65535_tFlowMeter_15 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_15().limitLog4jByte();
 
 				int count_tFlowMeter_15 = 0;
 
@@ -3243,22 +2992,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tSampleRow_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row6" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row6");
 				}
 
 				int tos_count_tSampleRow_1 = 0;
-
-				class BytesLimit65535_tSampleRow_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tSampleRow_1().limitLog4jByte();
 
 				String[] rangetSampleRow_1 = "1..120".split(",");
 				java.util.Set rangeSettSampleRow_1 = new java.util.HashSet();
@@ -3269,17 +3006,14 @@ public class KnnSample implements TalendJob {
 
 					if (rangetSampleRow_1[i].matches("\\d+")) {
 
-						rangeSettSampleRow_1.add(Integer
-								.valueOf(rangetSampleRow_1[i]));
+						rangeSettSampleRow_1.add(Integer.valueOf(rangetSampleRow_1[i]));
 
 					} else if (rangetSampleRow_1[i].matches("\\d+\\.\\.\\d+")) {
 
-						String[] edgetSampleRow_1 = rangetSampleRow_1[i]
-								.split("\\.\\.");
+						String[] edgetSampleRow_1 = rangetSampleRow_1[i].split("\\.\\.");
 
-						for (int j = Integer.valueOf(edgetSampleRow_1[0])
-								.intValue(); j < Integer.valueOf(
-								edgetSampleRow_1[1]).intValue() + 1; j++) {
+						for (int j = Integer.valueOf(edgetSampleRow_1[0]).intValue(); j < Integer
+								.valueOf(edgetSampleRow_1[1]).intValue() + 1; j++) {
 							rangeSettSampleRow_1.add(Integer.valueOf(j));
 						}
 					} else {
@@ -3302,23 +3036,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tBufferOutput_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row15" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row15");
 				}
 
 				int tos_count_tBufferOutput_1 = 0;
-
-				class BytesLimit65535_tBufferOutput_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tBufferOutput_1().limitLog4jByte();
 
 				/**
 				 * [tBufferOutput_1 begin ] stop
@@ -3334,22 +3055,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tFlowMeter_17";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row1" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row1");
 				}
 
 				int tos_count_tFlowMeter_17 = 0;
-
-				class BytesLimit65535_tFlowMeter_17 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_17().limitLog4jByte();
 
 				int count_tFlowMeter_17 = 0;
 
@@ -3367,22 +3076,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tSampleRow_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row7" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row7");
 				}
 
 				int tos_count_tSampleRow_2 = 0;
-
-				class BytesLimit65535_tSampleRow_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tSampleRow_2().limitLog4jByte();
 
 				String[] rangetSampleRow_2 = "121..150".split(",");
 				java.util.Set rangeSettSampleRow_2 = new java.util.HashSet();
@@ -3393,17 +3090,14 @@ public class KnnSample implements TalendJob {
 
 					if (rangetSampleRow_2[i].matches("\\d+")) {
 
-						rangeSettSampleRow_2.add(Integer
-								.valueOf(rangetSampleRow_2[i]));
+						rangeSettSampleRow_2.add(Integer.valueOf(rangetSampleRow_2[i]));
 
 					} else if (rangetSampleRow_2[i].matches("\\d+\\.\\.\\d+")) {
 
-						String[] edgetSampleRow_2 = rangetSampleRow_2[i]
-								.split("\\.\\.");
+						String[] edgetSampleRow_2 = rangetSampleRow_2[i].split("\\.\\.");
 
-						for (int j = Integer.valueOf(edgetSampleRow_2[0])
-								.intValue(); j < Integer.valueOf(
-								edgetSampleRow_2[1]).intValue() + 1; j++) {
+						for (int j = Integer.valueOf(edgetSampleRow_2[0]).intValue(); j < Integer
+								.valueOf(edgetSampleRow_2[1]).intValue() + 1; j++) {
 							rangeSettSampleRow_2.add(Integer.valueOf(j));
 						}
 					} else {
@@ -3426,22 +3120,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tReplicate_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row3" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row3");
 				}
 
 				int tos_count_tReplicate_1 = 0;
-
-				class BytesLimit65535_tReplicate_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tReplicate_1().limitLog4jByte();
 
 				/**
 				 * [tReplicate_1 begin ] stop
@@ -3457,22 +3139,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tFlowMeter_12";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row5" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row5");
 				}
 
 				int tos_count_tFlowMeter_12 = 0;
-
-				class BytesLimit65535_tFlowMeter_12 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_12().limitLog4jByte();
 
 				int count_tFlowMeter_12 = 0;
 
@@ -3485,8 +3155,7 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tShujuTransform_2_TransformIn", false);
-				start_Hash.put("tShujuTransform_2_TransformIn",
-						System.currentTimeMillis());
+				start_Hash.put("tShujuTransform_2_TransformIn", System.currentTimeMillis());
 
 				currentVirtualComponent = "tShujuTransform_2";
 
@@ -3494,30 +3163,17 @@ public class KnnSample implements TalendJob {
 
 				int tos_count_tShujuTransform_2_TransformIn = 0;
 
-				class BytesLimit65535_tShujuTransform_2_TransformIn {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuTransform_2_TransformIn()
-						.limitLog4jByte();
 				int nb_line_tShujuTransform_2_TransformIn = 0;
 
 				com.github.romualdrousseau.shuju.DataSet dataset_tShujuTransform_2_TransformIn = (com.github.romualdrousseau.shuju.DataSet) globalMap
 						.get("tShujuTransform_2");
 				for (com.github.romualdrousseau.shuju.DataRow row_tShujuTransform_2_TransformIn : dataset_tShujuTransform_2_TransformIn
 						.rows()) {
-					row5.sepalLength = (Double) row_tShujuTransform_2_TransformIn
-							.features().get(0).getValue();
-					row5.sepalWidth = (Double) row_tShujuTransform_2_TransformIn
-							.features().get(1).getValue();
-					row5.petalLength = (Double) row_tShujuTransform_2_TransformIn
-							.features().get(2).getValue();
-					row5.petalWidth = (Double) row_tShujuTransform_2_TransformIn
-							.features().get(3).getValue();
-					row5.species = (String) row_tShujuTransform_2_TransformIn
-							.getLabel().getValue();
+					row5.sepalLength = (Double) row_tShujuTransform_2_TransformIn.features().get(0).getValue();
+					row5.sepalWidth = (Double) row_tShujuTransform_2_TransformIn.features().get(1).getValue();
+					row5.petalLength = (Double) row_tShujuTransform_2_TransformIn.features().get(2).getValue();
+					row5.petalWidth = (Double) row_tShujuTransform_2_TransformIn.features().get(3).getValue();
+					row5.species = (String) row_tShujuTransform_2_TransformIn.getLabel().getValue();
 					nb_line_tShujuTransform_2_TransformIn++;
 
 					/**
@@ -3556,11 +3212,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tFlowMeter_12";
 
-					// row5
-					// row5
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row5" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row5");
 					}
 
 					count_tFlowMeter_12++;
@@ -3589,11 +3242,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tReplicate_1";
 
-					// row3
-					// row3
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row3" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row3");
 					}
 
 					row6 = new row6Struct();
@@ -3633,11 +3283,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tSampleRow_1";
 
-					// row6
-					// row6
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row6" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row6");
 					}
 
 					nb_line_tSampleRow_1++;
@@ -3674,7 +3321,7 @@ public class KnnSample implements TalendJob {
 					/**
 					 * [tSampleRow_1 process_data_begin ] stop
 					 */
-					// Start of branch "row2"
+// Start of branch "row2"
 					if (row2 != null) {
 
 						/**
@@ -3683,12 +3330,8 @@ public class KnnSample implements TalendJob {
 
 						currentComponent = "tFlowMeter_15";
 
-						// row2
-						// row2
-
 						if (execStat) {
-							runStat.updateStatOnConnection("row2" + iterateId,
-									1, 1);
+							runStat.updateStatOnConnection(iterateId, 1, 1, "row2");
 						}
 
 						count_tFlowMeter_15++;
@@ -3717,35 +3360,26 @@ public class KnnSample implements TalendJob {
 
 						currentComponent = "tShujuTrain_1";
 
-						// row14
-						// row14
-
 						if (execStat) {
-							runStat.updateStatOnConnection("row14" + iterateId,
-									1, 1);
+							runStat.updateStatOnConnection(iterateId, 1, 1, "row14");
 						}
 
 						com.github.romualdrousseau.shuju.DataRow row_tShujuTrain_1 = new com.github.romualdrousseau.shuju.DataRow();
 						com.github.romualdrousseau.shuju.features.NumericFeature feature_sepalLength_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 								row14.sepalLength);
-						row_tShujuTrain_1
-								.addFeature(feature_sepalLength_tShujuTrain_1);
+						row_tShujuTrain_1.addFeature(feature_sepalLength_tShujuTrain_1);
 						com.github.romualdrousseau.shuju.features.NumericFeature feature_sepalWidth_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 								row14.sepalWidth);
-						row_tShujuTrain_1
-								.addFeature(feature_sepalWidth_tShujuTrain_1);
+						row_tShujuTrain_1.addFeature(feature_sepalWidth_tShujuTrain_1);
 						com.github.romualdrousseau.shuju.features.NumericFeature feature_petalLength_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 								row14.petalLength);
-						row_tShujuTrain_1
-								.addFeature(feature_petalLength_tShujuTrain_1);
+						row_tShujuTrain_1.addFeature(feature_petalLength_tShujuTrain_1);
 						com.github.romualdrousseau.shuju.features.NumericFeature feature_petalWidth_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 								row14.petalWidth);
-						row_tShujuTrain_1
-								.addFeature(feature_petalWidth_tShujuTrain_1);
+						row_tShujuTrain_1.addFeature(feature_petalWidth_tShujuTrain_1);
 						com.github.romualdrousseau.shuju.features.StringFeature feature_species_tShujuTrain_1 = new com.github.romualdrousseau.shuju.features.StringFeature(
 								row14.species);
-						row_tShujuTrain_1
-								.setLabel(feature_species_tShujuTrain_1);
+						row_tShujuTrain_1.setLabel(feature_species_tShujuTrain_1);
 						dataset_tShujuTrain_1.addRow(row_tShujuTrain_1);
 
 						nb_line_tShujuTrain_1++;
@@ -3804,11 +3438,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tSampleRow_2";
 
-					// row7
-					// row7
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row7" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row7");
 					}
 
 					nb_line_tSampleRow_2++;
@@ -3845,7 +3476,7 @@ public class KnnSample implements TalendJob {
 					/**
 					 * [tSampleRow_2 process_data_begin ] stop
 					 */
-					// Start of branch "row1"
+// Start of branch "row1"
 					if (row1 != null) {
 
 						/**
@@ -3854,12 +3485,8 @@ public class KnnSample implements TalendJob {
 
 						currentComponent = "tFlowMeter_17";
 
-						// row1
-						// row1
-
 						if (execStat) {
-							runStat.updateStatOnConnection("row1" + iterateId,
-									1, 1);
+							runStat.updateStatOnConnection(iterateId, 1, 1, "row1");
 						}
 
 						count_tFlowMeter_17++;
@@ -3888,27 +3515,18 @@ public class KnnSample implements TalendJob {
 
 						currentComponent = "tBufferOutput_1";
 
-						// row15
-						// row15
-
 						if (execStat) {
-							runStat.updateStatOnConnection("row15" + iterateId,
-									1, 1);
+							runStat.updateStatOnConnection(iterateId, 1, 1, "row15");
 						}
 
-						String[] row_tBufferOutput_1 = new String[] { "", "",
-								"", "", "", };
-						row_tBufferOutput_1[0] = String
-								.valueOf(row15.sepalLength);
+						String[] row_tBufferOutput_1 = new String[] { "", "", "", "", "", };
+						row_tBufferOutput_1[0] = String.valueOf(row15.sepalLength);
 
-						row_tBufferOutput_1[1] = String
-								.valueOf(row15.sepalWidth);
+						row_tBufferOutput_1[1] = String.valueOf(row15.sepalWidth);
 
-						row_tBufferOutput_1[2] = String
-								.valueOf(row15.petalLength);
+						row_tBufferOutput_1[2] = String.valueOf(row15.petalLength);
 
-						row_tBufferOutput_1[3] = String
-								.valueOf(row15.petalWidth);
+						row_tBufferOutput_1[3] = String.valueOf(row15.petalWidth);
 
 						if (row15.species != null) {
 
@@ -4009,12 +3627,10 @@ public class KnnSample implements TalendJob {
 
 				}
 
-				globalMap.put("tShujuTransform_2_TransformIn_NB_LINE",
-						nb_line_tShujuTransform_2_TransformIn);
+				globalMap.put("tShujuTransform_2_TransformIn_NB_LINE", nb_line_tShujuTransform_2_TransformIn);
 
 				ok_Hash.put("tShujuTransform_2_TransformIn", true);
-				end_Hash.put("tShujuTransform_2_TransformIn",
-						System.currentTimeMillis());
+				end_Hash.put("tShujuTransform_2_TransformIn", System.currentTimeMillis());
 
 				/**
 				 * [tShujuTransform_2_TransformIn end ] stop
@@ -4026,14 +3642,10 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_12";
 
-				tFlowMeterCatcher_1.addMessage("row5", new Integer(
-						count_tFlowMeter_12), "null", "", "tFlowMeter_12");
+				tFlowMeterCatcher_1.addMessage("row5", new Integer(count_tFlowMeter_12), "null", "", "tFlowMeter_12");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row5" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row5");
 				}
 
 				ok_Hash.put("tFlowMeter_12", true);
@@ -4050,10 +3662,7 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tReplicate_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row3" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row3");
 				}
 
 				ok_Hash.put("tReplicate_1", true);
@@ -4070,10 +3679,7 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tSampleRow_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row6" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row6");
 				}
 
 				ok_Hash.put("tSampleRow_1", true);
@@ -4089,14 +3695,10 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_15";
 
-				tFlowMeterCatcher_1.addMessage("row2", new Integer(
-						count_tFlowMeter_15), "null", "", "tFlowMeter_15");
+				tFlowMeterCatcher_1.addMessage("row2", new Integer(count_tFlowMeter_15), "null", "", "tFlowMeter_15");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row2" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row2");
 				}
 
 				ok_Hash.put("tFlowMeter_15", true);
@@ -4114,8 +3716,7 @@ public class KnnSample implements TalendJob {
 
 				class tShujuTrain_1ClassifierFactory {
 					public com.github.romualdrousseau.shuju.IClassifier getInstance() {
-						return new com.github.romualdrousseau.shuju.ml.knn.KNN(
-								6);
+						return new com.github.romualdrousseau.shuju.ml.knn.KNN(6);
 					}
 				}
 				com.github.romualdrousseau.shuju.IClassifier classifier_tShujuTrain_1 = new tShujuTrain_1ClassifierFactory()
@@ -4123,16 +3724,11 @@ public class KnnSample implements TalendJob {
 
 				classifier_tShujuTrain_1.train(dataset_tShujuTrain_1);
 
-				globalMap.put("classifier_tShujuTrain_1",
-						classifier_tShujuTrain_1);
+				globalMap.put("classifier_tShujuTrain_1", classifier_tShujuTrain_1);
 				globalMap.put("tShujuTrain_1_NB_LINE", nb_line_tShujuTrain_1);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row14" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row14");
 				}
 
 				ok_Hash.put("tShujuTrain_1", true);
@@ -4149,10 +3745,7 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tSampleRow_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row7" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row7");
 				}
 
 				ok_Hash.put("tSampleRow_2", true);
@@ -4168,14 +3761,10 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_17";
 
-				tFlowMeterCatcher_1.addMessage("row1", new Integer(
-						count_tFlowMeter_17), "null", "", "tFlowMeter_17");
+				tFlowMeterCatcher_1.addMessage("row1", new Integer(count_tFlowMeter_17), "null", "", "tFlowMeter_17");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row1" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row1");
 				}
 
 				ok_Hash.put("tFlowMeter_17", true);
@@ -4192,11 +3781,7 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tBufferOutput_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row15" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row15");
 				}
 
 				ok_Hash.put("tBufferOutput_1", true);
@@ -4206,16 +3791,13 @@ public class KnnSample implements TalendJob {
 				 * [tBufferOutput_1 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 			tFlowMeterCatcher_1Process(globalMap);
 
 			if (resumeEntryMethodName == null || globalResumeTicket) {
-				resumeUtil
-						.addLog("CHECKPOINT",
-								"CONNECTION:SUBJOB_OK:tFileInputDelimited_1:OnSubjobOk",
-								"", Thread.currentThread().getId() + "", "",
-								"", "", "", "");
+				resumeUtil.addLog("CHECKPOINT", "CONNECTION:SUBJOB_OK:tFileInputDelimited_1:OnSubjobOk", "",
+						Thread.currentThread().getId() + "", "", "", "", "", "");
 			}
 
 			if (execStat) {
@@ -4226,8 +3808,7 @@ public class KnnSample implements TalendJob {
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			te.setVirtualComponentName(currentVirtualComponent);
 
@@ -4379,8 +3960,7 @@ public class KnnSample implements TalendJob {
 		globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row11Struct implements
-			routines.system.IPersistableRow<row11Struct> {
+	public static class row11Struct implements routines.system.IPersistableRow<row11Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -4573,8 +4153,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -4592,8 +4171,8 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class OnRowsEndStructtAggregateRow_1 implements
-			routines.system.IPersistableRow<OnRowsEndStructtAggregateRow_1> {
+	public static class OnRowsEndStructtAggregateRow_1
+			implements routines.system.IPersistableRow<OnRowsEndStructtAggregateRow_1> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -4786,8 +4365,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -4805,8 +4383,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row9Struct implements
-			routines.system.IPersistableRow<row9Struct> {
+	public static class row9Struct implements routines.system.IPersistableRow<row9Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -4840,8 +4417,7 @@ public class KnnSample implements TalendJob {
 			return intReturn;
 		}
 
-		private void writeInteger(Integer intNum, ObjectOutputStream dos)
-				throws IOException {
+		private void writeInteger(Integer intNum, ObjectOutputStream dos) throws IOException {
 			if (intNum == null) {
 				dos.writeByte(-1);
 			} else {
@@ -4932,8 +4508,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -4951,8 +4526,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row16Struct implements
-			routines.system.IPersistableRow<row16Struct> {
+	public static class row16Struct implements routines.system.IPersistableRow<row16Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -5006,22 +4580,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -5141,8 +4712,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5160,8 +4730,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row8Struct implements
-			routines.system.IPersistableRow<row8Struct> {
+	public static class row8Struct implements routines.system.IPersistableRow<row8Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -5215,22 +4784,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -5350,8 +4916,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5369,8 +4934,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public static class row10Struct implements
-			routines.system.IPersistableRow<row10Struct> {
+	public static class row10Struct implements routines.system.IPersistableRow<row10Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -5412,22 +4976,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -5523,8 +5084,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -5542,9 +5102,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public void tBufferInput_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tBufferInput_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tBufferInput_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -5559,8 +5117,7 @@ public class KnnSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -5577,36 +5134,23 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tAggregateRow_1_AGGOUT", false);
-				start_Hash.put("tAggregateRow_1_AGGOUT",
-						System.currentTimeMillis());
+				start_Hash.put("tAggregateRow_1_AGGOUT", System.currentTimeMillis());
 
 				currentVirtualComponent = "tAggregateRow_1";
 
 				currentComponent = "tAggregateRow_1_AGGOUT";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row9" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row9");
 				}
 
 				int tos_count_tAggregateRow_1_AGGOUT = 0;
 
-				class BytesLimit65535_tAggregateRow_1_AGGOUT {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tAggregateRow_1_AGGOUT().limitLog4jByte();
-
-				// ------------ Seems it is not used
+// ------------ Seems it is not used
 
 				java.util.Map hashAggreg_tAggregateRow_1 = new java.util.HashMap();
 
-				// ------------
+// ------------
 
 				class UtilClass_tAggregateRow_1 { // G_OutBegin_AggR_144
 
@@ -5626,177 +5170,121 @@ public class KnnSample implements TalendJob {
 						return Math.sqrt((n * d1 - d2 * d2) / n / (n - 1));
 					}
 
-					public void checkedIADD(byte a, byte b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(byte a, byte b, boolean checkTypeOverFlow, boolean checkUlp) {
 						byte r = (byte) (a + b);
 						if (checkTypeOverFlow && ((a ^ r) & (b ^ r)) < 0) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'short/Short'", "'byte/Byte'"));
 						}
 					}
 
-					public void checkedIADD(short a, short b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(short a, short b, boolean checkTypeOverFlow, boolean checkUlp) {
 						short r = (short) (a + b);
 						if (checkTypeOverFlow && ((a ^ r) & (b ^ r)) < 0) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'int/Integer'", "'short/Short'"));
 						}
 					}
 
-					public void checkedIADD(int a, int b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(int a, int b, boolean checkTypeOverFlow, boolean checkUlp) {
 						int r = a + b;
 						if (checkTypeOverFlow && ((a ^ r) & (b ^ r)) < 0) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'long/Long'", "'int/Integer'"));
 						}
 					}
 
-					public void checkedIADD(long a, long b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(long a, long b, boolean checkTypeOverFlow, boolean checkUlp) {
 						long r = a + b;
 						if (checkTypeOverFlow && ((a ^ r) & (b ^ r)) < 0) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'long/Long'"));
 						}
 					}
 
-					public void checkedIADD(float a, float b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(float a, float b, boolean checkTypeOverFlow, boolean checkUlp) {
 
 						if (checkUlp) {
 							float minAddedValue = Math.ulp(a);
 							if (minAddedValue > Math.abs(b)) {
-								throw new RuntimeException(
-										buildPrecisionMessage(
-												String.valueOf(a),
-												String.valueOf(b),
-												"'double' or 'BigDecimal'",
-												"'float/Float'"));
+								throw new RuntimeException(buildPrecisionMessage(String.valueOf(a), String.valueOf(b),
+										"'double' or 'BigDecimal'", "'float/Float'"));
 							}
 						}
 
-						if (checkTypeOverFlow
-								&& ((double) a + (double) b > (double) Float.MAX_VALUE)
+						if (checkTypeOverFlow && ((double) a + (double) b > (double) Float.MAX_VALUE)
 								|| ((double) a + (double) b < (double) -Float.MAX_VALUE)) {
-							throw new RuntimeException(
-									buildOverflowMessage(String.valueOf(a),
-											String.valueOf(b),
-											"'double' or 'BigDecimal'",
-											"'float/Float'"));
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
+									"'double' or 'BigDecimal'", "'float/Float'"));
 						}
 					}
 
-					public void checkedIADD(double a, double b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(double a, double b, boolean checkTypeOverFlow, boolean checkUlp) {
 
 						if (checkUlp) {
 							double minAddedValue = Math.ulp(a);
 							if (minAddedValue > Math.abs(b)) {
-								throw new RuntimeException(
-										buildPrecisionMessage(
-												String.valueOf(a),
-												String.valueOf(a),
-												"'BigDecimal'",
-												"'double/Double'"));
+								throw new RuntimeException(buildPrecisionMessage(String.valueOf(a), String.valueOf(a),
+										"'BigDecimal'", "'double/Double'"));
 							}
 						}
 
-						if (checkTypeOverFlow
-								&& (a + b > (double) Double.MAX_VALUE)
-								|| (a + b < -Double.MAX_VALUE)) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+						if (checkTypeOverFlow && (a + b > (double) Double.MAX_VALUE) || (a + b < -Double.MAX_VALUE)) {
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'double/Double'"));
 						}
 					}
 
-					public void checkedIADD(double a, byte b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(double a, byte b, boolean checkTypeOverFlow, boolean checkUlp) {
 
-						if (checkTypeOverFlow
-								&& (a + b > (double) Double.MAX_VALUE)
-								|| (a + b < -Double.MAX_VALUE)) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+						if (checkTypeOverFlow && (a + b > (double) Double.MAX_VALUE) || (a + b < -Double.MAX_VALUE)) {
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'double/Double'"));
 						}
 					}
 
-					public void checkedIADD(double a, short b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(double a, short b, boolean checkTypeOverFlow, boolean checkUlp) {
 
-						if (checkTypeOverFlow
-								&& (a + b > (double) Double.MAX_VALUE)
-								|| (a + b < -Double.MAX_VALUE)) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+						if (checkTypeOverFlow && (a + b > (double) Double.MAX_VALUE) || (a + b < -Double.MAX_VALUE)) {
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'double/Double'"));
 						}
 					}
 
-					public void checkedIADD(double a, int b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(double a, int b, boolean checkTypeOverFlow, boolean checkUlp) {
 
-						if (checkTypeOverFlow
-								&& (a + b > (double) Double.MAX_VALUE)
-								|| (a + b < -Double.MAX_VALUE)) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+						if (checkTypeOverFlow && (a + b > (double) Double.MAX_VALUE) || (a + b < -Double.MAX_VALUE)) {
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'double/Double'"));
 						}
 					}
 
-					public void checkedIADD(double a, float b,
-							boolean checkTypeOverFlow, boolean checkUlp) {
+					public void checkedIADD(double a, float b, boolean checkTypeOverFlow, boolean checkUlp) {
 
 						if (checkUlp) {
 							double minAddedValue = Math.ulp(a);
 							if (minAddedValue > Math.abs(b)) {
-								throw new RuntimeException(
-										buildPrecisionMessage(
-												String.valueOf(a),
-												String.valueOf(a),
-												"'BigDecimal'",
-												"'double/Double'"));
+								throw new RuntimeException(buildPrecisionMessage(String.valueOf(a), String.valueOf(a),
+										"'BigDecimal'", "'double/Double'"));
 							}
 						}
 
-						if (checkTypeOverFlow
-								&& (a + b > (double) Double.MAX_VALUE)
-								|| (a + b < -Double.MAX_VALUE)) {
-							throw new RuntimeException(buildOverflowMessage(
-									String.valueOf(a), String.valueOf(b),
+						if (checkTypeOverFlow && (a + b > (double) Double.MAX_VALUE) || (a + b < -Double.MAX_VALUE)) {
+							throw new RuntimeException(buildOverflowMessage(String.valueOf(a), String.valueOf(b),
 									"'BigDecimal'", "'double/Double'"));
 						}
 					}
 
-					private String buildOverflowMessage(String a, String b,
-							String advicedTypes, String originalType) {
-						return "Type overflow when adding "
-								+ b
-								+ " to "
-								+ a
-								+ ", to resolve this problem, increase the precision by using "
-								+ advicedTypes + " type in place of "
-								+ originalType + ".";
+					private String buildOverflowMessage(String a, String b, String advicedTypes, String originalType) {
+						return "Type overflow when adding " + b + " to " + a
+								+ ", to resolve this problem, increase the precision by using " + advicedTypes
+								+ " type in place of " + originalType + ".";
 					}
 
-					private String buildPrecisionMessage(String a, String b,
-							String advicedTypes, String originalType) {
-						return "The double precision is unsufficient to add the value "
-								+ b
-								+ " to "
-								+ a
-								+ ", to resolve this problem, increase the precision by using "
-								+ advicedTypes
-								+ " type in place of "
-								+ originalType + ".";
+					private String buildPrecisionMessage(String a, String b, String advicedTypes, String originalType) {
+						return "The double precision is unsufficient to add the value " + b + " to " + a
+								+ ", to resolve this problem, increase the precision by using " + advicedTypes
+								+ " type in place of " + originalType + ".";
 					}
 
 				} // G_OutBegin_AggR_144
@@ -5867,39 +5355,26 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tMap_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row16" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row16");
 				}
 
 				int tos_count_tMap_1 = 0;
 
-				class BytesLimit65535_tMap_1 {
-					public void limitLog4jByte() throws Exception {
+// ###############################
+// # Lookup's keys initialization
+// ###############################        
 
-					}
-				}
-
-				new BytesLimit65535_tMap_1().limitLog4jByte();
-
-				// ###############################
-				// # Lookup's keys initialization
-				// ###############################
-
-				// ###############################
-				// # Vars initialization
+// ###############################
+// # Vars initialization
 				class Var__tMap_1__Struct {
 				}
 				Var__tMap_1__Struct Var__tMap_1 = new Var__tMap_1__Struct();
-				// ###############################
+// ###############################
 
-				// ###############################
-				// # Outputs initialization
+// ###############################
+// # Outputs initialization
 				row9Struct row9_tmp = new row9Struct();
-				// ###############################
+// ###############################
 
 				/**
 				 * [tMap_1 begin ] stop
@@ -5915,22 +5390,10 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tFlowMeter_19";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row8" + iterateId, 0, 0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row8");
 				}
 
 				int tos_count_tFlowMeter_19 = 0;
-
-				class BytesLimit65535_tFlowMeter_19 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeter_19().limitLog4jByte();
 
 				int count_tFlowMeter_19 = 0;
 
@@ -5948,23 +5411,11 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tShujuPredict_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row10" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row10");
 				}
 
 				int tos_count_tShujuPredict_1 = 0;
 
-				class BytesLimit65535_tShujuPredict_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tShujuPredict_1().limitLog4jByte();
 				int nb_line_tShujuPredict_1 = 0;
 
 				com.github.romualdrousseau.shuju.IClassifier classifier_tShujuPredict_1 = (com.github.romualdrousseau.shuju.IClassifier) globalMap
@@ -5985,14 +5436,6 @@ public class KnnSample implements TalendJob {
 
 				int tos_count_tBufferInput_1 = 0;
 
-				class BytesLimit65535_tBufferInput_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tBufferInput_1().limitLog4jByte();
-
 				int nb_line_tBufferInput_1 = 0;
 
 				String[] row_tBufferInput_1 = new String[5];
@@ -6000,29 +5443,25 @@ public class KnnSample implements TalendJob {
 					row_tBufferInput_1 = (String[]) globalBuffer.get(n);
 					if (0 < row_tBufferInput_1.length) {
 
-						row10.sepalLength = ParserUtils
-								.parseTo_double(row_tBufferInput_1[0]);
+						row10.sepalLength = ParserUtils.parseTo_double(row_tBufferInput_1[0]);
 
 					}
 
 					if (1 < row_tBufferInput_1.length) {
 
-						row10.sepalWidth = ParserUtils
-								.parseTo_double(row_tBufferInput_1[1]);
+						row10.sepalWidth = ParserUtils.parseTo_double(row_tBufferInput_1[1]);
 
 					}
 
 					if (2 < row_tBufferInput_1.length) {
 
-						row10.petalLength = ParserUtils
-								.parseTo_double(row_tBufferInput_1[2]);
+						row10.petalLength = ParserUtils.parseTo_double(row_tBufferInput_1[2]);
 
 					}
 
 					if (3 < row_tBufferInput_1.length) {
 
-						row10.petalWidth = ParserUtils
-								.parseTo_double(row_tBufferInput_1[3]);
+						row10.petalWidth = ParserUtils.parseTo_double(row_tBufferInput_1[3]);
 
 					}
 
@@ -6068,39 +5507,30 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tShujuPredict_1";
 
-					// row10
-					// row10
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row10" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row10");
 					}
 
 					com.github.romualdrousseau.shuju.DataRow row_tShujuPredict_1 = new com.github.romualdrousseau.shuju.DataRow();
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_sepalLength_tShujuPredict_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row10.sepalLength);
-					row_tShujuPredict_1
-							.addFeature(feature_sepalLength_tShujuPredict_1);
+					row_tShujuPredict_1.addFeature(feature_sepalLength_tShujuPredict_1);
 					row8.sepalLength = row10.sepalLength;
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_sepalWidth_tShujuPredict_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row10.sepalWidth);
-					row_tShujuPredict_1
-							.addFeature(feature_sepalWidth_tShujuPredict_1);
+					row_tShujuPredict_1.addFeature(feature_sepalWidth_tShujuPredict_1);
 					row8.sepalWidth = row10.sepalWidth;
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_petalLength_tShujuPredict_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row10.petalLength);
-					row_tShujuPredict_1
-							.addFeature(feature_petalLength_tShujuPredict_1);
+					row_tShujuPredict_1.addFeature(feature_petalLength_tShujuPredict_1);
 					row8.petalLength = row10.petalLength;
 					com.github.romualdrousseau.shuju.features.NumericFeature feature_petalWidth_tShujuPredict_1 = new com.github.romualdrousseau.shuju.features.NumericFeature(
 							row10.petalWidth);
-					row_tShujuPredict_1
-							.addFeature(feature_petalWidth_tShujuPredict_1);
+					row_tShujuPredict_1.addFeature(feature_petalWidth_tShujuPredict_1);
 					row8.petalWidth = row10.petalWidth;
 					com.github.romualdrousseau.shuju.features.StringFeature feature_species_tShujuPredict_1 = new com.github.romualdrousseau.shuju.features.StringFeature(
 							row10.species);
-					row_tShujuPredict_1
-							.setLabel(feature_species_tShujuPredict_1);
+					row_tShujuPredict_1.setLabel(feature_species_tShujuPredict_1);
 					row8.species = row10.species;
 					com.github.romualdrousseau.shuju.Result result = classifier_tShujuPredict_1
 							.predict(row_tShujuPredict_1);
@@ -6131,11 +5561,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tFlowMeter_19";
 
-					// row8
-					// row8
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row8" + iterateId, 1, 1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row8");
 					}
 
 					count_tFlowMeter_19++;
@@ -6164,12 +5591,8 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tMap_1";
 
-					// row16
-					// row16
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row16" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row16");
 					}
 
 					boolean hasCasePrimitiveKeyWithNull_tMap_1 = false;
@@ -6191,14 +5614,12 @@ public class KnnSample implements TalendJob {
 
 						row9 = null;
 
-						// # Output table : 'row9'
-						row9_tmp.CORRECT = row16.species
-								.equals(row16.RESULT_LABEL) ? 1 : 0;
-						row9_tmp.INCORRECT = row16.species
-								.equals(row16.RESULT_LABEL) ? 0 : 1;
+// # Output table : 'row9'
+						row9_tmp.CORRECT = row16.species.equals(row16.RESULT_LABEL) ? 1 : 0;
+						row9_tmp.INCORRECT = row16.species.equals(row16.RESULT_LABEL) ? 0 : 1;
 						row9_tmp.ERROR = row16.RESULT_ERROR;
 						row9 = row9_tmp;
-						// ###############################
+// ###############################
 
 					} // end of Var scope
 
@@ -6219,7 +5640,7 @@ public class KnnSample implements TalendJob {
 					/**
 					 * [tMap_1 process_data_begin ] stop
 					 */
-					// Start of branch "row9"
+// Start of branch "row9"
 					if (row9 != null) {
 
 						/**
@@ -6230,18 +5651,13 @@ public class KnnSample implements TalendJob {
 
 						currentComponent = "tAggregateRow_1_AGGOUT";
 
-						// row9
-						// row9
-
 						if (execStat) {
-							runStat.updateStatOnConnection("row9" + iterateId,
-									1, 1);
+							runStat.updateStatOnConnection(iterateId, 1, 1, "row9");
 						}
 
 						operation_finder_tAggregateRow_1.hashCodeDirty = true;
 
-						operation_result_tAggregateRow_1 = hash_tAggregateRow_1
-								.get(operation_finder_tAggregateRow_1);
+						operation_result_tAggregateRow_1 = hash_tAggregateRow_1.get(operation_finder_tAggregateRow_1);
 
 						boolean isFirstAdd_tAggregateRow_1 = false;
 
@@ -6251,8 +5667,7 @@ public class KnnSample implements TalendJob {
 
 							isFirstAdd_tAggregateRow_1 = true;
 
-							hash_tAggregateRow_1.put(
-									operation_result_tAggregateRow_1,
+							hash_tAggregateRow_1.put(operation_result_tAggregateRow_1,
 									operation_result_tAggregateRow_1);
 
 						} // G_OutMain_AggR_001
@@ -6276,8 +5691,7 @@ public class KnnSample implements TalendJob {
 						operation_result_tAggregateRow_1.ERROR_AVG_count++;
 
 						if (operation_result_tAggregateRow_1.ERROR_AVG_sum == null) {
-							operation_result_tAggregateRow_1.ERROR_AVG_sum = new BigDecimal(
-									0).setScale(0);
+							operation_result_tAggregateRow_1.ERROR_AVG_sum = new BigDecimal(0).setScale(0);
 						}
 						operation_result_tAggregateRow_1.ERROR_AVG_sum = operation_result_tAggregateRow_1.ERROR_AVG_sum
 								.add(new BigDecimal(String.valueOf(row9.ERROR)));
@@ -6295,8 +5709,7 @@ public class KnnSample implements TalendJob {
 						) {
 							operation_result_tAggregateRow_1.ERROR_MIN_min = row9.ERROR;
 						}
-						operation_result_tAggregateRow_1.ERROR_STD_std_dev
-								.add((double) row9.ERROR);
+						operation_result_tAggregateRow_1.ERROR_STD_std_dev.add((double) row9.ERROR);
 
 						tos_count_tAggregateRow_1_AGGOUT++;
 
@@ -6393,15 +5806,10 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tShujuPredict_1";
 
-				globalMap.put("tShujuPredict_1_NB_LINE",
-						nb_line_tShujuPredict_1);
+				globalMap.put("tShujuPredict_1_NB_LINE", nb_line_tShujuPredict_1);
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row10" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row10");
 				}
 
 				ok_Hash.put("tShujuPredict_1", true);
@@ -6417,14 +5825,10 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tFlowMeter_19";
 
-				tFlowMeterCatcher_1.addMessage("row8", new Integer(
-						count_tFlowMeter_19), "null", "", "tFlowMeter_19");
+				tFlowMeterCatcher_1.addMessage("row8", new Integer(count_tFlowMeter_19), "null", "", "tFlowMeter_19");
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row8" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row8");
 				}
 
 				ok_Hash.put("tFlowMeter_19", true);
@@ -6440,16 +5844,12 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tMap_1";
 
-				// ###############################
-				// # Lookup hashes releasing
-				// ###############################
+// ###############################
+// # Lookup hashes releasing
+// ###############################      
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row16" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row16");
 				}
 
 				ok_Hash.put("tMap_1", true);
@@ -6468,15 +5868,11 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tAggregateRow_1_AGGOUT";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row9" + iterateId, 2, 0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row9");
 				}
 
 				ok_Hash.put("tAggregateRow_1_AGGOUT", true);
-				end_Hash.put("tAggregateRow_1_AGGOUT",
-						System.currentTimeMillis());
+				end_Hash.put("tAggregateRow_1_AGGOUT", System.currentTimeMillis());
 
 				/**
 				 * [tAggregateRow_1_AGGOUT end ] stop
@@ -6492,25 +5888,12 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tLogRow_1";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row11" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row11");
 				}
 
 				int tos_count_tLogRow_1 = 0;
 
-				class BytesLimit65535_tLogRow_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tLogRow_1().limitLog4jByte();
-
-				// /////////////////////
+				///////////////////////
 
 				class Util_tLogRow_1 {
 
@@ -6520,8 +5903,7 @@ public class KnnSample implements TalendJob {
 
 					String[] des_frame = { "|" };
 
-					public void printLine(StringBuilder sb, int titleWidth,
-							int dataWidth) {
+					public void printLine(StringBuilder sb, int titleWidth, int dataWidth) {
 
 						sb.append("+");
 						for (int i = 0; i < titleWidth + 2; i++)
@@ -6543,8 +5925,7 @@ public class KnnSample implements TalendJob {
 						for (int i = 0; i < row.length; i++) {
 							if (row[i] == null && 4 > dataWidth) {
 								dataWidth = 4;
-							} else if (row[i] != null
-									&& row[i].length() > dataWidth)
+							} else if (row[i] != null && row[i].length() > dataWidth)
 								dataWidth = row[i].length();
 						}
 
@@ -6562,8 +5943,7 @@ public class KnnSample implements TalendJob {
 						for (int i = 0; i < emptyCenterWidth; i++)
 							sb.append(" ");
 						sb.append(title);
-						for (int i = 0; i < totalWidth - emptyCenterWidth
-								- title.length(); i++)
+						for (int i = 0; i < totalWidth - emptyCenterWidth - title.length(); i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6588,8 +5968,7 @@ public class KnnSample implements TalendJob {
 							sb.append(" ");
 						sb.append("| " + row[0]);
 						for (int i = 0; row[0] == null && i < dataWidth - 3
-								|| row[0] != null
-								&& i < dataWidth - row[0].length() + 1; i++)
+								|| row[0] != null && i < dataWidth - row[0].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6597,13 +5976,11 @@ public class KnnSample implements TalendJob {
 
 						// for(int i=0; i<row.length; i++){
 						sb.append("| " + "INCORRECT");
-						for (int i = 0; i < titleWidth - "INCORRECT".length()
-								+ 1; i++)
+						for (int i = 0; i < titleWidth - "INCORRECT".length() + 1; i++)
 							sb.append(" ");
 						sb.append("| " + row[1]);
 						for (int i = 0; row[1] == null && i < dataWidth - 3
-								|| row[1] != null
-								&& i < dataWidth - row[1].length() + 1; i++)
+								|| row[1] != null && i < dataWidth - row[1].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6611,13 +5988,11 @@ public class KnnSample implements TalendJob {
 
 						// for(int i=0; i<row.length; i++){
 						sb.append("| " + "ERROR_MIN");
-						for (int i = 0; i < titleWidth - "ERROR_MIN".length()
-								+ 1; i++)
+						for (int i = 0; i < titleWidth - "ERROR_MIN".length() + 1; i++)
 							sb.append(" ");
 						sb.append("| " + row[2]);
 						for (int i = 0; row[2] == null && i < dataWidth - 3
-								|| row[2] != null
-								&& i < dataWidth - row[2].length() + 1; i++)
+								|| row[2] != null && i < dataWidth - row[2].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6625,13 +6000,11 @@ public class KnnSample implements TalendJob {
 
 						// for(int i=0; i<row.length; i++){
 						sb.append("| " + "ERROR_AVG");
-						for (int i = 0; i < titleWidth - "ERROR_AVG".length()
-								+ 1; i++)
+						for (int i = 0; i < titleWidth - "ERROR_AVG".length() + 1; i++)
 							sb.append(" ");
 						sb.append("| " + row[3]);
 						for (int i = 0; row[3] == null && i < dataWidth - 3
-								|| row[3] != null
-								&& i < dataWidth - row[3].length() + 1; i++)
+								|| row[3] != null && i < dataWidth - row[3].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6639,13 +6012,11 @@ public class KnnSample implements TalendJob {
 
 						// for(int i=0; i<row.length; i++){
 						sb.append("| " + "ERROR_STD");
-						for (int i = 0; i < titleWidth - "ERROR_STD".length()
-								+ 1; i++)
+						for (int i = 0; i < titleWidth - "ERROR_STD".length() + 1; i++)
 							sb.append(" ");
 						sb.append("| " + row[4]);
 						for (int i = 0; row[4] == null && i < dataWidth - 3
-								|| row[4] != null
-								&& i < dataWidth - row[4].length() + 1; i++)
+								|| row[4] != null && i < dataWidth - row[4].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6653,13 +6024,11 @@ public class KnnSample implements TalendJob {
 
 						// for(int i=0; i<row.length; i++){
 						sb.append("| " + "ERROR_MAX");
-						for (int i = 0; i < titleWidth - "ERROR_MAX".length()
-								+ 1; i++)
+						for (int i = 0; i < titleWidth - "ERROR_MAX".length() + 1; i++)
 							sb.append(" ");
 						sb.append("| " + row[5]);
 						for (int i = 0; row[5] == null && i < dataWidth - 3
-								|| row[5] != null
-								&& i < dataWidth - row[5].length() + 1; i++)
+								|| row[5] != null && i < dataWidth - row[5].length() + 1; i++)
 							sb.append(" ");
 						sb.append("|" + "\n");
 
@@ -6677,17 +6046,15 @@ public class KnnSample implements TalendJob {
 
 				java.io.PrintStream consoleOut_tLogRow_1 = null;
 				if (globalMap.get("tLogRow_CONSOLE") != null) {
-					consoleOut_tLogRow_1 = (java.io.PrintStream) globalMap
-							.get("tLogRow_CONSOLE");
+					consoleOut_tLogRow_1 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
 				} else {
-					consoleOut_tLogRow_1 = new java.io.PrintStream(
-							new java.io.BufferedOutputStream(System.out));
+					consoleOut_tLogRow_1 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
 					globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_1);
 				}
 
 				StringBuilder strBuffer_tLogRow_1 = null;
 				int nb_line_tLogRow_1 = 0;
-				// /////////////////////
+///////////////////////    			
 
 				/**
 				 * [tLogRow_1 begin ] stop
@@ -6698,8 +6065,7 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tAggregateRow_1_AGGIN", false);
-				start_Hash.put("tAggregateRow_1_AGGIN",
-						System.currentTimeMillis());
+				start_Hash.put("tAggregateRow_1_AGGIN", System.currentTimeMillis());
 
 				currentVirtualComponent = "tAggregateRow_1";
 
@@ -6707,19 +6073,10 @@ public class KnnSample implements TalendJob {
 
 				int tos_count_tAggregateRow_1_AGGIN = 0;
 
-				class BytesLimit65535_tAggregateRow_1_AGGIN {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tAggregateRow_1_AGGIN().limitLog4jByte();
-
 				java.util.Collection<AggOperationStruct_tAggregateRow_1> values_tAggregateRow_1 = hash_tAggregateRow_1
 						.values();
 
-				globalMap.put("tAggregateRow_1_NB_LINE",
-						values_tAggregateRow_1.size());
+				globalMap.put("tAggregateRow_1_NB_LINE", values_tAggregateRow_1.size());
 
 				for (AggOperationStruct_tAggregateRow_1 aggregated_row_tAggregateRow_1 : values_tAggregateRow_1) { // G_AggR_600
 
@@ -6765,8 +6122,7 @@ public class KnnSample implements TalendJob {
 					if (aggregated_row_tAggregateRow_1.ERROR_AVG_count > 0) {
 
 						row11.ERROR_AVG = aggregated_row_tAggregateRow_1.ERROR_AVG_sum
-								.divide(new BigDecimal(
-										String.valueOf(aggregated_row_tAggregateRow_1.ERROR_AVG_count)),
+								.divide(new BigDecimal(String.valueOf(aggregated_row_tAggregateRow_1.ERROR_AVG_count)),
 										10, BigDecimal.ROUND_HALF_UP)
 
 								.doubleValue()
@@ -6780,8 +6136,7 @@ public class KnnSample implements TalendJob {
 
 					}
 					row11.ERROR_STD = (double) utilClass_tAggregateRow_1
-							.sd(aggregated_row_tAggregateRow_1.ERROR_STD_std_dev
-									.toArray(new Double[0]));
+							.sd(aggregated_row_tAggregateRow_1.ERROR_STD_std_dev.toArray(new Double[0]));
 
 					row11.ERROR_MAX = aggregated_row_tAggregateRow_1.ERROR_MAX_max;
 
@@ -6809,22 +6164,17 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tLogRow_1";
 
-					// row11
-					// row11
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row11" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row11");
 					}
 
-					// /////////////////////
+///////////////////////		
 
 					strBuffer_tLogRow_1 = new StringBuilder();
 
 					if (row11.CORRECT != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.CORRECT));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.CORRECT));
 
 					} //
 
@@ -6832,8 +6182,7 @@ public class KnnSample implements TalendJob {
 
 					if (row11.INCORRECT != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.INCORRECT));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.INCORRECT));
 
 					} //
 
@@ -6841,8 +6190,7 @@ public class KnnSample implements TalendJob {
 
 					if (row11.ERROR_MIN != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.ERROR_MIN));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.ERROR_MIN));
 
 					} //
 
@@ -6850,8 +6198,7 @@ public class KnnSample implements TalendJob {
 
 					if (row11.ERROR_AVG != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.ERROR_AVG));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.ERROR_AVG));
 
 					} //
 
@@ -6859,8 +6206,7 @@ public class KnnSample implements TalendJob {
 
 					if (row11.ERROR_STD != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.ERROR_STD));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.ERROR_STD));
 
 					} //
 
@@ -6868,58 +6214,50 @@ public class KnnSample implements TalendJob {
 
 					if (row11.ERROR_MAX != null) { //
 
-						strBuffer_tLogRow_1.append(FormatterUtils
-								.formatUnwithE(row11.ERROR_MAX));
+						strBuffer_tLogRow_1.append(FormatterUtils.formatUnwithE(row11.ERROR_MAX));
 
 					} //
 
 					String[] row_tLogRow_1 = new String[6];
 
 					if (row11.CORRECT != null) { //
-						row_tLogRow_1[0] = FormatterUtils
-								.formatUnwithE(row11.CORRECT);
+						row_tLogRow_1[0] = FormatterUtils.formatUnwithE(row11.CORRECT);
 
 					} //
 
 					if (row11.INCORRECT != null) { //
-						row_tLogRow_1[1] = FormatterUtils
-								.formatUnwithE(row11.INCORRECT);
+						row_tLogRow_1[1] = FormatterUtils.formatUnwithE(row11.INCORRECT);
 
 					} //
 
 					if (row11.ERROR_MIN != null) { //
-						row_tLogRow_1[2] = FormatterUtils
-								.formatUnwithE(row11.ERROR_MIN);
+						row_tLogRow_1[2] = FormatterUtils.formatUnwithE(row11.ERROR_MIN);
 
 					} //
 
 					if (row11.ERROR_AVG != null) { //
-						row_tLogRow_1[3] = FormatterUtils
-								.formatUnwithE(row11.ERROR_AVG);
+						row_tLogRow_1[3] = FormatterUtils.formatUnwithE(row11.ERROR_AVG);
 
 					} //
 
 					if (row11.ERROR_STD != null) { //
-						row_tLogRow_1[4] = FormatterUtils
-								.formatUnwithE(row11.ERROR_STD);
+						row_tLogRow_1[4] = FormatterUtils.formatUnwithE(row11.ERROR_STD);
 
 					} //
 
 					if (row11.ERROR_MAX != null) { //
-						row_tLogRow_1[5] = FormatterUtils
-								.formatUnwithE(row11.ERROR_MAX);
+						row_tLogRow_1[5] = FormatterUtils.formatUnwithE(row11.ERROR_MAX);
 
 					} //
 
 					nb_line_tLogRow_1++;
-					consoleOut_tLogRow_1.println(util_tLogRow_1.print(
-							row_tLogRow_1, nb_line_tLogRow_1));
+					consoleOut_tLogRow_1.println(util_tLogRow_1.print(row_tLogRow_1, nb_line_tLogRow_1));
 					consoleOut_tLogRow_1.flush();
-					// ////
+//////
 
-					// ////
+//////                    
 
-					// /////////////////////
+///////////////////////    			
 
 					tos_count_tLogRow_1++;
 
@@ -6970,8 +6308,7 @@ public class KnnSample implements TalendJob {
 				} // G_AggR_600
 
 				ok_Hash.put("tAggregateRow_1_AGGIN", true);
-				end_Hash.put("tAggregateRow_1_AGGIN",
-						System.currentTimeMillis());
+				end_Hash.put("tAggregateRow_1_AGGIN", System.currentTimeMillis());
 
 				/**
 				 * [tAggregateRow_1_AGGIN end ] stop
@@ -6983,18 +6320,14 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tLogRow_1";
 
-				// ////
-				// ////
+//////
+//////
 				globalMap.put("tLogRow_1_NB_LINE", nb_line_tLogRow_1);
 
-				// /////////////////////
+///////////////////////    			
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row11" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row11");
 				}
 
 				ok_Hash.put("tLogRow_1", true);
@@ -7004,16 +6337,13 @@ public class KnnSample implements TalendJob {
 				 * [tLogRow_1 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 			tFlowMeterCatcher_1Process(globalMap);
 
 			if (resumeEntryMethodName == null || globalResumeTicket) {
-				resumeUtil
-						.addLog("CHECKPOINT",
-								"CONNECTION:SUBJOB_OK:tBufferInput_1:OnSubjobOk",
-								"", Thread.currentThread().getId() + "", "",
-								"", "", "", "");
+				resumeUtil.addLog("CHECKPOINT", "CONNECTION:SUBJOB_OK:tBufferInput_1:OnSubjobOk", "",
+						Thread.currentThread().getId() + "", "", "", "", "", "");
 			}
 
 			if (execStat) {
@@ -7024,8 +6354,7 @@ public class KnnSample implements TalendJob {
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			te.setVirtualComponentName(currentVirtualComponent);
 
@@ -7127,9 +6456,7 @@ public class KnnSample implements TalendJob {
 		globalMap.put("tBufferInput_1_SUBPROCESS_STATE", 1);
 	}
 
-	public void tChronometerStop_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tChronometerStop_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tChronometerStop_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -7143,8 +6470,7 @@ public class KnnSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -7155,20 +6481,11 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tChronometerStop_1", false);
-				start_Hash
-						.put("tChronometerStop_1", System.currentTimeMillis());
+				start_Hash.put("tChronometerStop_1", System.currentTimeMillis());
 
 				currentComponent = "tChronometerStop_1";
 
 				int tos_count_tChronometerStop_1 = 0;
-
-				class BytesLimit65535_tChronometerStop_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tChronometerStop_1().limitLog4jByte();
 
 				long timetChronometerStop_1;
 
@@ -7176,20 +6493,15 @@ public class KnnSample implements TalendJob {
 
 				System.out.print("[ tChronometerStop_1 ]  ");
 
-				System.out.print("   " + timetChronometerStop_1 / 1000
-						+ "seconds   ");
+				System.out.print("   " + timetChronometerStop_1 / 1000 + "seconds   ");
 
-				System.out.println("" + "  " + timetChronometerStop_1
-						+ " milliseconds");
+				System.out.println("" + "  " + timetChronometerStop_1 + " milliseconds");
 
 				Long currentTimetChronometerStop_1 = System.currentTimeMillis();
-				globalMap.put("tChronometerStop_1",
-						currentTimetChronometerStop_1);
+				globalMap.put("tChronometerStop_1", currentTimetChronometerStop_1);
 
-				globalMap.put("tChronometerStop_1_STOPTIME",
-						currentTimetChronometerStop_1);
-				globalMap.put("tChronometerStop_1_DURATION",
-						timetChronometerStop_1);
+				globalMap.put("tChronometerStop_1_STOPTIME", currentTimetChronometerStop_1);
+				globalMap.put("tChronometerStop_1_DURATION", timetChronometerStop_1);
 
 				/**
 				 * [tChronometerStop_1 begin ] stop
@@ -7239,12 +6551,11 @@ public class KnnSample implements TalendJob {
 				/**
 				 * [tChronometerStop_1 end ] stop
 				 */
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -7276,8 +6587,7 @@ public class KnnSample implements TalendJob {
 		globalMap.put("tChronometerStop_1_SUBPROCESS_STATE", 1);
 	}
 
-	public static class row13Struct implements
-			routines.system.IPersistableRow<row13Struct> {
+	public static class row13Struct implements routines.system.IPersistableRow<row13Struct> {
 		final static byte[] commonByteArrayLock_SAMPLES_KnnSample = new byte[0];
 		static byte[] commonByteArray_SAMPLES_KnnSample = new byte[0];
 
@@ -7371,8 +6681,7 @@ public class KnnSample implements TalendJob {
 			return this.thresholds;
 		}
 
-		private java.util.Date readDate(ObjectInputStream dis)
-				throws IOException {
+		private java.util.Date readDate(ObjectInputStream dis) throws IOException {
 			java.util.Date dateReturn = null;
 			int length = 0;
 			length = dis.readByte();
@@ -7384,8 +6693,7 @@ public class KnnSample implements TalendJob {
 			return dateReturn;
 		}
 
-		private void writeDate(java.util.Date date1, ObjectOutputStream dos)
-				throws IOException {
+		private void writeDate(java.util.Date date1, ObjectOutputStream dos) throws IOException {
 			if (date1 == null) {
 				dos.writeByte(-1);
 			} else {
@@ -7402,22 +6710,19 @@ public class KnnSample implements TalendJob {
 				strReturn = null;
 			} else {
 				if (length > commonByteArray_SAMPLES_KnnSample.length) {
-					if (length < 1024
-							&& commonByteArray_SAMPLES_KnnSample.length == 0) {
+					if (length < 1024 && commonByteArray_SAMPLES_KnnSample.length == 0) {
 						commonByteArray_SAMPLES_KnnSample = new byte[1024];
 					} else {
 						commonByteArray_SAMPLES_KnnSample = new byte[2 * length];
 					}
 				}
 				dis.readFully(commonByteArray_SAMPLES_KnnSample, 0, length);
-				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0,
-						length, utf8Charset);
+				strReturn = new String(commonByteArray_SAMPLES_KnnSample, 0, length, utf8Charset);
 			}
 			return strReturn;
 		}
 
-		private void writeString(String str, ObjectOutputStream dos)
-				throws IOException {
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
 			if (str == null) {
 				dos.writeInt(-1);
 			} else {
@@ -7439,8 +6744,7 @@ public class KnnSample implements TalendJob {
 			return intReturn;
 		}
 
-		private void writeInteger(Integer intNum, ObjectOutputStream dos)
-				throws IOException {
+		private void writeInteger(Integer intNum, ObjectOutputStream dos) throws IOException {
 			if (intNum == null) {
 				dos.writeByte(-1);
 			} else {
@@ -7615,8 +6919,7 @@ public class KnnSample implements TalendJob {
 			if (object1 instanceof Comparable && object2 instanceof Comparable) {
 				returnValue = ((Comparable) object1).compareTo(object2);
 			} else if (object1 != null && object2 != null) {
-				returnValue = compareStrings(object1.toString(),
-						object2.toString());
+				returnValue = compareStrings(object1.toString(), object2.toString());
 			} else if (object1 == null && object2 != null) {
 				returnValue = 1;
 			} else if (object1 != null && object2 == null) {
@@ -7634,9 +6937,7 @@ public class KnnSample implements TalendJob {
 
 	}
 
-	public void tFlowMeterCatcher_1Process(
-			final java.util.Map<String, Object> globalMap)
-			throws TalendException {
+	public void tFlowMeterCatcher_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 		globalMap.put("tFlowMeterCatcher_1_SUBPROCESS_STATE", 0);
 
 		final boolean execStat = this.execStat;
@@ -7650,8 +6951,7 @@ public class KnnSample implements TalendJob {
 			// TDI-39566 avoid throwing an useless Exception
 			boolean resumeIt = true;
 			if (globalResumeTicket == false && resumeEntryMethodName != null) {
-				String currentMethodName = new java.lang.Exception()
-						.getStackTrace()[0].getMethodName();
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
 				resumeIt = resumeEntryMethodName.equals(currentMethodName);
 			}
 			if (resumeIt || globalResumeTicket) { // start the resume
@@ -7669,32 +6969,19 @@ public class KnnSample implements TalendJob {
 				currentComponent = "tLogRow_2";
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null) {
-
-						runStat.updateStatOnConnection("row13" + iterateId, 0,
-								0);
-
-					}
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row13");
 				}
 
 				int tos_count_tLogRow_2 = 0;
 
-				class BytesLimit65535_tLogRow_2 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tLogRow_2().limitLog4jByte();
-
-				// /////////////////////
+				///////////////////////
 
 				final String OUTPUT_FIELD_SEPARATOR_tLogRow_2 = "|";
 				java.io.PrintStream consoleOut_tLogRow_2 = null;
 
 				StringBuilder strBuffer_tLogRow_2 = null;
 				int nb_line_tLogRow_2 = 0;
-				// /////////////////////
+///////////////////////    			
 
 				/**
 				 * [tLogRow_2 begin ] stop
@@ -7705,40 +6992,27 @@ public class KnnSample implements TalendJob {
 				 */
 
 				ok_Hash.put("tFlowMeterCatcher_1", false);
-				start_Hash.put("tFlowMeterCatcher_1",
-						System.currentTimeMillis());
+				start_Hash.put("tFlowMeterCatcher_1", System.currentTimeMillis());
 
 				currentComponent = "tFlowMeterCatcher_1";
 
 				int tos_count_tFlowMeterCatcher_1 = 0;
 
-				class BytesLimit65535_tFlowMeterCatcher_1 {
-					public void limitLog4jByte() throws Exception {
-
-					}
-				}
-
-				new BytesLimit65535_tFlowMeterCatcher_1().limitLog4jByte();
-
-				for (MetterCatcherUtils.MetterCatcherMessage mcm : tFlowMeterCatcher_1
-						.getMessages()) {
+				for (MetterCatcherUtils.MetterCatcherMessage mcm : tFlowMeterCatcher_1.getMessages()) {
 					row13.pid = pid;
 					row13.root_pid = rootPid;
 					row13.father_pid = fatherPid;
 					row13.project = projectName;
 					row13.job = jobName;
 					row13.context = contextStr;
-					row13.origin = (mcm.getOrigin() == null
-							|| mcm.getOrigin().length() < 1 ? null : mcm
-							.getOrigin());
+					row13.origin = (mcm.getOrigin() == null || mcm.getOrigin().length() < 1 ? null : mcm.getOrigin());
 					row13.moment = mcm.getMoment();
 					row13.job_version = mcm.getJobVersion();
 					row13.job_repository_id = mcm.getJobId();
 					row13.system_pid = mcm.getSystemPid();
 					row13.label = mcm.getLabel();
 					row13.count = mcm.getCount();
-					row13.reference = tFlowMeterCatcher_1.getConnLinesCount(mcm
-							.getReferense() + "_count");
+					row13.reference = tFlowMeterCatcher_1.getConnLinesCount(mcm.getReferense() + "_count");
 					row13.thresholds = mcm.getThresholds();
 
 					/**
@@ -7773,22 +7047,17 @@ public class KnnSample implements TalendJob {
 
 					currentComponent = "tLogRow_2";
 
-					// row13
-					// row13
-
 					if (execStat) {
-						runStat.updateStatOnConnection("row13" + iterateId, 1,
-								1);
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row13");
 					}
 
-					// /////////////////////
+///////////////////////		
 
 					strBuffer_tLogRow_2 = new StringBuilder();
 
 					if (row13.moment != null) { //
 
-						strBuffer_tLogRow_2.append(FormatterUtils.format_Date(
-								row13.moment, "yyyy-MM-dd HH:mm:ss"));
+						strBuffer_tLogRow_2.append(FormatterUtils.format_Date(row13.moment, "yyyy-MM-dd HH:mm:ss"));
 
 					} //
 
@@ -7804,8 +7073,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.father_pid != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.father_pid));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.father_pid));
 
 					} //
 
@@ -7813,8 +7081,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.root_pid != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.root_pid));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.root_pid));
 
 					} //
 
@@ -7822,8 +7089,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.system_pid != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.system_pid));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.system_pid));
 
 					} //
 
@@ -7831,8 +7097,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.project != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.project));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.project));
 
 					} //
 
@@ -7848,8 +7113,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.job_repository_id != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.job_repository_id));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.job_repository_id));
 
 					} //
 
@@ -7857,8 +7121,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.job_version != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.job_version));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.job_version));
 
 					} //
 
@@ -7866,8 +7129,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.context != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.context));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.context));
 
 					} //
 
@@ -7875,8 +7137,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.origin != null) { //
 
-						strBuffer_tLogRow_2
-								.append(String.valueOf(row13.origin));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.origin));
 
 					} //
 
@@ -7900,8 +7161,7 @@ public class KnnSample implements TalendJob {
 
 					if (row13.reference != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.reference));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.reference));
 
 					} //
 
@@ -7909,28 +7169,24 @@ public class KnnSample implements TalendJob {
 
 					if (row13.thresholds != null) { //
 
-						strBuffer_tLogRow_2.append(String
-								.valueOf(row13.thresholds));
+						strBuffer_tLogRow_2.append(String.valueOf(row13.thresholds));
 
 					} //
 
 					if (globalMap.get("tLogRow_CONSOLE") != null) {
-						consoleOut_tLogRow_2 = (java.io.PrintStream) globalMap
-								.get("tLogRow_CONSOLE");
+						consoleOut_tLogRow_2 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
 					} else {
-						consoleOut_tLogRow_2 = new java.io.PrintStream(
-								new java.io.BufferedOutputStream(System.out));
+						consoleOut_tLogRow_2 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
 						globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_2);
 					}
-					consoleOut_tLogRow_2
-							.println(strBuffer_tLogRow_2.toString());
+					consoleOut_tLogRow_2.println(strBuffer_tLogRow_2.toString());
 					consoleOut_tLogRow_2.flush();
 					nb_line_tLogRow_2++;
-					// ////
+//////
 
-					// ////
+//////                    
 
-					// /////////////////////
+///////////////////////    			
 
 					tos_count_tLogRow_2++;
 
@@ -7989,18 +7245,14 @@ public class KnnSample implements TalendJob {
 
 				currentComponent = "tLogRow_2";
 
-				// ////
-				// ////
+//////
+//////
 				globalMap.put("tLogRow_2_NB_LINE", nb_line_tLogRow_2);
 
-				// /////////////////////
+///////////////////////    			
 
 				if (execStat) {
-					if (resourceMap.get("inIterateVComp") == null
-							|| !((Boolean) resourceMap.get("inIterateVComp"))) {
-						runStat.updateStatOnConnection("row13" + iterateId, 2,
-								0);
-					}
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row13");
 				}
 
 				ok_Hash.put("tLogRow_2", true);
@@ -8010,12 +7262,11 @@ public class KnnSample implements TalendJob {
 				 * [tLogRow_2 end ] stop
 				 */
 
-			}// end the resume
+			} // end the resume
 
 		} catch (java.lang.Exception e) {
 
-			TalendException te = new TalendException(e, currentComponent,
-					globalMap);
+			TalendException te = new TalendException(e, currentComponent, globalMap);
 
 			throw te;
 		} catch (java.lang.Error error) {
@@ -8080,6 +7331,8 @@ public class KnnSample implements TalendJob {
 	public boolean isChildJob = false;
 	public String log4jLevel = "";
 
+	private boolean enableLogStash;
+
 	private boolean execStat = true;
 
 	private ThreadLocal<java.util.Map<String, String>> threadLocal = new ThreadLocal<java.util.Map<String, String>>() {
@@ -8121,8 +7374,7 @@ public class KnnSample implements TalendJob {
 	public String[][] runJob(String[] args) {
 
 		int exitCode = runJobInTOS(args);
-		String[][] bufferValue = (String[][]) globalBuffer
-				.toArray(new String[globalBuffer.size()][]);
+		String[][] bufferValue = (String[][]) globalBuffer.toArray(new String[globalBuffer.size()][]);
 
 		return bufferValue;
 	}
@@ -8150,6 +7402,7 @@ public class KnnSample implements TalendJob {
 				lastStr = "";
 			}
 		}
+		enableLogStash = "true".equalsIgnoreCase(System.getProperty("monitoring"));
 
 		if (clientHost == null) {
 			clientHost = defaultClientHost;
@@ -8171,10 +7424,8 @@ public class KnnSample implements TalendJob {
 		if (portStats != null) {
 			// portStats = -1; //for testing
 			if (portStats < 0 || portStats > 65535) {
-				// issue:10869, the portStats is invalid, so this client socket
-				// can't open
-				System.err.println("The statistics socket port " + portStats
-						+ " is invalid.");
+				// issue:10869, the portStats is invalid, so this client socket can't open
+				System.err.println("The statistics socket port " + portStats + " is invalid.");
 				execStat = false;
 			}
 		} else {
@@ -8182,27 +7433,24 @@ public class KnnSample implements TalendJob {
 		}
 
 		try {
-			// call job/subjob with an existing context, like:
-			// --context=production. if without this parameter, there will use
-			// the default context instead.
+			// call job/subjob with an existing context, like: --context=production. if
+			// without this parameter, there will use the default context instead.
 			java.io.InputStream inContext = KnnSample.class.getClassLoader()
-					.getResourceAsStream(
-							"samples/knnsample_0_1/contexts/" + contextStr
-									+ ".properties");
+					.getResourceAsStream("samples/knnsample_0_1/contexts/" + contextStr + ".properties");
 			if (inContext == null) {
-				inContext = KnnSample.class
-						.getClassLoader()
-						.getResourceAsStream(
-								"config/contexts/" + contextStr + ".properties");
+				inContext = KnnSample.class.getClassLoader()
+						.getResourceAsStream("config/contexts/" + contextStr + ".properties");
 			}
 			if (inContext != null) {
 				// defaultProps is in order to keep the original context value
-				defaultProps.load(inContext);
+				if (context != null && context.isEmpty()) {
+					defaultProps.load(inContext);
+					context = new ContextProperties(defaultProps);
+				}
+
 				inContext.close();
-				context = new ContextProperties(defaultProps);
 			} else if (!isDefaultContext) {
-				// print info and job continue to run, for case: context_param
-				// is not empty.
+				// print info and job continue to run, for case: context_param is not empty.
 				System.err.println("Could not find the context " + contextStr);
 			}
 
@@ -8211,12 +7459,21 @@ public class KnnSample implements TalendJob {
 				// set types for params from parentJobs
 				for (Object key : context_param.keySet()) {
 					String context_key = key.toString();
-					String context_type = context_param
-							.getContextType(context_key);
+					String context_type = context_param.getContextType(context_key);
 					context.setContextType(context_key, context_type);
 
 				}
 			}
+			class ContextProcessing {
+				private void processContext_0() {
+				}
+
+				public void processAllContext() {
+					processContext_0();
+				}
+			}
+
+			new ContextProcessing().processAllContext();
 		} catch (java.io.IOException ie) {
 			System.err.println("Could not load context " + contextStr);
 			ie.printStackTrace();
@@ -8227,18 +7484,14 @@ public class KnnSample implements TalendJob {
 		}
 
 		// Resume: init the resumeUtil
-		resumeEntryMethodName = ResumeUtil
-				.getResumeEntryMethodName(resuming_checkpoint_path);
+		resumeEntryMethodName = ResumeUtil.getResumeEntryMethodName(resuming_checkpoint_path);
 		resumeUtil = new ResumeUtil(resuming_logs_dir_path, isChildJob, rootPid);
-		resumeUtil.initCommonInfo(pid, rootPid, fatherPid, projectName,
-				jobName, contextStr, jobVersion);
+		resumeUtil.initCommonInfo(pid, rootPid, fatherPid, projectName, jobName, contextStr, jobVersion);
 
 		List<String> parametersToEncrypt = new java.util.ArrayList<String>();
 		// Resume: jobStart
-		resumeUtil.addLog("JOB_STARTED", "JOB:" + jobName,
-				parent_part_launcher, Thread.currentThread().getId() + "", "",
-				"", "", "",
-				resumeUtil.convertToJsonText(context, parametersToEncrypt));
+		resumeUtil.addLog("JOB_STARTED", "JOB:" + jobName, parent_part_launcher, Thread.currentThread().getId() + "",
+				"", "", "", "", resumeUtil.convertToJsonText(context, parametersToEncrypt));
 
 		if (execStat) {
 			try {
@@ -8254,8 +7507,7 @@ public class KnnSample implements TalendJob {
 		java.util.concurrent.ConcurrentHashMap<Object, Object> concurrentHashMap = new java.util.concurrent.ConcurrentHashMap<Object, Object>();
 		globalMap.put("concurrentHashMap", concurrentHashMap);
 
-		long startUsedMemory = Runtime.getRuntime().totalMemory()
-				- Runtime.getRuntime().freeMemory();
+		long startUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		long endUsedMemory = 0;
 		long end = 0;
 
@@ -8276,10 +7528,8 @@ public class KnnSample implements TalendJob {
 				try {
 					((java.util.Map) threadLocal.get()).put("errorCode", null);
 					tFileInputDelimited_1Process(globalMap);
-					if (!"failure".equals(((java.util.Map) threadLocal.get())
-							.get("status"))) {
-						((java.util.Map) threadLocal.get())
-								.put("status", "end");
+					if (!"failure".equals(((java.util.Map) threadLocal.get()).get("status"))) {
+						((java.util.Map) threadLocal.get()).put("status", "end");
 					}
 				} catch (TalendException e_tFileInputDelimited_1) {
 					globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", -1);
@@ -8288,18 +7538,14 @@ public class KnnSample implements TalendJob {
 
 				} catch (java.lang.Error e_tFileInputDelimited_1) {
 					globalMap.put("tFileInputDelimited_1_SUBPROCESS_STATE", -1);
-					((java.util.Map) threadLocal.get())
-							.put("status", "failure");
+					((java.util.Map) threadLocal.get()).put("status", "failure");
 					throw e_tFileInputDelimited_1;
 
 				} finally {
-					Integer localErrorCode = (Integer) (((java.util.Map) threadLocal
-							.get()).get("errorCode"));
-					String localStatus = (String) (((java.util.Map) threadLocal
-							.get()).get("status"));
+					Integer localErrorCode = (Integer) (((java.util.Map) threadLocal.get()).get("errorCode"));
+					String localStatus = (String) (((java.util.Map) threadLocal.get()).get("status"));
 					if (localErrorCode != null) {
-						if (errorCode == null
-								|| localErrorCode.compareTo(errorCode) > 0) {
+						if (errorCode == null || localErrorCode.compareTo(errorCode) > 0) {
 							errorCode = localErrorCode;
 						}
 					}
@@ -8307,8 +7553,7 @@ public class KnnSample implements TalendJob {
 						status = localStatus;
 					}
 
-					if ("true".equals(((java.util.Map) threadLocal.get())
-							.get("JobInterrupted"))) {
+					if ("true".equals(((java.util.Map) threadLocal.get()).get("JobInterrupted"))) {
 						launchingThread.interrupt();
 					}
 
@@ -8340,11 +7585,9 @@ public class KnnSample implements TalendJob {
 			System.out.println((end - startTime) + " milliseconds");
 		}
 
-		endUsedMemory = Runtime.getRuntime().totalMemory()
-				- Runtime.getRuntime().freeMemory();
+		endUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		if (false) {
-			System.out.println((endUsedMemory - startUsedMemory)
-					+ " bytes memory increase when running : KnnSample");
+			System.out.println((endUsedMemory - startUsedMemory) + " bytes memory increase when running : KnnSample");
 		}
 
 		if (execStat) {
@@ -8357,9 +7600,8 @@ public class KnnSample implements TalendJob {
 		} else {
 			returnCode = errorCode.intValue();
 		}
-		resumeUtil.addLog("JOB_ENDED", "JOB:" + jobName, parent_part_launcher,
-				Thread.currentThread().getId() + "", "", "" + returnCode, "",
-				"", "");
+		resumeUtil.addLog("JOB_ENDED", "JOB:" + jobName, parent_part_launcher, Thread.currentThread().getId() + "", "",
+				"" + returnCode, "", "", "");
 
 		return returnCode;
 
@@ -8413,8 +7655,7 @@ public class KnnSample implements TalendJob {
 					context_param.setContextType(keyValue.substring(0, index),
 							replaceEscapeChars(keyValue.substring(index + 1)));
 				} else { // the subjob won't escape the especial chars
-					context_param.setContextType(keyValue.substring(0, index),
-							keyValue.substring(index + 1));
+					context_param.setContextType(keyValue.substring(0, index), keyValue.substring(index + 1));
 				}
 
 			}
@@ -8424,24 +7665,24 @@ public class KnnSample implements TalendJob {
 			int index = -1;
 			if (keyValue != null && (index = keyValue.indexOf('=')) > -1) {
 				if (fatherPid == null) {
-					context_param.put(keyValue.substring(0, index),
-							replaceEscapeChars(keyValue.substring(index + 1)));
+					context_param.put(keyValue.substring(0, index), replaceEscapeChars(keyValue.substring(index + 1)));
 				} else { // the subjob won't escape the especial chars
-					context_param.put(keyValue.substring(0, index),
-							keyValue.substring(index + 1));
+					context_param.put(keyValue.substring(0, index), keyValue.substring(index + 1));
 				}
 			}
 		} else if (arg.startsWith("--log4jLevel=")) {
 			log4jLevel = arg.substring(13);
+		} else if (arg.startsWith("--monitoring") && arg.contains("=")) {// for trunjob call
+			final int equal = arg.indexOf('=');
+			final String key = arg.substring("--".length(), equal);
+			System.setProperty(key, arg.substring(equal + 1));
 		}
-
 	}
 
 	private static final String NULL_VALUE_EXPRESSION_IN_COMMAND_STRING_FOR_CHILD_JOB_ONLY = "<TALEND_NULL>";
 
-	private final String[][] escapeChars = { { "\\\\", "\\" }, { "\\n", "\n" },
-			{ "\\'", "\'" }, { "\\r", "\r" }, { "\\f", "\f" }, { "\\b", "\b" },
-			{ "\\t", "\t" } };
+	private final String[][] escapeChars = { { "\\\\", "\\" }, { "\\n", "\n" }, { "\\'", "\'" }, { "\\r", "\r" },
+			{ "\\f", "\f" }, { "\\b", "\b" }, { "\\t", "\t" } };
 
 	private String replaceEscapeChars(String keyValue) {
 
@@ -8458,15 +7699,14 @@ public class KnnSample implements TalendJob {
 				index = keyValue.indexOf(strArray[0], currIndex);
 				if (index >= 0) {
 
-					result.append(keyValue.substring(currIndex,
-							index + strArray[0].length()).replace(strArray[0],
+					result.append(keyValue.substring(currIndex, index + strArray[0].length()).replace(strArray[0],
 							strArray[1]));
 					currIndex = index + strArray[0].length();
 					break;
 				}
 			}
-			// if the left string doesn't include escape chars, append the left
-			// into the result
+			// if the left string doesn't include escape chars, append the left into the
+			// result
 			if (index < 0) {
 				result.append(keyValue.substring(currIndex));
 				currIndex = currIndex + keyValue.length();
@@ -8487,6 +7727,6 @@ public class KnnSample implements TalendJob {
 	ResumeUtil resumeUtil = null;
 }
 /************************************************************************************************
- * 221886 characters generated by Talend Open Studio for Big Data on the
- * September 23, 2018 11:20:43 AM SGT
+ * 215243 characters generated by Talend Open Studio for Big Data on the 21
+ * July, 2020 4:34:06 PM SGT
  ************************************************************************************************/

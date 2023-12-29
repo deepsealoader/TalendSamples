@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.example.samples</groupId>
     <artifactId>code.Master</artifactId>
-    <version>7.0.1</version>
+    <version>7.3.1</version>
     <relativePath>../../</relativePath>
   </parent>
   <groupId>org.example.samples.code</groupId>
   <artifactId>routines</artifactId>
-  <version>7.0.1</version>
+  <version>7.3.1</version>
   <name>SAMPLES Routines</name>
   <properties>
     <talend.codes.package>routines</talend.codes.package>
@@ -18,13 +18,29 @@
   <dependencies>
     <dependency>
       <groupId>org.talend.libraries</groupId>
-      <artifactId>log4j-1.2.16</artifactId>
-      <version>6.0.0</version>
+      <artifactId>crypto-utils</artifactId>
+      <version>6.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.talend.libraries</groupId>
-      <artifactId>dom4j-1.6.1</artifactId>
-      <version>6.0.0</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>org.dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>2.1.1</version>
     </dependency>
   </dependencies>
+  <build>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>

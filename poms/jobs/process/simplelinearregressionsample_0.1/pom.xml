@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.example.samples</groupId>
     <artifactId>code.Master</artifactId>
-    <version>7.0.1</version>
+    <version>7.3.1</version>
     <relativePath>../../../</relativePath>
   </parent>
   <groupId>org.example.samples.job</groupId>
@@ -19,41 +19,119 @@
     <current.int-resources.dir>${basedir}/src/main/resources</current.int-resources.dir>
     <talend.job.version>0.1</talend.job.version>
     <talend.project.name.lowercase>samples</talend.project.name.lowercase>
-    <talend.job.path>samples/simplelinearregressionsample_0_1</talend.job.path>
+    <talend.job.path>samples</talend.job.path>
+    <project.distribution-management.repository.id>${project.distributionManagement.repository.id}</project.distribution-management.repository.id>
     <maven.build.timestamp.format>yyyy-MM-dd HHmmssSSS</maven.build.timestamp.format>
     <talend.project.name>SAMPLES</talend.project.name>
-    <talend.product.version>7.0.1.20180411_1414</talend.product.version>
+    <talend.product.version>7.3.1.20200219_1130</talend.product.version>
     <talend.job.finalName>simplelinearregressionsample_0_1</talend.job.finalName>
     <talend.pigudf.groupid>org.example.samples.pigudf</talend.pigudf.groupid>
     <talend.routine.groupid>org.example.samples.code</talend.routine.groupid>
     <current.bundle.resources.dir>${basedir}/src/main/bundle-resources</current.bundle.resources.dir>
     <talend.job.jvmargs>-Xms256M -Xmx1024M -Dfile.encoding=UTF-8 </talend.job.jvmargs>
-    <talend.project.branch></talend.project.branch>
-    <talend.job.context>Default</talend.job.context>
     <talend.job.stat>true</talend.job.stat>
+    <talend.job.context>Default</talend.job.context>
     <talend.job.date>${maven.build.timestamp}</talend.job.date>
     <current.resources.dir>${basedir}/src/main/ext-resources</current.resources.dir>
     <talend.job.name>SimpleLinearRegressionSample</talend.job.name>
     <talend.job.id>_rXHRsLoUEeiTnveA9Ky8_A</talend.job.id>
     <talend.project.id>0</talend.project.id>
+    <talend.job.folder></talend.job.folder>
     <talend.job.framework></talend.job.framework>
+    <project.distribution-management.repository.url>${project.distributionManagement.repository.url}</project.distribution-management.repository.url>
     <talend.job.type>Standard</talend.job.type>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.talend.libraries</groupId>
-      <artifactId>dom4j-1.6.1</artifactId>
+      <artifactId>commons-collections4-4.1</artifactId>
       <version>6.0.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.19</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.talend.libraries</groupId>
-      <artifactId>log4j-1.2.16</artifactId>
+      <artifactId>crypto-utils</artifactId>
+      <version>6.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.talend.libraries</groupId>
+      <artifactId>geronimo-stax-api_1.0_spec-1.0.1</artifactId>
       <version>6.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-to-slf4j</artifactId>
+      <version>2.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>4.1.0-20190523141255_modified_talend</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>4.1.0-20190523141255_modified_talend</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml-schemas</artifactId>
+      <version>4.1.0-20190523141255_modified_talend</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-scratchpad</artifactId>
+      <version>4.1.0-20190523141255_modified_talend</version>
     </dependency>
     <dependency>
       <groupId>com.github.romualdrousseau</groupId>
       <artifactId>shuju</artifactId>
       <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>org.talend.libraries</groupId>
+      <artifactId>talendExcel-1.5-20190731</artifactId>
+      <version>6.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.talend.libraries</groupId>
@@ -66,9 +144,14 @@
       <version>6.0.0</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.example.samples.code</groupId>
       <artifactId>routines</artifactId>
-      <version>7.0.1</version>
+      <version>7.3.1</version>
     </dependency>
   </dependencies>
   <build>
@@ -105,6 +188,30 @@
       </build>
     </profile>
     <profile>
+      <id>signature</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.talend.ci</groupId>
+            <artifactId>signer-maven-plugin</artifactId>
+            <version>${signer.version}</version>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>default-settings</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -130,9 +237,15 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <templates.dir>${basedir}/src/main/templates/</templates.dir>
-        <poms.dir>${basedir}</poms.dir>
         <assemblies.dir>${basedir}/src/main/assemblies/</assemblies.dir>
+        <pigudfpom.dir>${parentpom.dir}code/pigudf/</pigudfpom.dir>
+        <routinescode.dir>${parentpom.dir}code/routines/src/main/</routinescode.dir>
+        <parentpom.dir>${project.parent.relativePath}</parentpom.dir>
+        <templates.dir>${basedir}/src/main/templates/</templates.dir>
+        <routinespom.dir>${parentpom.dir}code/routines/</routinespom.dir>
+        <pigudfcode.dir>${parentpom.dir}code/pigudf/src/main/</pigudfcode.dir>
+        <joblet.dir>${parentpom.dir}jobs/</joblet.dir>
+        <poms.dir>${basedir}</poms.dir>
       </properties>
     </profile>
     <profile>
@@ -245,15 +358,6 @@
       <id>include-microservice-running-configs</id>
       <properties>
         <microservice.running.configs.dir>${current.int-resources.dir}/</microservice.running.configs.dir>
-      </properties>
-    </profile>
-    <profile>
-      <id>include-survivorship-rules</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <survivorship.rules.dir>${current.resources.dir}/metadata/survivorship/</survivorship.rules.dir>
       </properties>
     </profile>
   </profiles>

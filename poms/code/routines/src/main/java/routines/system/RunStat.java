@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RunStat implements Runnable {
 
@@ -66,6 +67,17 @@ public class RunStat implements Runnable {
         private long endTime = 0;
 
         private String exec = null;
+
+        /**
+         * sometimes, we need to computer the connection execution time, so it need to
+         * save both the connection start time and end time in one StatBean object, so after
+         * send "start" status StatBean, we need to keep it to set the end time when "end" status come, then do computer.
+         *
+         * But for iterate connection case, no need connection execution time, so clear it from memory at once after send it, then avoid memory leak.
+         * The field do for that.
+         *
+         */
+        private boolean clearAfterSend;
 
         // feature:11356---1="Start Job" and 2="End job", default is -1
         private int jobStat = JOBDEFAULT;
@@ -143,6 +155,14 @@ public class RunStat implements Runnable {
 
         public String getItemId() {
             return itemId;
+        }
+
+        public void setClearAfterSend(boolean clearAfterSend) {
+            this.clearAfterSend = clearAfterSend;
+        }
+
+        public boolean isClearAfterSend() {
+            return clearAfterSend;
         }
 
     }
@@ -262,7 +282,7 @@ public class RunStat implements Runnable {
             StatBean sb = processStats.get(curKey);
             // it is connection
             int jobStat = sb.getJobStat();
-            if (jobStat == JOBDEFAULT) {
+            if (jobStat == JOBDEFAULT) {//it mean job is running here for connection status, not a good name
                 str = TYPE1_CONNECTION + "|" + rootPid + "|" + fatherPid + "|" + pid + "|" + sb.getConnectionId();
                 // str = sb.getConnectionId();
                 if (sb.getState() == RunStat.CLEAR) {
@@ -276,6 +296,11 @@ public class RunStat implements Runnable {
                     }
                     if (sb.getState() != RunStat.RUNNING) {
                         str += "|" + ((sb.getState() == RunStat.BEGIN) ? "start" : "stop"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    }
+
+                    if(sb.isClearAfterSend()) {
+                        //remove the stat object when end to avoid memory cost
+                        processStats.remove(curKey);
                     }
                 }
             } else {
@@ -305,6 +330,251 @@ public class RunStat implements Runnable {
 
     long lastStatsUpdate = 0;
 
+    private Map<String, StatBean> processStats4Meter = new HashMap<String, StatBean>();
+
+    private List<String> keysList4Meter = new LinkedList<String>();
+
+    public synchronized StatBean log(String connectionId, int mode, int nbLine) {
+        StatBean bean;
+        String key = connectionId;
+        if (connectionId.contains(".")) {
+            String firstKey = null;
+            String connectionName = connectionId.split("\\.")[0];
+            int nbKeys = 0;
+            for (String myKey : keysList4Meter) {
+                if (myKey.startsWith(connectionName + ".")) {
+                    if (firstKey == null) {
+                        firstKey = myKey;
+                    }
+                    nbKeys++;
+                    if (nbKeys == 4) {
+                        break;
+                    }
+                }
+            }
+            if (nbKeys == 4) {
+            	keysList4Meter.remove(firstKey);
+            }
+        }
+
+        if (keysList4Meter.contains(key)) {
+            int keyNb = keysList4Meter.indexOf(key);
+            keysList4Meter.remove(key);
+            keysList4Meter.add(keyNb, key);
+        } else {
+        	keysList4Meter.add(key);
+        }
+
+        if (processStats4Meter.containsKey(key)) {
+            bean = processStats4Meter.get(key);
+        } else {
+            bean = new StatBean(connectionId);
+        }
+
+        bean.setNbLine(bean.getNbLine() + nbLine);
+        processStats4Meter.put(key, bean);
+
+        if (mode == BEGIN) {
+            bean.setNbLine(0);
+            bean.setStartTime(System.currentTimeMillis());
+        } else if(mode == END) {
+        	bean.setEndTime(System.currentTimeMillis());
+
+    		processStats4Meter.remove(key);
+
+        	keysList4Meter.clear();
+        }
+
+        return bean;
+    }
+    
+    public synchronized boolean log(Map<String, Object> resourceMap, String iterateId, String connectionUniqueName, int mode, int nbLine, 
+    		JobStructureCatcherUtils jscu, String sourceNodeId, String sourceNodeComponent, String targetNodeId, String targetNodeComponent, String lineType) {
+    	if(resourceMap.get("inIterateVComp") == null || !((Boolean)resourceMap.get("inIterateVComp"))) {
+	    	StatBean bean = log(connectionUniqueName, mode, nbLine);
+	    	jscu.addConnectionMessage(
+	    		sourceNodeId, 
+	    		sourceNodeComponent, 
+			    false,
+			    lineType,
+			    connectionUniqueName+iterateId,
+			    bean.getNbLine(),
+			    bean.getStartTime(),
+			    bean.getEndTime()
+			);
+			
+	 		jscu.addConnectionMessage(
+				targetNodeId, 
+				targetNodeComponent, 
+			    true,
+			    "input",
+			    connectionUniqueName+iterateId,
+			    bean.getNbLine(),
+			    bean.getStartTime(),
+			    bean.getEndTime()
+			);
+	 		
+	 		return true;
+    	} else {
+    		return false;
+    	}
+    }
+
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStat(Map<String, Object> resourceMap, String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	if(resourceMap.get("inIterateVComp") == null || !((Boolean)resourceMap.get("inIterateVComp"))){
+	    	for(String connectionUniqueName : connectionUniqueNames) {
+	    		updateStatOnConnection(connectionUniqueName+iterateId, mode, nbLine);
+	    	}
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized boolean updateStatAndLog(boolean execStat, boolean enableLogStash, Map<String, Object> resourceMap, String iterateId, String connectionUniqueName, int mode, int nbLine, 
+    		JobStructureCatcherUtils jscu, String sourceNodeId, String sourceNodeComponent, String targetNodeId, String targetNodeComponent, String lineType) {
+    	if(execStat) {
+    		updateStat(resourceMap, iterateId, mode, nbLine, connectionUniqueName);
+    	}
+    	
+    	if(enableLogStash) {
+    		return log(resourceMap, iterateId, connectionUniqueName, mode, nbLine, 
+    	    		jscu, sourceNodeId, sourceNodeComponent, targetNodeId, targetNodeComponent, lineType);
+    	}
+    	
+    	
+    	return false;
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatOnConnection(Map<String, Object> resourceMap, String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	if(resourceMap.get("inIterateVComp") == null){
+	    	for(String connectionUniqueName : connectionUniqueNames) {
+	    		updateStatOnConnection(connectionUniqueName+iterateId, mode, nbLine);
+	    	}
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void log(Map<String, Object> resourceMap, String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	if(resourceMap.get("inIterateVComp") == null){
+	    	for(String connectionUniqueName : connectionUniqueNames) {
+	    		log(connectionUniqueName+iterateId, mode, nbLine);
+	    	}
+    	}
+    }
+
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void log(Map<String, Object> resourceMap, String iterateId, int mode, int nbLine, String connectionUniqueName) {
+    	if(resourceMap.get("inIterateVComp") == null){
+	    	log(connectionUniqueName+iterateId, mode, nbLine);
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatAndLog(boolean execStat, boolean enableLogStash, Map<String, Object> resourceMap, String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	if(execStat) {
+    		updateStatOnConnection(resourceMap, iterateId, mode, nbLine, connectionUniqueNames);
+    	}
+    	
+    	if(enableLogStash) {
+    		log(resourceMap, iterateId, mode, nbLine, connectionUniqueNames);
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatOnConnection(String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	for(String connectionUniqueName : connectionUniqueNames) {
+    		updateStatOnConnection(connectionUniqueName+iterateId, mode, nbLine);
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void log(String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	for(String connectionUniqueName : connectionUniqueNames) {
+    		log(connectionUniqueName+iterateId, mode, nbLine);
+    	}
+    }
+    
+    /**
+     * TBD-9420 fix 
+     */
+    public synchronized void log(String iterateId, int mode, int nbLine, String connectionUniqueName) {
+		log(connectionUniqueName+iterateId, mode, nbLine);
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatAndLog(boolean execStat, boolean enableLogStash, String iterateId, int mode, int nbLine, String... connectionUniqueNames) {
+    	if(execStat) {
+    		updateStatOnConnection(iterateId, mode, nbLine, connectionUniqueNames);
+    	}
+    	
+    	if(enableLogStash) {
+    		log(iterateId, mode, nbLine, connectionUniqueNames);
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatOnConnectionAndLog(Map<String, Object> globalMap, int iterateLoop, String iterateId, boolean execStat, boolean enableLogStash, int nbLine, String... connectionUniqueNames) {
+    	for(String connectionUniqueName : connectionUniqueNames) {
+	    	ConcurrentHashMap<Object, Object> concurrentHashMap = (ConcurrentHashMap) globalMap.get("concurrentHashMap");
+			concurrentHashMap.putIfAbsent(connectionUniqueName + iterateLoop,new java.util.concurrent.atomic.AtomicInteger(0));
+			java.util.concurrent.atomic.AtomicInteger stats = (java.util.concurrent.atomic.AtomicInteger) concurrentHashMap.get(connectionUniqueName + iterateLoop);
+			
+			int step = stats.incrementAndGet()<=1?0:1;
+			
+			if(execStat) {
+				updateStatOnConnection(connectionUniqueName+iterateId, step, nbLine);
+			}
+			
+			if(enableLogStash) {
+				log(connectionUniqueName+iterateId, step, nbLine);
+			}
+    	}
+    }
+    
+    /**
+     * work for avoiding the 65535 issue
+     */
+    public synchronized void updateStatOnConnectionAndLog(Map<String, Object> resourceMap, Map<String, Object> globalMap, int iterateLoop, String iterateId, boolean execStat, boolean enableLogStash, int nbLine, String... connectionUniqueNames) {
+    	for(String connectionUniqueName : connectionUniqueNames) {
+    		if(resourceMap.get("inIterateVComp") == null) {
+		    	ConcurrentHashMap<Object, Object> concurrentHashMap = (ConcurrentHashMap) globalMap.get("concurrentHashMap");
+				concurrentHashMap.putIfAbsent(connectionUniqueName + iterateLoop,new java.util.concurrent.atomic.AtomicInteger(0));
+				java.util.concurrent.atomic.AtomicInteger stats = (java.util.concurrent.atomic.AtomicInteger) concurrentHashMap.get(connectionUniqueName + iterateLoop);
+				
+				int step = stats.incrementAndGet()<=1?0:1;
+				
+				if(execStat) {
+					updateStatOnConnection(connectionUniqueName+iterateId, step, nbLine);
+				}
+				
+				if(enableLogStash) {
+					log(connectionUniqueName+iterateId, step, nbLine);
+				}
+    		}
+    	}
+    }
+    
     public synchronized void updateStatOnConnection(String connectionId, int mode, int nbLine) {
         StatBean bean;
         String key = connectionId;
@@ -368,8 +638,10 @@ public class RunStat implements Runnable {
         StatBean bean;
         String key = connectionId + "|" + mode;
 
+        boolean clearAfterSend = false;
         if (connectionId.startsWith("iterate")) {
             key = connectionId + "|" + mode + "|" + exec;
+            clearAfterSend = true;
         } else {
             if (connectionId.contains(".")) {
                 String firstKey = null;
@@ -403,6 +675,7 @@ public class RunStat implements Runnable {
         }
         bean.setState(mode);
         bean.setExec(exec);
+        bean.setClearAfterSend(clearAfterSend);
         processStats.put(key, bean);
 
         // Set a maximum interval for each update of 250ms.
@@ -441,6 +714,7 @@ public class RunStat implements Runnable {
         }
         bean.setState(mode);
         bean.setExec(exec);
+        bean.setClearAfterSend(true);
         processStats.put(key, bean);
 
         // Set a maximum interval for each update of 250ms.

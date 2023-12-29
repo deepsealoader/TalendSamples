@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<assembly
-	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+<?xml version="1.0" encoding="UTF-8"?><assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 	<id>bin</id>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<formats>
@@ -38,7 +34,8 @@
 	</files>
 
 	<fileSets>
-		<fileSet><!-- templates -->
+		<fileSet>
+            <!-- templates -->
 			<directory>${templates.dir}</directory>
 			<outputDirectory>${talend.job.name}/src/main/templates/
 			</outputDirectory>
@@ -46,7 +43,8 @@
 				<include>**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- log4j resources -->
+		<fileSet>
+            <!-- log4j resources -->
 			<directory>${log4j.resources.dir}</directory>
 			<outputDirectory>${output.resources.dir}/
 			</outputDirectory>
@@ -54,14 +52,16 @@
 				<include>log4j.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- log4j.xml for running -->
+		<fileSet>
+            <!-- log4j.xml for running -->
 			<directory>${log4j.running.dir}</directory>
 			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
 				<include>log4j.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- xmlMappings resources -->
+		<fileSet>
+            <!-- xmlMappings resources -->
 			<directory>${xmlMappings.resources.dir}</directory>
 			<outputDirectory>${output.resources.dir}/xmlMappings/
 			</outputDirectory>
@@ -69,7 +69,8 @@
 				<include>**/*.*</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- xmlMappings for running -->
+		<fileSet>
+            <!-- xmlMappings for running -->
 			<directory>${xmlMappings.running.dir}</directory>
 			<outputDirectory>${talend.job.name}/xmlMappings/
 			</outputDirectory>
@@ -77,7 +78,8 @@
 				<include>**/*.*</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- rules resources -->
+		<fileSet>
+            <!-- rules resources -->
 			<directory>${rules.resources.dir}</directory>
 			<outputDirectory>${output.resources.dir}/rules/
 			</outputDirectory>
@@ -85,7 +87,8 @@
 				<include>**/*.*</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- assembly_*.xml -->
+		<fileSet>
+            <!-- assembly_*.xml -->
 			<directory>${assemblies.dir}</directory>
 			<outputDirectory>${talend.job.name}/src/main/assemblies/
 			</outputDirectory>
@@ -93,11 +96,60 @@
 				<include>assembly.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- pom_*.xml -->
+		<fileSet>
+            <!-- pom_*.xml -->
 			<directory>${poms.dir}</directory>
 			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--parent pom.xml -->
+			<directory>${parentpom.dir}</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--routines code -->
+			<directory>${routinescode.dir}</directory>
+			<outputDirectory>code/routines/src/main</outputDirectory>
+			<includes>
+				<include>**/**/*.*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--routines pom -->
+			<directory>${routinespom.dir}</directory>
+			<outputDirectory>code/routines/</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--pigudf code -->
+			<directory>${pigudfcode.dir}</directory>
+			<outputDirectory>code/pigudf/src/main</outputDirectory>
+			<includes>
+				<include>**/**/*.*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--pifudf pom -->
+			<directory>${pigudfpom.dir}</directory>
+			<outputDirectory>code/pigudf/</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+            <!--joblet -->
+			<directory>${joblet.dir}</directory>
+			<outputDirectory>jobs/</outputDirectory>
+			<includes>
+				<include>joblets*/**/*.*</include>
 			</includes>
 		</fileSet>
 		<fileSet> <!-- add items -->
@@ -114,7 +166,8 @@
 				<include>${talend.job.path}/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- add context resources -->
+		<fileSet>
+            <!-- add context resources -->
 			<directory>${resources.dir}</directory>
 			<outputDirectory>${output.resources.dir}/
 			</outputDirectory>
@@ -122,14 +175,16 @@
 				<include>${talend.job.path}/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- add test source codes -->
+		<fileSet>
+            <!-- add test source codes -->
 			<directory>${test.sourcecodes.dir}</directory>
 			<outputDirectory>${talend.job.name}/src/test/java/</outputDirectory>
 			<includes>
 				<include>${talend.job.path}/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- add test context resources -->
+		<fileSet>
+            <!-- add test context resources -->
 			<directory>${test.resources.dir}</directory>
 			<outputDirectory>${talend.job.name}/src/test/resources/
 			</outputDirectory>
@@ -137,14 +192,16 @@
 				<include>${talend.job.path}/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- junits reports -->
+		<fileSet>
+            <!-- junits reports -->
 			<directory>${test.reports.dir}</directory>
 			<outputDirectory>sunfire-reports</outputDirectory>
 			<includes>
 				<include>**/*.*</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- add all resources for running -->
+		<fileSet>
+            <!-- add all resources for running -->
 			<directory>${contexts.running.dir}</directory>
 			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
@@ -152,57 +209,65 @@
 			</includes>
 		</fileSet>
 		<!-- If have children jobs, will add here -->
-		<fileSet><!-- microservice config files -->
+		<fileSet>
+            <!-- microservice config files -->
 			<directory>${microservice.configs.dir}</directory>
-			<outputDirectory>${file.separator}</outputDirectory>
+			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
 				<include>config/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- microservice running config files -->
+		<fileSet>
+            <!-- microservice running config files -->
 			<directory>${microservice.running.configs.dir}</directory>
 			<outputDirectory>${talend.job.name}</outputDirectory>
 			<includes>
 				<include>config/**</include>
 			</includes>
 		</fileSet>
-		<fileSet><!-- survivorship rules -->
-			<directory>${survivorship.rules.dir}</directory>
-			<outputDirectory>${talend.job.name}/items/${talend.project.name.lowercase}/metadata/survivorship/</outputDirectory>
-			<includes>
-			</includes>
-		</fileSet>
 	</fileSets>
 	<dependencySets>
-		<dependencySet>
-			<outputDirectory>lib</outputDirectory>
-			<includes>
-				<include>org.talend.libraries:dom4j-1.6.1</include>
-				<include>org.talend.libraries:log4j-1.2.16</include>
-				<include>org.talend.libraries:talend_file_enhanced_20070724</include>
-				<include>org.talend.libraries:talendcsv</include>
-				<include>org.example.samples.code:routines</include>
-			</includes>
-			<!-- without version for talend libraries -->
-			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}
-			</outputFileNameMapping>
-			<useProjectArtifact>false</useProjectArtifact>
-		</dependencySet>
-		<dependencySet>
-			<outputDirectory>lib</outputDirectory>
-			<includes>
-				<include>com.github.romualdrousseau:shuju</include>
-			</includes>
-			<useProjectArtifact>false</useProjectArtifact>
-		</dependencySet>
-		<!-- for all jobs -->
-		<dependencySet>
-			<outputDirectory>${talend.job.name}</outputDirectory>
-			<includes>
-				<include>org.example.samples.job:SimpleLinearRegressionSample</include>
-			</includes>
-			<outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
-			<useProjectArtifact>true</useProjectArtifact>
-		</dependencySet>
-	</dependencySets>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>org.talend.libraries:crypto-utils:jar:6.0.0-SNAPSHOT</include>
+                <include>org.talend.libraries:talend_file_enhanced_20070724:jar:6.0.0</include>
+                <include>org.talend.libraries:geronimo-stax-api_1.0_spec-1.0.1:jar:6.0.0</include>
+                <include>org.talend.libraries:talendExcel-1.5-20190731:jar:6.0.0</include>
+                <include>org.example.samples.code:routines:jar:7.3.1</include>
+                <include>org.talend.libraries:talendcsv:jar:6.0.0</include>
+                <include>org.talend.libraries:commons-collections4-4.1:jar:6.0.0</include>
+            </includes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>org.apache.commons:commons-compress:jar:1.19</include>
+                <include>org.dom4j:dom4j:jar:2.1.1</include>
+                <include>org.apache.poi:poi-ooxml:jar:4.1.0-20190523141255_modified_talend</include>
+                <include>org.apache.commons:commons-math3:jar:3.6.1</include>
+                <include>org.apache.xmlbeans:xmlbeans:jar:3.1.0</include>
+                <include>org.apache.commons:commons-lang3:jar:3.8.1</include>
+                <include>org.apache.poi:poi:jar:4.1.0-20190523141255_modified_talend</include>
+                <include>org.apache.logging.log4j:log4j-to-slf4j:jar:2.12.1</include>
+                <include>org.slf4j:slf4j-api:jar:1.7.25</include>
+                <include>org.apache.poi:poi-scratchpad:jar:4.1.0-20190523141255_modified_talend</include>
+                <include>com.github.romualdrousseau:shuju:jar:1.4</include>
+                <include>log4j:log4j:jar:1.2.17</include>
+                <include>org.apache.poi:poi-ooxml-schemas:jar:4.1.0-20190523141255_modified_talend</include>
+                <include>org.slf4j:slf4j-log4j12:jar:1.7.25</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>${talend.job.name}</outputDirectory>
+            <includes>
+                <include>org.example.samples.job:SimpleLinearRegressionSample:jar:0.1.0</include>
+            </includes>
+            <outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
+            <useProjectArtifact>true</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
 </assembly>
